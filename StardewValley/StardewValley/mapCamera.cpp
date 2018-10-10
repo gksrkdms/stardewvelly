@@ -8,7 +8,6 @@ mapCamera::mapCamera()
 {
 }
 
-
 mapCamera::~mapCamera()
 {
 }
