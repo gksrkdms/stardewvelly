@@ -46,7 +46,7 @@ HRESULT mapManager::init()
 
 void mapManager::release()
 {
-
+	delete[] m_pTiles;
 }
 
 void mapManager::update()
