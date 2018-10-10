@@ -6,13 +6,6 @@
 
 #include "mapManager.h"
 
-//HWND hButtonOpenFileDialog;
-//HWND hEditFileToBeOpened;
-//OPENFILENAME OFN;
-//const UINT nFileNameMaxLen = 512;
-//char szFileName[nFileNameMaxLen];
-//TCHAR szFileName2[256] = _T("");
-
 void mainGame::setBackBuffer()
 {
 	m_pBackBuffer = new image;
