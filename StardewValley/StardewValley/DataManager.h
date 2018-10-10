@@ -23,10 +23,6 @@ class DataManager : public singletonBase<DataManager>
 
 
 public:
-	void saveMap(LPCSTR szfileName, tagTile* tile, int x, int y);
-	void saveFile(tagTile tile, int x, int y);
-	void loadFile(HWND hwnd, tagTile tile, int x, int y);
-	void loadMap(LPCSTR szfileName, tagTile* tile, int x, int y);
 	DataManager();
 	~DataManager();
 };

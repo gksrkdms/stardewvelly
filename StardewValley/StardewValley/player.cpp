@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "player.h"
 #include "animation.h"
-//#include "Map.h"
 #include "playerMenu.h"
 #include "inven.h"
 #include "item.h"
 #include "fishing.h"
 
+#include "mapManager.h"
 
 HRESULT player::init()
 {
@@ -22,7 +22,6 @@ HRESULT player::init()
 	m_pFishing = new fishing;
 	m_pFishing->setPlayer(this);
 	m_pFishing->init();
-
 
 	m_nX = WINSIZEX / 2;
 	m_nY = WINSIZEY / 2;
@@ -81,6 +80,10 @@ void player::update()
 	{
 		m_pMenu->setMenu(true);
 	}
+
+	if (KEYMANAGER->isOnceKeyDown('O'))
+		m_pmap->loadMap("image/ssss.map");
+
 	// 플레이어 렉트 셋팅
 	m_rc = RectMake(m_nX + 26 - CAMERA->getX(), m_nY + 85 - CAMERA->getY(), m_nPlayerSizeX, m_nPlayerSizeY);
 	// 바닥에 빨간색네모 타겟 렉트

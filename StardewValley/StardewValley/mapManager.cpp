@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "mapManager.h"
-#include "mapTool.h"
 
 mapManager::mapManager()
 {
@@ -9,129 +8,130 @@ mapManager::mapManager()
 mapManager::~mapManager()
 {
 }
-mapTool* mapManager::m_pCurrMap = NULL;
-mapTool* mapManager::m_pNextMap = NULL;
 
 HRESULT mapManager::init()
 {
+	// 시간
+	PLAYTIMEMANAGER->init();
+
+	m_pTileSet = IMAGEMANAGER->findImage("earthAll");
+	m_pObject = IMAGEMANAGER->findImage("town_Shop");
+	m_pObject2 = IMAGEMANAGER->findImage("town_Nomal");
+	m_pObject3 = IMAGEMANAGER->findImage("object3");
+
+	m_pUibgsample = IMAGEMANAGER->findImage("maptoolui");
+
+	TILE_SIZE_1 = 32;
+	TILE_X = MAPSIZEX / TILE_SIZE_1;
+	TILE_Y = MAPSIZEY / TILE_SIZE_1;
+
+	m_pTiles = new tagTile[TILE_X*TILE_Y];
+
+	//	기본 타일 정보 셋팅
+	for (int y = 0; y < TILE_Y; y++)
+	{
+		for (int x = 0; x < TILE_X; x++)
+		{
+			m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1, y*TILE_SIZE_1, TILE_SIZE_1, TILE_SIZE_1);
+			m_pTiles[y * TILE_X + x].terrainFrameX = 0;
+			m_pTiles[y * TILE_X + x].terrainFrameY = 1;
+			m_pTiles[y * TILE_X + x].terrain = NOMALTILE;
+			m_pTiles[y * TILE_X + x].object = OBJ_NULL;
+			m_pTiles[y * TILE_X + x].objectID = OBID_NULL;
+			m_pTiles[y * TILE_X + x].index = y * TILE_X + x;
+			m_pTiles[y * TILE_X + x].isCollide = false;
+		}
+	}
 	return S_OK;
 }
 
 void mapManager::release()
 {
-	for (m_iter = m_map.begin(); m_iter != m_map.end(); )
-	{
-		if (m_iter->second != NULL)
-		{
-			if (m_iter->second == m_pCurrMap)
-				m_iter->second->release();
 
-			SAFE_DELETE(m_iter->second);
-			m_iter = m_map.erase(m_iter);
-		}
-		else
-		{
-			m_iter++;
-		}
-	}
-	m_map.clear();
 }
 
 void mapManager::update()
 {
-	//if (m_pCurrMap)
-	//	m_pCurrMap->update();
-	
-	for (m_iter = m_map.begin(); m_iter != m_map.end(); m_iter++)
+	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
 	{
-		m_iter->second->update();
+		for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
+		{
+			int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
+			int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
+
+			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
+			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+			//m_vecTile[y*TILE_SIZE_1 + x] = m_pTiles[y*TILE_SIZE_1 + x];
+		}
 	}
+
 }
 
 void mapManager::render(HDC hdc)
 {
-	//if (m_pCurrMap)
-	//	m_pCurrMap->render(hdc);
-
-	for (m_iter = m_map.begin(); m_iter != m_map.end(); m_iter++)
+	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
 	{
-		m_iter->second->render(hdc);
+		for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
+		{
+			int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
+			int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
+
+			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
+			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+
+			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+				, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
+		}
+	}
+
+	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
+	{
+		for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
+		{
+			int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
+			int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
+
+			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
+			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+
+			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+				, m_pTiles[m_indexCamera].terrainFrameX, m_pTiles[m_indexCamera].terrainFrameY, TILE_SIZE_1, TILE_SIZE_1);
+
+			if (m_pTiles[m_indexCamera].object != OBJ_NULL)
+			{
+				if (m_pTiles[m_indexCamera].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
+				{
+					m_pObject->frameRenderTile(hdc,
+						m_pTiles[m_indexCamera].rc.left,
+						m_pTiles[m_indexCamera].rc.top,
+						m_pTiles[m_indexCamera].objectFrameX,
+						m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
+				}
+
+				if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
+				{
+					m_pObject2->frameRenderTile(hdc,
+						m_pTiles[m_indexCamera].rc.left,
+						m_pTiles[m_indexCamera].rc.top,
+						m_pTiles[m_indexCamera].objectFrameX,
+						m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
+				}
+
+				if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
+				{
+					m_pObject3->frameRenderTile(hdc,
+						m_pTiles[m_indexCamera].rc.left,
+						m_pTiles[m_indexCamera].rc.top,
+						m_pTiles[m_indexCamera].objectFrameX,
+						m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
+				}
+			}
+
+		}
 	}
 }
 
-mapTool * mapManager::addScene(string mapName, mapTool * pMap)
-{
-	if (!pMap)	return NULL;
-
-	m_map.insert(pair<string, mapTool*>(mapName, pMap));
-
-	return pMap;
-}
-
-HRESULT mapManager::changeScene(string mapName)
-{
-	// 맵에서 바꾸고자하는 씬을 찾는다
-	m_iter = m_map.find(mapName);
-
-	m_mapName = mapName;
-
-	// 맵에서 바꾸고자하는 씬을 못 찾으면
-	if (m_iter == m_map.end())	return E_FAIL;
-
-	// 바꾸고자하는 씬과 현재씬이 같으면
-	if (m_iter->second == m_pCurrMap)	return S_OK;
-
-	// 바꾸고자하는 씬을 찾았으면 초기화
-	if (SUCCEEDED(m_iter->second->init()))
-	{
-		// 초기화 성공 시, 현재 씬을 release
-		if (m_pCurrMap)
-			m_pCurrMap->release();
-
-		// 현재 씬을 바꾸고자하는 씬으로 교체
-		m_pCurrMap = m_iter->second;
-		return S_OK;
-	}
-
-	return E_FAIL;
-}
-
-mapTool * mapManager::addMap(string mapName, mapTool * pMap)
-{
-	if (!pMap)	return NULL;
-
-	return pMap;
-}
-
-HRESULT mapManager::loadFile(LPCSTR szfileName)
-{
-	// 맵에서 바꾸고자하는 씬을 찾는다
-	m_iter = m_map.find(szfileName);
-
-	m_mapName = szfileName;
-
-	// 맵에서 바꾸고자하는 씬을 못 찾으면
-	if (m_iter == m_map.end())	return E_FAIL;
-
-	// 바꾸고자하는 씬과 현재씬이 같으면
-	if (m_iter->second == m_pCurrMap)	return S_OK;
-
-	// 바꾸고자하는 씬을 찾았으면 초기화
-	if (SUCCEEDED(m_iter->second->init()))
-	{
-		// 초기화 성공 시, 현재 씬을 release
-		if (m_pCurrMap)
-			m_pCurrMap->release();
-
-		// 현재 씬을 바꾸고자하는 씬으로 교체
-		m_pCurrMap = m_iter->second;
-		return S_OK;
-	}
-
-	return E_FAIL;
-}
-
-void mapManager::loadMap(LPCSTR szfileName)
+void mapManager::loadMap(const char* szfileName)
 {
 	char str[128];
 	DWORD read;
@@ -145,48 +145,7 @@ void mapManager::loadMap(LPCSTR szfileName)
 		FILE_ATTRIBUTE_NORMAL,
 		NULL);
 
-	ReadFile(hFile, m_pCurrMap->getTile(), sizeof(tagTile) *m_pCurrMap->getTileX() *m_pCurrMap->getTileY(), &read, NULL);
+	ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
 
 	CloseHandle(hFile);
 }
-
-//vector<mapTool*> mapManager::mapLoad(const char * loadFileName)
-//{
-//	char str[128];
-//	DWORD read;
-//
-//	HANDLE hFile;
-//	hFile = CreateFile(loadFileName,
-//		GENERIC_READ,
-//		0,
-//		NULL,
-//		OPEN_EXISTING,
-//		FILE_ATTRIBUTE_NORMAL,
-//		NULL);
-//
-//	ReadFile(hFile, str, 128, &read, NULL);
-//
-//	CloseHandle(hFile);
-//
-//	return mapToolArraySeparation(str);
-//}
-//
-//vector<mapTool*> mapManager::mapToolArraySeparation(mapTool* charArray)
-//{
-//	//이순현,정지수,정민욱
-//	vector<mapTool*> vecStr;
-//	const char* separator = ",";
-//	mapTool* token;
-//	char* temp;
-//
-//	token = strtok_s(charArray, separator, &temp);
-//	// token = "이순현";
-//	vecStr.push_back(token);
-//
-//	while ((token = strtok_s(NULL, separator, &temp)) != NULL)
-//	{
-//		vecStr.push_back(token);
-//	}
-//
-//	return vecStr;
-//}

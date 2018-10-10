@@ -1,20 +1,17 @@
 #pragma once
-#include "singletonBase.h"
+#include "mapTool.h"
+#include <vector>
 
-#include "scene.h"
 
-class mapTool;
-
-class mapManager: public scene // singletonBase<mapManager>,
+class mapManager: public mapTool
 {
 private:
 	std::map<std::string, mapTool*>	m_map;
 	std::map<std::string, mapTool*>::iterator m_iter;
 
-	std::vector<std::string> m_vecLoad;
+	std::vector<tagTile> m_vecTile;
+	std::vector<tagTile>::iterator m_iterTile;
 
-	static mapTool*	m_pCurrMap;	// «ˆ¿Á ∏ 
-	static mapTool*	m_pNextMap;	// ¿¸»Ø ¥Î±‚ ¡ﬂ¿Œ ∏ 
 	string m_mapName;
 
 public:
@@ -26,16 +23,8 @@ public:
 	void update();
 	void render(HDC hdc);
 
-	// ¿œπ› æ¿
-	mapTool* addScene(string mapName, mapTool* pMap);
-	HRESULT changeScene(string mapName);
-	inline string getSceneName() { return m_mapName; };
+	void loadMap(const char * szfileName);
 
-	mapTool* addMap(string mapName, mapTool* pMap);
-	HRESULT loadFile(LPCSTR szfileName);
-
-	void loadMap(LPCSTR szfileName);
-	//vector<mapTool*> mapLoad(const char * loadFileName);
-	//vector<mapTool*> mapToolArraySeparation(mapTool* charArray);
+	inline vector<tagTile>getTile() { return m_vecTile; }
 };
 

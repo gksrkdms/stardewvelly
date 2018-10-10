@@ -6,6 +6,8 @@ class inven;
 class item;
 class fishing;
 
+class mapManager;
+
 enum PLAYERDIR
 {
 	PLAYER_LEFT,
@@ -57,6 +59,8 @@ private:
 	playerMenu*	m_pMenu;		// 인벤토리
 	item*		m_pTargetItem;	// 퀵슬롯 현재 아이템
 	fishing*	m_pFishing;
+
+	mapManager* m_pmap;
 
 	RECT	m_rc;				// 플래이어 렉트
 	RECT	m_TargetRc;			// 빨간네모 렉트

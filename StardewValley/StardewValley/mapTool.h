@@ -17,9 +17,43 @@
 //#define SAMPLE_TILE_X	20//20
 //#define SAMPLE_TILE_Y	20//20
 
+enum TERRAIN
+{
+	TERRNULL, NOMALTILE, WATER, SEA, EARTH, FARMLAND, WETFARMLAND, TR_NUM
+};
 
+enum OBJECT
+{
+	OBJ_NULL,
+	TREE_BIG,
+	TREE_SMALL,
+	BUSH_BIG,
+	BUSH_SMALL,
+	ROCK_BIG,
+	ROCK_SMALL,
+	BRANCH_SMALL,
+	NORMALHOUSE,
+	NORMALOBJECT,
+	MINE_ROCK,
+	MYHOME,
+	SHOP,
+	FENCE,
+	BED,
+	TV,
+	BOX,
+	CROP,
+	DOOR,
+	OB_NUM
+};
 
-
+enum OBJECTIDNUM
+{
+	OBID_NULL,
+	OBID_1,
+	OBID_2,
+	OBID_3,
+	OBID_NUM
+};
 
 enum BUTTONID
 {
@@ -56,6 +90,27 @@ enum TERRAINIMG
 enum OBJECTIMG
 {
 	IMGOBJ_OBJNULL, IMGOBJ_1, IMGOBJ_2, IMGOBJ_3, IMGOBJ_OBJMAX
+};
+
+typedef struct tagTile
+{
+	TERRAIN terrain;
+	OBJECT object;
+
+	OBJECTIDNUM objectID;
+
+	int terrainFrameX; // 타일이 가지고 있는 지형정보
+	int terrainFrameY;
+
+	int objectFrameX; // 타일이 가지고 있는 오브젝트정보
+	int objectFrameY;
+
+	int index;
+	int sampleindex;
+
+	bool isCollide;
+
+	RECT rc;
 };
 
 struct tagSampleTile
@@ -124,6 +179,24 @@ private:
 	
 	// obj 강도 지정
 
+
+	
+	//tagTile m_pTiles[TILE_X * TILE_Y];
+	//tagTile m_pTiles[TILE_X * TILE_Y];
+	//tagSampleTile m_pSampleTiles[SAMPLE_TILE_X * SAMPLE_TILE_Y];
+
+protected:
+	tagTile* m_pTiles;
+	tagSampleTile* m_pSampleTiles;
+
+	int TILE_SIZE_1;
+
+	int TILE_X;
+	int TILE_Y;
+
+	//카메라
+	int m_indexCamera;
+
 	// 타일
 	image*	m_pTileSet;
 
@@ -135,12 +208,8 @@ private:
 	// 배경
 	image*	m_pbg;
 	image*	m_pUibgsample;
-	
-	//tagTile m_pTiles[TILE_X * TILE_Y];
-	//tagTile m_pTiles[TILE_X * TILE_Y];
-	//tagSampleTile m_pSampleTiles[SAMPLE_TILE_X * SAMPLE_TILE_Y];
-	tagTile* m_pTiles;
-	tagSampleTile* m_pSampleTiles;
+
+private:
 
 	// 오브젝트 샘플 이미지 선택
 	OBJECTIMG m_sampleObjChoice;
@@ -190,10 +259,7 @@ private:
 	RECT rcTemp;
 
 	int m_tileNum;
-
-	//카메라
-	int m_indexCamera;
-
+	   
 	//미니맵
 	int m_minisize;
 	int m_minipositionX;
@@ -204,11 +270,7 @@ private:
 	tempSampleTile* m_ptempSampleObj1;
 	tempSampleTile* m_ptempSampleObj2;
 	tempSampleTile* m_ptempSampleObj3;
-
-	int TILE_X;
-	int TILE_Y;
-
-
+	   
 public:
 	mapTool();
 	~mapTool();
@@ -219,8 +281,6 @@ public:
 	virtual void render(HDC hdc);
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 	LRESULT ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
-
-	LRESULT ChildMapSampleTopProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 	
 	//샘플타일 저장
 	void sampleTileSave();
@@ -239,6 +299,10 @@ public:
 	void checkObjCollide(); // 오브젝트 충돌 검사
 
 	void sampleTileinit(); // 타일 이미지 바뀌면 초기화
+
+	void saveMap(const char* szfileName);
+
+	void loadMap(const char* szfileName);
 
 	inline tagTile* getTile() { return m_pTiles; }
 	inline int getTileX() { return TILE_X; }

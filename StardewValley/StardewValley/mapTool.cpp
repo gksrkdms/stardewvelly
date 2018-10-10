@@ -11,11 +11,6 @@ TCHAR szFileName2[256] = _T("");
 
 RECT rc;
 
-int TILE_SIZE_X;
-int TILE_SIZE_Y;
-
-int TILE_SIZE_1;
-
 int SAMPLE_TILE_X;
 int SAMPLE_TILE_Y;
 
@@ -38,15 +33,13 @@ HRESULT mapTool::init()
 	m_pObject3 = IMAGEMANAGER->findImage("object3");
 	m_pbg = IMAGEMANAGER->findImage("whitebackground");
 	m_pUibgsample = IMAGEMANAGER->findImage("maptoolui");
-	//g_hWndChildSample = CreateWindow(TEXT("MapSample"), NULL, WS_POPUP | WS_VISIBLE | WS_OVERLAPPEDWINDOW,
-	//	16 * TILE_X, WINSIZEY- 420, WINSIZEX - 16 * TILE_X, 400, g_hWnd, (HMENU)0, g_hInstance, NULL);
 
 	g_hWndChildSample = CreateWindow(TEXT("MapSample"), NULL, WS_CHILD | WS_VISIBLE| WS_OVERLAPPEDWINDOW,
 		TILE_SIZE_SAMPLE * 50, WINSIZEY - 470, WINSIZEX - TILE_SIZE_SAMPLE * 50, 450, g_hWnd, (HMENU)0, g_hInstance, NULL);
 	
 	TILE_SIZE_1 = 32;
 	TILE_X = MAPSIZEX / TILE_SIZE_1;
-	TILE_Y = MAPSIZEX / TILE_SIZE_1;
+	TILE_Y = MAPSIZEY / TILE_SIZE_1;
 
 	SAMPLE_TILE_X = 20;
 	SAMPLE_TILE_Y = 20;
@@ -75,7 +68,7 @@ HRESULT mapTool::init()
 	{
 		for (int x = 0; x < TILE_X; x++)
 		{
-			m_pTiles[y * TILE_X + x].rc = RectMake(x * TILE_SIZE_1, y * TILE_SIZE_1, TILE_SIZE_1, TILE_SIZE_1);
+			m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1, y*TILE_SIZE_1, TILE_SIZE_1, TILE_SIZE_1);
 			m_pTiles[y * TILE_X + x].terrainFrameX = 0;
 			m_pTiles[y * TILE_X + x].terrainFrameY = 1;
 			m_pTiles[y * TILE_X + x].terrain = NOMALTILE;
@@ -212,7 +205,7 @@ void mapTool::update()
 	{
 		for (int x = 0; x < TILE_X; x++)
 		{
-			m_pTiles[y * TILE_X + x].rc = RectMake(x * TILE_SIZE_1 - CAMERAMANAGER->getCameraX(), y * TILE_SIZE_1 - CAMERAMANAGER->getCameraY(), TILE_SIZE_1, TILE_SIZE_1);
+			m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1 - CAMERAMANAGER->getCameraX(), y*TILE_SIZE_1 - CAMERAMANAGER->getCameraY(), TILE_SIZE_1, TILE_SIZE_1);
 		}
 	}	
 
@@ -227,15 +220,13 @@ void mapTool::update()
 void mapTool::render(HDC hdc)
 {
 	// 백그라운드
-	//if (m_pbg)
-		//m_pbg->render(hdc, 0, 0);
-	for (int y = 0; y < WINSIZEY / TILE_SIZE_1; y++)
+	for (int y = 0; y < WINSIZEY / TILE_SIZE_1+1; y++)
 	{
-		for (int x = 0; x < WINSIZEX / TILE_SIZE_1; x++)
+		for (int x = 0; x < WINSIZEX / TILE_SIZE_1+1; x++)
 		{
 			int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
 			int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
-
+			
 			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
 			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 
@@ -244,9 +235,9 @@ void mapTool::render(HDC hdc)
 		}
 	}
 
-	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
+	for (int y = 0; y < WINSIZEY / TILE_SIZE_1+1; y++)
 	{
-		for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
+		for (int x = 0; x < WINSIZEX / TILE_SIZE_1+1; x++)
 		{
 			int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
 			int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
@@ -345,8 +336,7 @@ void mapTool::render(HDC hdc)
 				}
 			}
 		}
-	}
-	
+	}	
 	
 	// 샘플보기
 	if (m_isSampleOn)
@@ -405,47 +395,48 @@ void mapTool::render(HDC hdc)
 	sprintf_s(str, 128, "bottom : %d", rc.bottom);
 	TextOut(hdc, 850, 150, str, strlen(str));
 
-	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
-	{
-		for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
-		{
-			int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
-			int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
+	//for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
+	//{
+	//	for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
+	//	{
+	//		int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
+	//		int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
 
-			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
-			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
+	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 
-			if (m_pTiles[m_indexCamera].isCollide)
-			{
-				sprintf_s(str, 128, "%d", 1);
-				TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
-			}
-			else
-			{
-				sprintf_s(str, 128, "%d", 0);
-				TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
-			}
-			sprintf_s(str, 128, "%d", m_pTiles[m_indexCamera].index);
-			//TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
-		}
-	}
+	//		if (m_pTiles[m_indexCamera].isCollide)
+	//		{
+	//			sprintf_s(str, 128, "%d", 1);
+	//			TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
+	//		}
+	//		else
+	//		{
+	//			sprintf_s(str, 128, "%d", 0);
+	//			TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
+	//		}
+	//		sprintf_s(str, 128, "%d", m_pTiles[m_indexCamera].index);
+	//		//TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
+	//	}
+	//}
 
-	for (int y = 0; y < SAMPLE_TILE_Y; ++y)
-	{
-		for (int x = 0; x < SAMPLE_TILE_X; x++)
-		{
-			if (m_pSampleTiles[y*SAMPLE_TILE_X+x].isCollide)
-			{
-				sprintf_s(str, 128, "%d", 1);
-				TextOut(hdc, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top, str, strlen(str));
-			}
-			else
-			{
-				sprintf_s(str, 128, "%d", 0);
-				TextOut(hdc, m_pSampleTiles[y*SAMPLE_TILE_X+x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top, str, strlen(str));
-			}
-		}
-	}
+	//for (int y = 0; y < SAMPLE_TILE_Y; ++y)
+	//{
+	//	for (int x = 0; x < SAMPLE_TILE_X; x++)
+	//	{
+	//		if (m_pSampleTiles[y*SAMPLE_TILE_X+x].isCollide)
+	//		{
+	//			sprintf_s(str, 128, "%d", 1);
+	//			TextOut(hdc, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top, str, strlen(str));
+	//		}
+	//		else
+	//		{
+	//			sprintf_s(str, 128, "%d", 0);
+	//			TextOut(hdc, m_pSampleTiles[y*SAMPLE_TILE_X+x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top, str, strlen(str));
+	//		}
+	//	}
+	//}
+
 	//for (int y = 0; y < TILE_Y; y++)
 	//{
 	//	for (int x = 0; x < TILE_X; x++)
@@ -690,7 +681,7 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 			320, 295, 50, 10, hWnd, HMENU(BTN_15), g_hInstance, NULL);
 
 		CheckRadioButton(hWnd, BTN_01, BTN_02, BTN_01);
-		CheckRadioButton(hWnd, BTN_04, BTN_06, BTN_06);
+		CheckRadioButton(hWnd, BTN_04, BTN_06, BTN_05);
 		CheckRadioButton(hWnd, BTN_07, BTN_08, BTN_07);
 		CheckRadioButton(hWnd, BTN_11, BTN_12, BTN_12);
 		CheckRadioButton(hWnd, BTN_14, BTN_15, BTN_15);
@@ -809,7 +800,7 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 			//if (0 != GetOpenFileName(&OFN))
 			//{
 			//}
-			DATAMANAGER->saveMap(szFileName, m_pTiles, TILE_X, TILE_Y);
+			saveMap(szFileName);
 			//MessageBox(g_hWnd, TEXT("dd"), TEXT("ddkkk"), MB_OK);
 			break;
 
@@ -824,7 +815,7 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 			if (0 != GetOpenFileName(&OFN))
 			{
 				SetWindowText(hEditFileToBeOpened, OFN.lpstrFile);
-				DATAMANAGER->loadMap(OFN.lpstrFile, m_pTiles, TILE_X, TILE_Y);
+				loadMap(OFN.lpstrFile);
 			}
 			return TRUE;
 
@@ -880,11 +871,11 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 	}
 
 	case WM_SIZE:
-		if (wParam != SIZE_MINIMIZED)
-		{
-			GetClientRect(g_hWnd, &crt);
-			//MoveWindow(g_hWndChildSample, 0, 0, 500, 500, true);
-		}
+		//if (wParam != SIZE_MINIMIZED)
+		//{
+		//	GetClientRect(g_hWnd, &crt);
+		//	//MoveWindow(g_hWndChildSample, 0, 0, 500, 500, true);
+		//}
 		return 0;
 
 	case WM_DESTROY:
@@ -895,9 +886,6 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 		//}
 		return 0;
 	}
-
-
-
 	return DefWindowProc(hWnd, iMessage, wParam, lParam);
 }
 
@@ -1589,15 +1577,6 @@ void mapTool::sampleTileinit()
 	}
 	else
 	{	
-		//for (int y = 0; y < TILE_Y; y++)
-		//{
-		//	for (int x = 0; x < TILE_X; x++)
-		//	{
-		//		m_pTiles[y * TILE_X + x].rc = RectMake(x * TILE_SIZE_1, y * TILE_SIZE_1, TILE_SIZE_1, TILE_SIZE_1);
-		//		m_pTiles[y * TILE_X + x].index = y * TILE_X + x;
-		//	}
-		//}
-
 		for (int i = 0; i < SAMPLE_TILE_X * SAMPLE_TILE_Y; i++)
 		{
 			m_pSampleTiles[i].rc = RectMake(m_nImageX + (i % SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, (i / SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE);
@@ -1607,4 +1586,50 @@ void mapTool::sampleTileinit()
 			m_pSampleTiles[i].isCollide = false;
 		}
 	}
+}
+
+
+void mapTool::saveMap(const char* szfileName)
+{
+	//char szFilter[] = "MapSave (*.map) | All File(*.*)|*,*||";
+
+	DWORD write;
+	HANDLE hFile;
+	hFile = CreateFile(szfileName,	// 세이브할 파일 경로 / 파일이름
+		GENERIC_WRITE,			// 접근 방식 지정
+		0,						// 파일 공유 방식 지정 (0) : 공유 안함
+								// FILE_SHARE_DELETE : 삭제 접근 요청시 공유
+		NULL,					// 보안 관련 옵션
+		CREATE_ALWAYS,			// CREATE_ALWAYS : 새로운 파일 생성, 동일한 이름의 파일이 있으면 덮어쓴다
+								// CREATE_NEW : 새로운 파일 생성
+								// OPEN_EXISTING : 파일이 존재하면 오픈, 없으면 에러코드 리턴
+		FILE_ATTRIBUTE_NORMAL,	// FILE_ATTRIBUTE_NORMAL : 다른 속성이 없다
+								// FILE_ATTRIBUTE_READONLY : 읽기 전용 파일
+								// FILE_ATTRIBUTE_HIDDEN : 숨김 파일 생성
+		NULL);
+
+	// 파일에 내용을 쓴다
+	WriteFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &write, NULL);
+
+	// 다 쓴 파일 핸들을 삭제
+	CloseHandle(hFile);
+}
+
+void mapTool::loadMap(const char* szfileName)
+{
+	char str[128];
+	DWORD read;
+
+	HANDLE hFile;
+	hFile = CreateFile(szfileName,
+		GENERIC_READ,
+		0,
+		NULL,
+		OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL,
+		NULL);
+
+	ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
+
+	CloseHandle(hFile);
 }
