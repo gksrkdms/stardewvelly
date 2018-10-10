@@ -124,7 +124,6 @@ void item::ToolTiprender(HDC hdc)
 	{
 		if (isToolTip == true)
 		{
-
 			m_pToolTipImg->render(hdc, m_nMouseX + 10, m_nMouseY + 10);											// 툴팁 윈도우
 			DrawText(hdc, m_ItemName.c_str(), strlen(m_ItemName.c_str()), &m_NameRc, DT_WORDBREAK);				// 아이템 이름
 			DrawText(hdc, m_ItemKindName.c_str(), strlen(m_ItemKindName.c_str()), &m_KindRc, DT_WORDBREAK);		// 아이템 종류(도구,씨앗 등)
@@ -175,17 +174,22 @@ void item::ShopInvenRender(HDC hdc)
 		{
 			// 팔수 있으면 랜더, 및 상점용 툴팁 랜더(이름, 갯수, 판매가격)
 			m_pImg->render(hdc, m_nX + m_nIconX, m_nY + m_nIconY, 3);
-			if (isToolTip == true)
-			{
-				m_pShopToolTip->render(hdc, m_nMouseX + 10, m_nMouseY + 10);
-				sprintf_s(str, 128, "%s", m_ItemName.c_str());
-				TextOut(hdc, m_nMouseX + 30, m_nMouseY + 30, str, strlen(str));
-				sprintf_s(str, 128, "%d", m_nItemNum);
-				TextOut(hdc, m_nMouseX + 180, m_nMouseY + 35, str, strlen(str));
-				sprintf_s(str, 128, "%d", itemPrice / 2);
-				TextOut(hdc, m_nMouseX + 30, m_nMouseY + 65, str, strlen(str));
-			}
 		}
+	}
+}
+
+void item::ShopInvenToolTip(HDC hdc)
+{
+	char str[128];
+	if (isSell == true && isItemOn == true && isToolTip == true)
+	{
+		m_pShopToolTip->render(hdc, m_nMouseX + 10, m_nMouseY + 10);
+		sprintf_s(str, 128, "%s", m_ItemName.c_str());
+		TextOut(hdc, m_nMouseX + 30, m_nMouseY + 30, str, strlen(str));
+		sprintf_s(str, 128, "%d", m_nItemNum);
+		TextOut(hdc, m_nMouseX + 180, m_nMouseY + 35, str, strlen(str));
+		sprintf_s(str, 128, "%d", itemPrice / 2);
+		TextOut(hdc, m_nMouseX + 30, m_nMouseY + 65, str, strlen(str));
 	}
 }
 
