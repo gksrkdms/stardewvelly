@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "gameScene.h"
 #include "player.h"
-//#include "Map.h"
+#include "mapManager.h"
 
 HRESULT gameScene::init()
 {
@@ -9,9 +9,9 @@ HRESULT gameScene::init()
 	CAMERA->init();
 	m_pPlayer = new player;
 	m_pPlayer->init();
-	//m_pMap = new Map;
-	//m_pMap->init();
-	//m_pPlayer->getMap(m_pMap);
+	m_pMapManager = new mapManager;
+	m_pMapManager->init();
+	m_pPlayer->getMap(m_pMapManager);
 	return S_OK;
 }
 
@@ -21,14 +21,14 @@ void gameScene::release()
 	CAMERA->releaseSingleton();
 	m_pPlayer->release();
 	delete m_pPlayer;
-	//m_pMap->release();
-	//delete m_pMap;
+	m_pMapManager->release();
+	delete m_pMapManager;
 }
 
 void gameScene::update()
 {
 	m_pPlayer->update();
-	//m_pMap->update();
+	m_pMapManager->update();
 	CAMERA->setFocus(m_pPlayer);
 	CAMERA->update();
 }
@@ -36,7 +36,7 @@ void gameScene::update()
 void gameScene::render(HDC hdc)
 {
 	m_pBG->render(hdc, 0, 0, CAMERA->getX(), CAMERA->getY(), WINSIZEX, WINSIZEY);
-	//m_pMap->render(hdc);
+	m_pMapManager->render(hdc);
 	m_pPlayer->render(hdc);
 
 	TIMEMANAGER->render(hdc);

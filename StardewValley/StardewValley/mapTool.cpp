@@ -37,7 +37,7 @@ HRESULT mapTool::init()
 	g_hWndChildSample = CreateWindow(TEXT("MapSample"), NULL, WS_CHILD | WS_VISIBLE| WS_OVERLAPPEDWINDOW,
 		TILE_SIZE_SAMPLE * 50, WINSIZEY - 470, WINSIZEX - TILE_SIZE_SAMPLE * 50, 450, g_hWnd, (HMENU)0, g_hInstance, NULL);
 	
-	TILE_SIZE_1 = 32;
+	TILE_SIZE_1 = 64;
 	TILE_X = MAPSIZEX / TILE_SIZE_1;
 	TILE_Y = MAPSIZEY / TILE_SIZE_1;
 
@@ -381,9 +381,9 @@ void mapTool::render(HDC hdc)
 	sprintf_s(str, 128, "%d", g_ptMouse.x);
 	TextOut(hdc, 800, 250, str, strlen(str));
 	sprintf_s(str, 128, "%d", CAMERAMANAGER->getCameraX());
-	TextOut(hdc, 1000, 250, str, strlen(str));
+	TextOut(hdc, 0, 250, str, strlen(str));
 	sprintf_s(str, 128, "%d", CAMERAMANAGER->getCameraY());
-	TextOut(hdc, 1200, 250, str, strlen(str));
+	TextOut(hdc, 0, 350, str, strlen(str));
 
 
 	sprintf_s(str, 128, "left : %d", rc.left);

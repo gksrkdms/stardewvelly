@@ -2,7 +2,7 @@
 #include "scene.h"
 class inven;
 class player;
-//class Map;
+class mapManager;
 
 class gameScene : public scene
 {
@@ -11,7 +11,7 @@ private:
 	inven*	m_pInven;
 
 	player*	m_pPlayer;
-	//Map*	m_pMap;
+	mapManager*	m_pMapManager;
 
 public:
 	virtual HRESULT init();

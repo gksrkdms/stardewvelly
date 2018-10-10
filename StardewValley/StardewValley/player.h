@@ -110,7 +110,7 @@ public:
 
 	PLAYERDIR getPlayerDir() { return m_playerDir; }
 
-	//void getMap(Map* map) { m_pMap = map; }
+	void getMap(mapManager* map) { m_pmap = map; }
 
 	player();
 	~player();
