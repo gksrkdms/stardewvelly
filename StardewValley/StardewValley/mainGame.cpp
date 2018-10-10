@@ -14,6 +14,7 @@
 //TCHAR szFileName2[256] = _T("");
 
 //ぞしぞしぞし
+//せせせせ
 
 void mainGame::setBackBuffer()
 {
