@@ -63,12 +63,14 @@ void mainGame::release()
 	IMAGEMANAGER->release();
 	TIMEMANAGER->release();
 	SCENEMANAGER->release();
+	PLAYTIMEMANAGER->release();
 
 	DATAMANAGER->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
 	IMAGEMANAGER->releaseSingleton();
 	TIMEMANAGER->releaseSingleton();
 	SCENEMANAGER->releaseSingleton();
+	PLAYTIMEMANAGER->releaseSingleton();
 
 }
 

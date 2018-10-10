@@ -206,13 +206,6 @@ void mapTool::update()
 		}
 	}
 
-	// ¾ÀÀüÈ¯
-	if (KEYMANAGER->isOnceKeyDown('P'))
-	{
-		SCENEMANAGER->changeScene("sample");
-		DestroyWindow(g_hWndChildSample);
-	}
-
 	// camera ÀÌµ¿
 	CAMERAMANAGER->update();
 	for (int y = 0; y < TILE_Y; y++)
@@ -228,6 +221,13 @@ void mapTool::update()
 
 		}
 	}	
+
+	// ¾ÀÀüÈ¯
+	if (KEYMANAGER->isOnceKeyDown('P'))
+	{
+		SCENEMANAGER->changeScene("startScene");
+		DestroyWindow(g_hWndChildSample);
+	}
 }
 
 void mapTool::render(HDC hdc)
