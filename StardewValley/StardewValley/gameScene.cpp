@@ -3,6 +3,7 @@
 #include "player.h"
 //#include "Map.h"
 
+//ddffdfdfd
 HRESULT gameScene::init()
 {
 	m_pBG = IMAGEMANAGER->addImage("background", "image/background.bmp", MAPSIZEX, MAPSIZEY, true, RGB(255, 0, 255));
