@@ -37,7 +37,7 @@ HRESULT mapTool::init()
 	g_hWndChildSample = CreateWindow(TEXT("MapSample"), NULL, WS_CHILD | WS_VISIBLE| WS_OVERLAPPEDWINDOW,
 		TILE_SIZE_SAMPLE * 50, WINSIZEY - 470, WINSIZEX - TILE_SIZE_SAMPLE * 50, 450, g_hWnd, (HMENU)0, g_hInstance, NULL);
 	
-	TILE_SIZE_1 = 32;
+	TILE_SIZE_1 = 64;
 	TILE_X = MAPSIZEX / TILE_SIZE_1;
 	TILE_Y = MAPSIZEY / TILE_SIZE_1;
 
@@ -681,7 +681,7 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 			320, 295, 50, 10, hWnd, HMENU(BTN_15), g_hInstance, NULL);
 
 		CheckRadioButton(hWnd, BTN_01, BTN_02, BTN_01);
-		CheckRadioButton(hWnd, BTN_04, BTN_06, BTN_05);
+		CheckRadioButton(hWnd, BTN_04, BTN_06, BTN_06);
 		CheckRadioButton(hWnd, BTN_07, BTN_08, BTN_07);
 		CheckRadioButton(hWnd, BTN_11, BTN_12, BTN_12);
 		CheckRadioButton(hWnd, BTN_14, BTN_15, BTN_15);

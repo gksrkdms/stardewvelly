@@ -313,6 +313,8 @@ void inven::InvenTohand()
 			{
 				if (PtInRect(&m_iterItem->second->getrect(), g_ptMouse))
 				{
+					SOUNDMANAGER->play("sound/changeitem.wav");
+
 					InvenTohandSwap(m_iterItem->first);
 					isHandItem = true;
 					m_iterItem->second->deleteItem();
@@ -339,6 +341,9 @@ void inven::handToInven()
 						handToInvenSwap(m_iterItem->first);
 						isHandItem = false;
 						m_pHand->deleteItem();
+
+						SOUNDMANAGER->play("sound/changeitem.wav");
+
 					}
 				}
 				else
@@ -350,6 +355,9 @@ void inven::handToInven()
 						InvenTohandSwap(m_iterItem->first);
 						tempToInvenSwap(m_iterItem->first);
 						m_pTempHand->deleteItem();
+
+						SOUNDMANAGER->play("sound/changeitem.wav");
+
 					}
 				}
 			}

@@ -21,7 +21,7 @@ HRESULT mapManager::init()
 
 	m_pUibgsample = IMAGEMANAGER->findImage("maptoolui");
 
-	TILE_SIZE_1 = 32;
+	TILE_SIZE_1 = 64;
 	TILE_X = MAPSIZEX / TILE_SIZE_1;
 	TILE_Y = MAPSIZEY / TILE_SIZE_1;
 
