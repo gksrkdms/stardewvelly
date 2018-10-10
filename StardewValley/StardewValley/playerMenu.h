@@ -37,6 +37,8 @@ public:
 
 	void getPlayer(player* play);	// 상점한테 플레이어 정보 넘기는함수
 	item* getQuickItem();			// 퀵바아이템 정보를 플레이어한테 정보를 넘기는 함수
+	inven * getInven() { return m_pInven; }
+
 
 	playerMenu();
 	~playerMenu();
