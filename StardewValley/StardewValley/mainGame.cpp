@@ -20,11 +20,13 @@ HRESULT mainGame::init()
 	IMAGEMANAGER->init();
 	TIMEMANAGER->init();
 	SCENEMANAGER->init();
+	SOUNDMANAGER->init();
 
 	setBackBuffer();
 
 	// 필요한 리소스 미리 로드
 	imgload();
+	addsound();
 
 	// Maptool
 	m_pMap = new mapTool;
@@ -57,6 +59,7 @@ void mainGame::release()
 	TIMEMANAGER->release();
 	SCENEMANAGER->release();
 	PLAYTIMEMANAGER->release();
+	SOUNDMANAGER->release();
 
 	DATAMANAGER->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
@@ -64,7 +67,7 @@ void mainGame::release()
 	TIMEMANAGER->releaseSingleton();
 	SCENEMANAGER->releaseSingleton();
 	PLAYTIMEMANAGER->releaseSingleton();
-
+	SOUNDMANAGER->releaseSingleton();
 }
 
 LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -317,6 +320,15 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("i_moveChoo", "image/Stardew Valley/fishing/추감기.bmp", 168, 55, 4, 1, true, RGB(255, 0, 255));// 72 21 
 	IMAGEMANAGER->addImage("i_GetFish", "image/Stardew Valley/fishing/금붕어.bmp", 102, 51, 2, 1, true, RGB(255, 0, 255));// 34 17  
 }
+
+void mainGame::addsound()
+{
+	// 인벤옮기고 손떨어지게하는거
+	SOUNDMANAGER->addSound("sound/changeitem.wav", true, false);
+
+}
+
+
 
 
 mainGame::mainGame()

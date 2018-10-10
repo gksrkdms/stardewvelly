@@ -60,10 +60,9 @@ public:
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
 	LRESULT ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
-
-	LRESULT ChildMapSampleTopProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
-	   
+	
 	void imgload();
+	void addsound();
 
 	mainGame();
 	~mainGame();
