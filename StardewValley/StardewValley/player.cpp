@@ -497,7 +497,7 @@ void player::setItemMotion()
 {
 	if (m_playerState == PLAYER_PLAY)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
 			if (m_pTargetItem->getActItemKind() != ACTITEM_NULL)
 			{
@@ -617,9 +617,9 @@ void player::setItemMotion()
 					//	startMotion(m_pAni, 0, 4, false, false, 5);
 					//	break;
 					//}
-					m_pFishing->init();
-					m_pFishing->setIsOne(true);
-					m_pFishing->setIsMistake(false);
+					//m_pFishing->init();
+					//m_pFishing->setIsOne(true);
+					//m_pFishing->setIsMistake(false);
 					m_pFishing->setIsFishing(true);
 					break;
 				case ACTITEM_SWORD:
