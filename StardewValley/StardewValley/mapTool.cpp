@@ -213,12 +213,6 @@ void mapTool::update()
 		for (int x = 0; x < TILE_X; x++)
 		{
 			m_pTiles[y * TILE_X + x].rc = RectMake(x * TILE_SIZE_1 - CAMERAMANAGER->getCameraX(), y * TILE_SIZE_1 - CAMERAMANAGER->getCameraY(), TILE_SIZE_1, TILE_SIZE_1);
-			
-			//m_pMini[y * TILE_X + x].rc.left = m_pTiles[y * TILE_X + x].rc.left / m_minisize;
-			//m_pMini[y * TILE_X + x].rc.top = m_pTiles[y * TILE_X + x].rc.top / m_minisize;
-			//m_pMini[y * TILE_X + x].rc = RectMake(m_pTiles[y * TILE_X + x].rc.left / m_minisize - m_mapCamera->getCameraMiniX(), 
-			//m_pTiles[y * TILE_X + x].rc.top / m_minisize - m_mapCamera->getCameraMiniY(), TILE_SIZE_1/ m_minisize, TILE_SIZE_1/ m_minisize);
-
 		}
 	}	
 
@@ -235,9 +229,9 @@ void mapTool::render(HDC hdc)
 	// 백그라운드
 	//if (m_pbg)
 		//m_pbg->render(hdc, 0, 0);
-	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
+	for (int y = 0; y < WINSIZEY / TILE_SIZE_1; y++)
 	{
-		for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
+		for (int x = 0; x < WINSIZEX / TILE_SIZE_1; x++)
 		{
 			int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
 			int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
@@ -612,114 +606,6 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 	return DefWindowProc(hWnd, iMessage, wParam, lParam);
 }
 
-// 이미지 출력화면
-LRESULT mapTool::ChildMapSampleTopProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
-{
-	HDC hdc;
-	PAINTSTRUCT ps;
-	HDC backDC;
-
-	switch (iMessage)
-	{
-	case WM_CREATE:
-		m_nImageX = WINSIZEX - m_pTileSet->getWidth() - 16;
-		m_isObject = false;
-		m_rcSave = RectMakeCenter(0, 0, 0, 0);
-		m_rcDragCheck = RectMakeCenter(0, 0, 0, 0);
-		for (int i = 0; i < (m_pTileSet->getWidth() / TILE_SIZE_1) * (m_pTileSet->getHeight() / TILE_SIZE_1); i++)
-		{
-			m_pSampleTiles[i].rc = RectMake(m_nImageX + (i % (m_pTileSet->getWidth() / TILE_SIZE_1)) * TILE_SIZE_1, (i / (m_pTileSet->getWidth() / TILE_SIZE_1)) * TILE_SIZE_1, TILE_SIZE_1, TILE_SIZE_1);
-			m_pSampleTiles[i].frameX = i % (m_pTileSet->getWidth() / TILE_SIZE_1);
-			m_pSampleTiles[i].frameY = i / (m_pTileSet->getWidth() / TILE_SIZE_1);
-			m_pSampleTiles[i].index = i;
-			m_pSampleTiles[i].object = MYHOME;
-		}
-		rc = RectMakeCenter(0, 0, 0, 0);
-		return 0;
-
-	case WM_LBUTTONDOWN:
-		g_ptMouse.x = LOWORD(lParam);
-		g_ptMouse.y = HIWORD(lParam);
-		rc.left = LOWORD(lParam);
-		rc.top = HIWORD(lParam);
-		// 타일 0,0에서 부터 시작하기 위해 보정
-		rc.left = (rc.left / TILE_SIZE_1)*TILE_SIZE_1;
-		rc.top = (rc.top / TILE_SIZE_1)*TILE_SIZE_1;
-		m_isClick = true;
-		return 0;
-
-	case WM_MOUSEMOVE:
-		if (m_isClick)
-		{
-			m_isDrag = true;
-			g_ptMouse.x = LOWORD(lParam);
-			g_ptMouse.y = HIWORD(lParam);
-			//rc.right = LOWORD(lParam);
-			//rc.bottom = HIWORD(lParam);
-
-			// 맵타일 사이즈대로 그리기 위해 보정
-			rc.right = rc.left + ((g_ptMouse.x - rc.left) / TILE_SIZE_1)*TILE_SIZE_1;
-			rc.bottom = rc.top + ((g_ptMouse.y - rc.top) / TILE_SIZE_1)*TILE_SIZE_1;
-		}
-
-		else
-		{
-			g_ptMouse.x = LOWORD(lParam);
-			g_ptMouse.y = HIWORD(lParam);
-		}
-		return 0;
-
-	case WM_LBUTTONUP:
-		m_isClick = false;
-		m_isDrag = false;
-		m_rcDragCheck = rc;
-		if (rc.top > rc.bottom)
-		{
-			m_rcSwap = rc.top;
-			rc.top = rc.bottom;
-			rc.bottom = m_rcSwap;
-		}
-		if (rc.left > rc.right)
-		{
-			m_rcSwap = rc.left;
-			rc.left = rc.right;
-			rc.right = m_rcSwap;
-		}
-		m_rcSave = rc;
-		m_isAddvec = true;
-		rc = RectMakeCenter(0, 0, 0, 0);
-		m_rcSwap = -1;
-		return 0;
-
-	case WM_RBUTTONDOWN:
-		return 0;
-
-	case WM_INITDIALOG:
-		break;
-
-	case WM_PRINT:
-		break;
-
-	case WM_COMMAND:
-	{
-		//switch (LOWORD(wParam))
-		//{
-		//}
-		//break;
-	}
-
-	case WM_DESTROY:
-		g_wndCount--;
-		if (g_wndCount == 0)
-		{
-			PostQuitMessage(0);
-		}
-		return 0;
-	}
-
-	return DefWindowProc(hWnd, iMessage, wParam, lParam);
-}
-
 LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	HDC hdc;
@@ -804,7 +690,7 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 			320, 295, 50, 10, hWnd, HMENU(BTN_15), g_hInstance, NULL);
 
 		CheckRadioButton(hWnd, BTN_01, BTN_02, BTN_01);
-		CheckRadioButton(hWnd, BTN_04, BTN_06, BTN_05);
+		CheckRadioButton(hWnd, BTN_04, BTN_06, BTN_06);
 		CheckRadioButton(hWnd, BTN_07, BTN_08, BTN_07);
 		CheckRadioButton(hWnd, BTN_11, BTN_12, BTN_12);
 		CheckRadioButton(hWnd, BTN_14, BTN_15, BTN_15);

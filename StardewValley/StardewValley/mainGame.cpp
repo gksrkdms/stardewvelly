@@ -209,11 +209,6 @@ LRESULT mainGame::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LP
 	return m_pMap->ChildMapSampleProc(hWnd, iMessage, wParam, lParam);
 }
 
-LRESULT mainGame::ChildMapSampleTopProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
-{
-	return m_pMap->ChildMapSampleTopProc(hWnd, iMessage, wParam, lParam);
-}
-
 void mainGame::update()
 {
 	InvalidateRect(g_hWnd, NULL, false);
