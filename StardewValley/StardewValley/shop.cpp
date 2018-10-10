@@ -104,6 +104,10 @@ void shop::render(HDC hdc)
 	{
 		m_iterInven->second->ShopInvenRender(hdc);
 	}
+	for (m_iterInven = m_mapInven.begin(); m_iterInven != m_mapInven.end(); m_iterInven++)
+	{
+		m_iterInven->second->ShopInvenToolTip(hdc);
+	}
 	// 상점아이템 랜더 및 툴팁랜더
 	for (int i = 0; i < 4; i++)
 	{
