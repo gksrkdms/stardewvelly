@@ -2,7 +2,7 @@
 #include "fishing.h"
 #include "player.h"
 //0 60/  60 160  / 160 180
-
+// 아바나나나나
 HRESULT fishing::init()
 {
 	// 가로바
