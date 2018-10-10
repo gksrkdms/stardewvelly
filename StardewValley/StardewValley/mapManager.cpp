@@ -77,67 +77,6 @@ void mapManager::update()
 
 void mapManager::render(HDC hdc)
 {
-	//for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
-	//{
-	//	for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
-	//	{
-	//		int cullX = CAMERA->getX() / TILE_SIZE_1;
-	//		int cullY = CAMERA->getY() / TILE_SIZE_1;
-
-	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
-	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
-
-	//		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-	//			, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
-	//	}
-	//}
-
-	//for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
-	//{
-	//	for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
-	//	{
-	//		int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
-	//		int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
-
-	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
-	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
-
-	//		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-	//			, m_pTiles[m_indexCamera].terrainFrameX, m_pTiles[m_indexCamera].terrainFrameY, TILE_SIZE_1, TILE_SIZE_1);
-
-	//		if (m_pTiles[m_indexCamera].object != OBJ_NULL)
-	//		{
-	//			//if (m_pTiles[m_indexCamera].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
-	//			{
-	//				m_pObject->frameRenderTile(hdc,
-	//					m_pTiles[m_indexCamera].rc.left,
-	//					m_pTiles[m_indexCamera].rc.top,
-	//					m_pTiles[m_indexCamera].objectFrameX,
-	//					m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-	//			}
-
-	//			if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
-	//			{
-	//				m_pObject2->frameRenderTile(hdc,
-	//					m_pTiles[m_indexCamera].rc.left,
-	//					m_pTiles[m_indexCamera].rc.top,
-	//					m_pTiles[m_indexCamera].objectFrameX,
-	//					m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-	//			}
-
-	//			if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
-	//			{
-	//				m_pObject3->frameRenderTile(hdc,
-	//					m_pTiles[m_indexCamera].rc.left,
-	//					m_pTiles[m_indexCamera].rc.top,
-	//					m_pTiles[m_indexCamera].objectFrameX,
-	//					m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-	//			}
-	//		}
-
-	//	}
-	//}
-
 	for (int y = 0; y < TILE_Y; y++)
 	{
 		for (int x = 0; x < TILE_X; x++)

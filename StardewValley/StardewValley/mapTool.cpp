@@ -681,7 +681,7 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 			320, 295, 50, 10, hWnd, HMENU(BTN_15), g_hInstance, NULL);
 
 		CheckRadioButton(hWnd, BTN_01, BTN_02, BTN_01);
-		CheckRadioButton(hWnd, BTN_04, BTN_06, BTN_05);
+		CheckRadioButton(hWnd, BTN_04, BTN_06, BTN_06);
 		CheckRadioButton(hWnd, BTN_07, BTN_08, BTN_07);
 		CheckRadioButton(hWnd, BTN_11, BTN_12, BTN_12);
 		CheckRadioButton(hWnd, BTN_14, BTN_15, BTN_15);
