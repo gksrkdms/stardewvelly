@@ -13,9 +13,6 @@
 //char szFileName[nFileNameMaxLen];
 //TCHAR szFileName2[256] = _T("");
 
-//ぞしぞしぞし
-//せせせせ
-
 void mainGame::setBackBuffer()
 {
 	m_pBackBuffer = new image;
