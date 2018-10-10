@@ -94,7 +94,10 @@ void player::update()
 	if (m_pTargetItem)
 	{
 		m_pTargetItem->setPlayXY(m_nX, m_nY);	// 도구아이템이 아닐때 플레이어 x,y받아오는 함수
-		setItemMotion();						// 도구아이템 모션 상태
+		if (m_playerState != PLAYER_FISHING)
+		{
+			setItemMotion();
+		}						// 도구아이템 모션 상태
 		setSyncMotion(m_playerMotion, &m_nSyncX, &m_nSyncY);	// 모션 랜더 x,y보정값
 		// 플레이어가 플레이(필드)상태일떄 도구아이템 제외 아이템 그려줄지 여부(만세자세)
 		if (m_playerState == PLAYER_PLAY)
@@ -115,8 +118,11 @@ void player::update()
 
 void player::render(HDC hdc)
 {
-	// 플레이어 랜더
-	m_pPlayer->aniRender(hdc, m_nX - CAMERA->getX() - m_nSyncX, m_nY - CAMERA->getY() - m_nSyncY, m_pAni);
+	if (m_pFishing->getIsFishing() == false)
+		// 플레이어 랜더
+	{
+		m_pPlayer->aniRender(hdc, m_nX - CAMERA->getX() - m_nSyncX, m_nY - CAMERA->getY() - m_nSyncY, m_pAni);
+	}
 
 	// 퀵바 아이템이 있을때
 	if (m_pTargetItem)
@@ -497,7 +503,7 @@ void player::setItemMotion()
 {
 	if (m_playerState == PLAYER_PLAY)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			if (m_pTargetItem->getActItemKind() != ACTITEM_NULL)
 			{
@@ -617,10 +623,13 @@ void player::setItemMotion()
 					//	startMotion(m_pAni, 0, 4, false, false, 5);
 					//	break;
 					//}
-					//m_pFishing->init();
+				
+					m_pFishing->init();
 					//m_pFishing->setIsOne(true);
 					//m_pFishing->setIsMistake(false);
+	
 					m_pFishing->setIsFishing(true);
+					m_playerState = PLAYER_FISHING;		
 					break;
 				case ACTITEM_SWORD:
 					m_playerMotion = MOTION_SWORD;

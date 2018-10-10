@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "fishing.h"
 #include "player.h"
+#include "playerMenu.h"
+#include "inven.h"
 //0 60/  60 160  / 160 180
 
 HRESULT fishing::init()
@@ -36,8 +38,8 @@ HRESULT fishing::init()
 
 
 	///플레이어 좌표
-	m_fPlayerX = 500;
-	m_fPlayerY = 300;
+	m_fPlayerX = m_pPlayer->getX();
+	m_fPlayerY = m_pPlayer->getY();
 
 	m_iPlayerCount = 0;						// 플레이어 프레임 카운트
 	m_iPlayerFrameX = 0;					// 플레이어 프레임
@@ -149,6 +151,7 @@ HRESULT fishing::init()
 	m_rcSeroBar.top = m_fSrcCurrY - 250;  /// 물고기획득바 초기값  
 
 	m_iLuck = 7;  /// 성공확률 + 해줌
+	
 	m_iChance = 150; /// 성공확률 1~100
 	m_iRandomChance = 0; // 1~100 랜덤숫자 담기는 변수
 
@@ -204,6 +207,8 @@ void fishing::release()
 
 void fishing::update()
 {
+	m_fPlayerX = m_pPlayer->getX();
+	m_fPlayerY = m_pPlayer->getY();
 	if (isFishing)
 	{
 		if (isMistake && KEYMANAGER->isStayKeyDown(VK_LBUTTON))  // 처음 시작 시 한번만 실행
@@ -478,7 +483,9 @@ void fishing::fishingTwo()
 	{
 		if (m_BarResult == RED)
 		{
+			
 			isFishing = false;
+			m_pPlayer->setPlayerState(PLAYER_PLAY);
 			return;
 		}
 
@@ -503,11 +510,13 @@ void fishing::fishingTwo()
 					m_iFeelAlpha = 0;
 					m_fTime4 = 0;
 					isTwo = false;
+					
 					return;
 				}
 				else
 				{
-					this->init();
+					isFishing = false;
+					m_pPlayer->setPlayerState(PLAYER_PLAY);
 					return;
 				}
 			}
@@ -775,7 +784,11 @@ void fishing::fishingThree() // 물고기랑 싸움 시작
 
 		else if (m_FishResult == MISS_FISH)
 		{
-			this->init();
+
+			//this->init();
+			isFishing = false;
+			m_pPlayer->setPlayerState(PLAYER_PLAY);
+			return;
 		}
 	}
 
@@ -856,11 +869,24 @@ void fishing::fishingFour()
 
 		if (!isBring)
 			fishBring();
-		if (m_fTime2 > 0.7f)
+		if (m_fTime2 > 0.7f && m_fTime2 < 0.8f)
 		{
 			isBring = true;
-			m_fTime2 = 0;
+			
+		
 		}
+		
+		if (m_fTime2 > 2.5f)
+		{
+			m_fTime2 = 0;
+		
+			m_pPlayer->getPlayerMenu()->getInven()->addItem(101);
+
+			isFishing = false;
+			m_pPlayer->setPlayerState(PLAYER_PLAY);
+			return;
+		}
+	
 	}
 
 }
@@ -982,6 +1008,7 @@ void fishing::fishBring()
 	if (m_fTime3 > 0.6f)
 	{
 		m_fTime3 = 0;
+	
 	}
 
 

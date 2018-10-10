@@ -80,6 +80,8 @@ private:
 	bool isMove;				// 프레임렌더용 불값
 	bool isTargetRc;			// 빨간렉트 표시 불값
 
+
+	bool isFishingStart;
 	PLAYCOLLISION m_playerCollision;	// 플레이어 충돌 상태값
 
 	void setTargetXY();					// 타겟렉트 좌표
@@ -105,9 +107,12 @@ public:
 	int getSizeY() { return m_nPlayerSizeY; }
 
 	PLAYERDIR getPlayerDir() { return m_playerDir; }
+	void setPlayerState(PLAYERSTATE state) { m_playerState  = state; }
 
+	playerMenu* getPlayerMenu() { return m_pMenu; }
 	//void getMap(Map* map) { m_pMap = map; }
 
+	
 	player();
 	~player();
 };

@@ -1,6 +1,7 @@
 #pragma once
 class player;
-
+class playerMenu;
+class inven;
 enum BARSTATE // 처음 가로바 상태
 {
 	BAR_NULL,
@@ -147,9 +148,9 @@ private:
 	//PLAYERSEE	m_PlayerSee;    // 플레이어 보는방향
 	FISHGET		m_FishResult;	// 물고기 싸움결과
 	player*		m_pPlayer;
-
+	
 	bool isFishing;		// 외부에서 쓰일 불값
-
+	
 public:
 
 	HRESULT init();
@@ -170,12 +171,12 @@ public:
 
 	void fishingFour(); //잡은 후
 	void fishBring();
-
+	
 	void setPlayer(player* play) { m_pPlayer = play; }
 	void setIsOne(bool isone) { isOne = isone; }
 	void setIsMistake(bool mistake) { isMistake = mistake; }
 	void setIsFishing(bool isfishing) { isFishing = isfishing; }
-
+	bool getIsFishing() { return isFishing; }
 	fishing();
 	~fishing();
 };
