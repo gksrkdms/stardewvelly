@@ -63,12 +63,14 @@ void mainGame::release()
 	IMAGEMANAGER->release();
 	TIMEMANAGER->release();
 	SCENEMANAGER->release();
+	PLAYTIMEMANAGER->release();
 
 	DATAMANAGER->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
 	IMAGEMANAGER->releaseSingleton();
 	TIMEMANAGER->releaseSingleton();
 	SCENEMANAGER->releaseSingleton();
+	PLAYTIMEMANAGER->releaseSingleton();
 
 }
 
@@ -205,11 +207,6 @@ LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 LRESULT mainGame::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	return m_pMap->ChildMapSampleProc(hWnd, iMessage, wParam, lParam);
-}
-
-LRESULT mainGame::ChildMapSampleTopProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
-{
-	return m_pMap->ChildMapSampleTopProc(hWnd, iMessage, wParam, lParam);
 }
 
 void mainGame::update()

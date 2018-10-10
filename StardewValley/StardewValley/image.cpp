@@ -387,7 +387,6 @@ void image::frameRenderTile(HDC hdc, int destX, int destY, int currFrameX, int c
 			m_pImageInfo->nFrameHeight * m_pImageInfo->nCurrFrameY,// 복사될 영역 시작좌표
 			m_pImageInfo->nFrameWidth,
 			m_pImageInfo->nFrameHeight,	// 복사될 영역지정 좌표
-
 			m_transColor);			// 복사에서 제외할 색상
 	}
 	else

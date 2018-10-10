@@ -22,7 +22,7 @@ HRESULT gametime::init()
 	m_zulaTime = 0;
 	m_isAction = false;
 	m_isCount = true;
-	m_alpha = 100;
+	m_alpha = 0;
 	m_convertHour = 60;
 	m_day = 1;
 	m_month = 1;
@@ -54,8 +54,10 @@ void gametime::update()
 	}
 
 	// 오후 8시 이후에 어두워짐
-	if (m_hour >= 6)
+	if (m_hour >= 20)
 	{
+		m_alpha = 100;
+
 		// 10분 단위로 자름, 10분마다 어두워짐
 		if (m_min % 10 == 0 && m_isCount)
 		{
