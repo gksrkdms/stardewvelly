@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="2DGameFramework">
+      <UniqueIdentifier>{ba2e6f2a-77c2-4b3e-9a92-c727a1322bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame">
+      <UniqueIdentifier>{9a88345a-3d0d-4694-917f-463f284dada2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFramework\animation">
+      <UniqueIdentifier>{3d064ae2-1c6d-48e2-b5eb-ac71a1330ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFramework\effect">
+      <UniqueIdentifier>{5bf3f888-3321-4a42-8053-db2abd099ad9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFramework\image">
+      <UniqueIdentifier>{65817baf-3a4a-4967-937a-5025c4e89a59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFramework\Manager">
+      <UniqueIdentifier>{01e3e615-c2c3-4831-8bb9-479a2d690368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFramework\timer">
+      <UniqueIdentifier>{64f562dc-c344-4e25-acf1-89066cd58660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFramework\scene">
+      <UniqueIdentifier>{c1d49b9d-2b7f-4e68-bbb2-48d94cc1b19a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFramework\utility">
+      <UniqueIdentifier>{24f5c385-6be7-4946-ba3d-877d920b3ee6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\MapTool">
+      <UniqueIdentifier>{c5a1fc61-3232-4a1f-b985-50e7921738a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\MapTool\object">
+      <UniqueIdentifier>{809dcaf9-fabb-4d85-9eae-7e31b547f07a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene">
+      <UniqueIdentifier>{26c497b9-7c1c-4a0e-ac6c-19fd7d0f0333}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\gameScene">
+      <UniqueIdentifier>{b1240fe8-9aec-4808-9bad-0b4eddc1dd03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\gameScene\player">
+      <UniqueIdentifier>{d7cf5124-6561-455b-a6c8-ff7668e6b26b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\gameScene\item">
+      <UniqueIdentifier>{d3755c0f-e986-4f80-b748-d61792b8afdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFramework\txtData">
+      <UniqueIdentifier>{28f5608c-6f10-4e5a-817d-c24218dd19cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\gameScene\menu">
+      <UniqueIdentifier>{5ac5ca69-84e9-4c36-8b31-ef46fd178cd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\gameScene\fishing">
+      <UniqueIdentifier>{420152a5-0c37-466c-9a40-bc5ec14aeef1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="effectManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="imageManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="keyManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="soundManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="timeManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="effect.h">
+      <Filter>2DGameFramework\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="image.h">
+      <Filter>2DGameFramework\image</Filter>
+    </ClInclude>
+    <ClInclude Include="singletonBase.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="randomFunction.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="commonMacroFunction.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>2DGameFramework\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>2DGameFramework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>2DGameFramework\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="animation.h">
+      <Filter>2DGameFramework\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="DataManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="gameNode.h">
+      <Filter>2DGameFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="mainGame.h">
+      <Filter>MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="StardewValley.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="mapTool.h">
+      <Filter>MainGame\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="mapCamera.h">
+      <Filter>MainGame\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="mapManager.h">
+      <Filter>MainGame\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="mapObject.h">
+      <Filter>MainGame\MapTool\object</Filter>
+    </ClInclude>
+    <ClInclude Include="objTree.h">
+      <Filter>MainGame\MapTool\object</Filter>
+    </ClInclude>
+    <ClInclude Include="gametime.h">
+      <Filter>MainGame\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="startScene.h">
+      <Filter>MainGame\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="gameScene.h">
+      <Filter>MainGame\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>MainGame\gameScene\item</Filter>
+    </ClInclude>
+    <ClInclude Include="txtData.h">
+      <Filter>2DGameFramework\txtData</Filter>
+    </ClInclude>
+    <ClInclude Include="inven.h">
+      <Filter>MainGame\gameScene\item</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>MainGame\gameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>MainGame\gameScene\player</Filter>
+    </ClInclude>
+    <ClInclude Include="playerMenu.h">
+      <Filter>MainGame\gameScene\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="shop.h">
+      <Filter>MainGame\gameScene\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="fishing.h">
+      <Filter>MainGame\gameScene\fishing</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="effectManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="imageManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="keyManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="soundManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="timeManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="effect.cpp">
+      <Filter>2DGameFramework\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="image.cpp">
+      <Filter>2DGameFramework\image</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>2DGameFramework\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>2DGameFramework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="timer.cpp">
+      <Filter>2DGameFramework\timer</Filter>
+    </ClCompile>
+    <ClCompile Include="animation.cpp">
+      <Filter>2DGameFramework\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="DataManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="gameNode.cpp">
+      <Filter>2DGameFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="mainGame.cpp">
+      <Filter>MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="StardewValley.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="mapTool.cpp">
+      <Filter>MainGame\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="mapCamera.cpp">
+      <Filter>MainGame\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="mapManager.cpp">
+      <Filter>MainGame\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="mapObject.cpp">
+      <Filter>MainGame\MapTool\object</Filter>
+    </ClCompile>
+    <ClCompile Include="objTree.cpp">
+      <Filter>MainGame\MapTool\object</Filter>
+    </ClCompile>
+    <ClCompile Include="gametime.cpp">
+      <Filter>MainGame\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="startScene.cpp">
+      <Filter>MainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="gameScene.cpp">
+      <Filter>MainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>MainGame\gameScene\item</Filter>
+    </ClCompile>
+    <ClCompile Include="txtData.cpp">
+      <Filter>2DGameFramework\txtData</Filter>
+    </ClCompile>
+    <ClCompile Include="inven.cpp">
+      <Filter>MainGame\gameScene\item</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>MainGame\gameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>MainGame\gameScene\player</Filter>
+    </ClCompile>
+    <ClCompile Include="playerMenu.cpp">
+      <Filter>MainGame\gameScene\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="shop.cpp">
+      <Filter>MainGame\gameScene\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="fishing.cpp">
+      <Filter>MainGame\gameScene\fishing</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="StardewValley.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="StardewValley.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cursor1.cur">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+</Project>
