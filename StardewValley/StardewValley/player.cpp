@@ -82,7 +82,7 @@ void player::update()
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('O'))
-		m_pmap->loadMap("image/1234.map");
+		m_pMap->loadMap("image/1234.map");
 
 	// 플레이어 렉트 셋팅
 	m_rc = RectMake(m_nX + 26 - CAMERA->getX(), m_nY + 85 - CAMERA->getY(), m_nPlayerSizeX, m_nPlayerSizeY);

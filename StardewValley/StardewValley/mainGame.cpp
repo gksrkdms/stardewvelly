@@ -323,13 +323,6 @@ void mainGame::imgload()
 
 void mainGame::addsound()
 {
-	// 인벤옮기고 손떨어지게하는거
-	SOUNDMANAGER->addSound("sound/changeitem.wav", true, false);
-
-}
-
-void mainGame::addsound()
-{
 	// start scene
 	SOUNDMANAGER->addSound("sound/StardewValleyOverture.mp3", true, true);
 
