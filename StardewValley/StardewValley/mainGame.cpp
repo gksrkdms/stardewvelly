@@ -15,6 +15,7 @@
 
 //ぞしぞしぞし
 //せせせせ
+// ししし
 
 void mainGame::setBackBuffer()
 {
