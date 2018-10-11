@@ -29,9 +29,9 @@ void camera::setFocus(player * play)
 	m_nX = play->getX() - WINSIZEX / 2;
 	m_nY = play->getY() - WINSIZEY / 2;
 	if (play->getX() < 0) play->setX(0);
-	if (play->getX() > MAPSIZEX - play->getSizeX()) play->setX(MAPSIZEX - play->getSizeX());
+	if (play->getX() > MAPSIZEX - play->getSizeX() - 80) play->setX(MAPSIZEX - play->getSizeX() - 80);
 	if (play->getY() < 0) play->setY(0);
-	if (play->getY() > MAPSIZEY - play->getSizeY()) play->setY(MAPSIZEY - play->getSizeY());
+	if (play->getY() > MAPSIZEY - play->getSizeY() - 100) play->setY(MAPSIZEY - play->getSizeY() - 100);
 }
 
 void camera::setX(int x)

@@ -97,7 +97,7 @@ void player::update()
 	if (m_pTargetItem)
 	{
 		m_pTargetItem->setPlayXY(m_nX, m_nY);	// 도구아이템이 아닐때 플레이어 x,y받아오는 함수
-		if (m_playerState != PLAYER_FISHING)
+		if (m_playerState != PLAYER_FISHING && m_pMenu->getInven()->getLbutton() == false)
 		{
 			setItemMotion();
 		}						// 도구아이템 모션 상태

@@ -56,7 +56,6 @@ void mapManager::update()
 		for (int x = 0; x < TILE_X; x++)
 		{
 			m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1 - CAMERA->getX(), y*TILE_SIZE_1 - CAMERA->getY(), TILE_SIZE_1, TILE_SIZE_1);
-			int a = 20;
 		}
 	}
 
