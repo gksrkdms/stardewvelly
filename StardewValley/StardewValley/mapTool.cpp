@@ -87,6 +87,7 @@ HRESULT mapTool::init()
 		m_pSampleTiles[i].index = i;
 		m_pSampleTiles[i].object = MYHOME;
 		m_pSampleTiles[i].objectID = OBID_1;
+		m_pSampleTiles[i].terrain = NOMALTILE;
 		m_pSampleTiles[i].isCollide = false;
 		//오브젝트 충돌 임시 저장소 1
 		m_ptempSampleObj1[i].isCollide = false;
@@ -118,7 +119,7 @@ HRESULT mapTool::init()
 	//물
 	for (int y = 0; y < 4; y++)
 	{
-		for (int x = 6; x < 9; x++)
+		for (int x = 12; x < 15; x++)
 		{
 			m_pSampleTiles[y * 20 + x].terrain = WETEREARTH;
 		}
@@ -237,11 +238,14 @@ void mapTool::render(HDC hdc)
 			if (m_pTiles[m_indexCamera].terrain == WETEREARTH)
 			{
 				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-					, 1, 1, TILE_SIZE_1, TILE_SIZE_1);
+					, 19, 7, TILE_SIZE_1, TILE_SIZE_1);
 			}
 			else
+			{
 				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-				, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
+					, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
+			}
+
 
 		}
 	}
@@ -1506,7 +1510,7 @@ void mapTool::TerrTypeInit()
 	//물
 	for (int y = 0; y < 4; y++)
 	{
-		for (int x = 6; x < 9; x++)
+		for (int x = 12; x < 15; x++)
 		{
 			m_pSampleTiles[y * 20 + x].terrain = WETEREARTH;
 		}
@@ -1623,6 +1627,7 @@ void mapTool::sampleTileinit()
 			m_pSampleTiles[i].frameY = i / (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
 			m_pSampleTiles[i].index = i;
 			m_pSampleTiles[i].object = OBJ_NULL;
+			m_pSampleTiles[i].terrain = NOMALTILE;
 			
 			//저장하고싶다....
 			m_pSampleTiles[i].isCollide = false;
