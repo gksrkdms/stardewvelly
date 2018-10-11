@@ -31,7 +31,6 @@ void playerMenu::release()
 void playerMenu::update()
 {
 	m_pInven->update();
-	m_pShop->update();
 
 	m_mapItem = m_pInven->getInvenMap(); // 인벤토리 map정보 받아옴
 
@@ -45,6 +44,7 @@ void playerMenu::update()
 		}
 		if (m_menuDir == MENU_SHOP)
 		{
+			m_pShop->update();
 			m_pInven->setInvenDir(INVEN_SHOP);	// 메뉴가 상점일떄 인벤토리 랜더를 위해 상태값변경
 		}
 		// 손에 아이템이 없을떄만 메뉴창을 닫을수있게함

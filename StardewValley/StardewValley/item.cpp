@@ -327,8 +327,20 @@ void item::setItem(bool sameItem)
 		case 205:
 			itemName = "item_205";
 			break;
+		case 206:
+			itemName = "item_206";
+			break;
 		case 207:
 			itemName = "item_207";
+			break;
+		case 208:
+			itemName = "item_208";
+			break;
+		case 209:
+			itemName = "item_209";
+			break;
+		default:
+			return;
 			break;
 		}
 		// 문자열과 txt데이터의 데이터와 일치하면

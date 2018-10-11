@@ -42,6 +42,7 @@ HRESULT shop::init()
 
 	isBuy = false;
 	isSell = false;
+	isOnceSetItem = true;
 
 	m_nPage = 1;
 
@@ -62,7 +63,10 @@ void shop::update()
 	for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
 	{
 		m_iterItem->second->update();
-		m_iterItem->second->setMouseY(g_ptMouse.y + 5);
+		if (m_iterItem->second->getToolTip() == true)
+		{
+			m_iterItem->second->setMouseY(g_ptMouse.y + 5);
+		}
 	}
 
 	if (m_pInven->getHandItem() == false)
@@ -248,7 +252,7 @@ void shop::checkTrade()
 	m_mapInven = m_pInven->getInvenMap();
 	for (m_iterInven = m_mapInven.begin(); m_iterInven != m_mapInven.end(); m_iterInven++)
 	{
-		if (m_iterInven->second->getShopItem() == false && m_iterInven->second->getItemOn() == true)
+		if (m_iterInven->second->getItemOn() == true && m_iterInven->second->getShopItem() == false)
 		{
 			if (PtInRect(&m_iterInven->second->getrect(), g_ptMouse))
 			{
@@ -288,9 +292,15 @@ void shop::setItem()
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			if (m_nPage == 1)
+			{
 				m_nPage = MAXPAGE;
+				isOnceSetItem = true;
+			}
 			else
+			{
 				m_nPage--;
+				isOnceSetItem = true;
+			}
 		}
 	}
 	if (isMouseIn[1] == true)
@@ -298,43 +308,55 @@ void shop::setItem()
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			if (m_nPage == MAXPAGE)
+			{
 				m_nPage = 1;
+				isOnceSetItem = true;
+			}
 			else
+			{
 				m_nPage++;
+				isOnceSetItem = true;
+			}
 		}
 	}
 	int i = 0;
 
 	// 페이지 번호에따라서 아이템교체함
-	switch (m_nPage)
+	if (isOnceSetItem == true)
 	{
-	case 1:
-		i = 101;
-		for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
+		switch (m_nPage)
 		{
-			m_iterItem->second->deleteItem();
-			m_iterItem->second->getItem(i, false);
-			i++;
+		case 1:
+			i = 101;
+			for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
+			{
+				m_iterItem->second->deleteItem();
+				m_iterItem->second->getItem(i, false);
+				i++;
+			}
+			isOnceSetItem = false;
+			break;
+		case 2:
+			i = 201;
+			for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
+			{
+				m_iterItem->second->deleteItem();
+				m_iterItem->second->getItem(i, false);
+				i++;
+			}
+			isOnceSetItem = false;
+			break;
+		case 3:
+			for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
+			{
+				m_iterItem->second->deleteItem();
+			}
+			m_iterItem = m_mapItem.find(0);
+			m_iterItem->second->getItem(105, false);
+			m_iterItem = m_mapItem.find(1);
+			m_iterItem->second->getItem(205, false);
+			isOnceSetItem = false;
+			break;
 		}
-		break;
-	case 2:
-		i = 201;
-		for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
-		{
-			m_iterItem->second->deleteItem();
-			m_iterItem->second->getItem(i, false);
-			i++;
-		}
-		break;
-	case 3:
-		for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
-		{
-			m_iterItem->second->deleteItem();
-		}
-		m_iterItem = m_mapItem.find(0);
-		m_iterItem->second->getItem(105, false);
-		m_iterItem = m_mapItem.find(1);
-		m_iterItem->second->getItem(205, false);
-		break;
 	}
 }

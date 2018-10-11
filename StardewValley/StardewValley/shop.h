@@ -41,6 +41,7 @@ private:
 	bool isHandItem;	// 마우스 클릭유무
 	bool isBuy;			// 구입 상태
 	bool isSell;		// 판매 상태
+	bool isOnceSetItem;	// 페이지별 아이템 업데이트 1번만 돌아가게하는 불값
 
 	void buyItem();		// 아이템 구입 함수
 	void sellItem();	// 아이템 판매 함수
