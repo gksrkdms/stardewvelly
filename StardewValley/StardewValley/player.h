@@ -114,7 +114,7 @@ public:
 	void setPlayerState(PLAYERSTATE state) { m_playerState  = state; }
 
 	playerMenu* getPlayerMenu() { return m_pMenu; }
-	//void getMap(Map* map) { m_pMap = map; }
+	void getMap(mapManager* map) { m_pmap = map; }
 
 	
 	player();
