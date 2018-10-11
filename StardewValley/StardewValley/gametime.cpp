@@ -14,7 +14,8 @@ gametime::~gametime()
 HRESULT gametime::init()
 {
 	m_pdark = IMAGEMANAGER->findImage("dark");
-
+	m_pClock = IMAGEMANAGER->findImage("clock");
+	m_pMinutehand = IMAGEMANAGER->findImage("minutehand");
 	TIMEMANAGER->setZulaTime(0);
 
 	m_hour = 6;
@@ -26,6 +27,8 @@ HRESULT gametime::init()
 	m_convertHour = 60;
 	m_day = 1;
 	m_month = 1;
+
+	m_nClockScalar = 3;
 
 	return S_OK;
 }
@@ -134,7 +137,12 @@ void gametime::update()
 void gametime::render(HDC hdc)
 {
 	if (m_pdark)
-	m_pdark->alphaRender(hdc, 0, 0, m_alpha);
+		m_pdark->alphaRender(hdc, 0, 0, m_alpha);
+
+	// 시계 랜더
+	if(m_pClock)
+		m_pClock->render(hdc, WINSIZEX - m_pClock->getWidth()*m_nClockScalar-10, 20, m_nClockScalar);
+		m_pMinutehand->render(hdc, WINSIZEX - m_pClock->getWidth()*m_nClockScalar+40, 20, m_nClockScalar);
 
 	TIMEMANAGER->render(hdc);
 
@@ -142,6 +150,7 @@ void gametime::render(HDC hdc)
 
 	char str[256];
 	SetBkMode(hdc, TRANSPARENT);
+	SetTextColor(hdc, RGB(0, 0, 0));
 
 	sprintf_s(str, 256, "time : %f", TIMEMANAGER->getZulaTime());
 	TextOut(hdc, 0, 150, str, strlen(str));
@@ -149,11 +158,11 @@ void gametime::render(HDC hdc)
 	sprintf_s(str, 256, "zulatime : %f", m_zulaTime);
 	TextOut(hdc, 0, 200, str, strlen(str));
 
-	sprintf_s(str, 256, "hour : %d", m_hour);
-	TextOut(hdc, 300, 200, str, strlen(str));
+	sprintf_s(str, 256, "%d : ", m_hour);
+	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*m_nClockScalar + 120, 110, str, strlen(str));
 
-	sprintf_s(str, 256, "min : %d", m_min);
-	TextOut(hdc, 400, 200, str, strlen(str));
+	sprintf_s(str, 256, "%d", m_min);
+	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*m_nClockScalar + 150, 110, str, strlen(str));
 
 	sprintf_s(str, 256, "day : %d", m_day);
 	TextOut(hdc, 400, 250, str, strlen(str));

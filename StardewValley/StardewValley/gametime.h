@@ -8,23 +8,26 @@ enum WEEK {
 class gametime:public singletonBase<gametime>
 {
 private:
-	image * m_pdark;
+	image * m_pdark; // 밤 랜더
+	image * m_pClock; // 시계
+	image * m_pMinutehand; // 분침
 
 	WEEK m_week;
 
-	int m_alpha;
-	int m_zulaTime;
+	int m_alpha; // 알파랜더 알파값
+	int m_zulaTime; // 게임 전체시간
 
 	int m_hour;
 	int m_min;
+	int m_day; // 날
+	int m_month; // 달
 
 	bool m_isAction; // hour 덧셈 한번만 실행되게 하려고 넣음
 	bool m_isCount; // 10min count
 
 	int m_convertHour; // 게임시간단위로 한시간일때 현실시간으로 몇초인지 환산한 값
-
-	int m_day; // 날
-	int m_month; // 달
+	
+	int m_nClockScalar; // 시계 크기 조절
 
 public:
 	gametime();

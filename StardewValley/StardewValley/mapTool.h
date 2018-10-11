@@ -96,7 +96,6 @@ typedef struct tagTile
 	int objectFrameY;
 
 	int index;
-	int sampleindex;
 
 	bool isCollide;
 
@@ -111,13 +110,13 @@ struct tagSampleTile
 
 	int frameX;
 	int frameY;
-	int index;
 
 	bool isCollide;
 
 	RECT rc;
 };
 
+// 임시저장
 struct tempSampleTile
 {
 	TERRAIN terrain; // 지형 타입

@@ -84,7 +84,6 @@ HRESULT mapTool::init()
 		m_pSampleTiles[i].rc = RectMake(m_nImageX + (i % SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, (i / SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE);
 		m_pSampleTiles[i].frameX = i % (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
 		m_pSampleTiles[i].frameY = i / (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
-		m_pSampleTiles[i].index = i;
 		m_pSampleTiles[i].object = MYHOME;
 		m_pSampleTiles[i].objectID = OBID_1;
 		m_pSampleTiles[i].terrain = NOMALTILE;
@@ -374,7 +373,7 @@ void mapTool::render(HDC hdc)
 			
 			// È®ÀÎ
 			if (m_isMove)
-				m_pObject->frameRender(hdc, g_ptMouse.x + 15, g_ptMouse.y + 15, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY);		
+				m_pObject->frameRender(hdc, g_ptMouse.x, g_ptMouse.y, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY);		
 		}
 
 		else
@@ -394,7 +393,6 @@ void mapTool::render(HDC hdc)
 	TextOut(hdc, 0, 250, str, strlen(str));
 	sprintf_s(str, 128, "%d", CAMERAMANAGER->getCameraY());
 	TextOut(hdc, 0, 350, str, strlen(str));
-
 
 	sprintf_s(str, 128, "left : %d", rc.left);
 	TextOut(hdc, 1000, 150, str, strlen(str));
@@ -1625,7 +1623,6 @@ void mapTool::sampleTileinit()
 			m_pSampleTiles[i].rc = RectMake(m_nImageX + (i % SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, (i / SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE);
 			m_pSampleTiles[i].frameX = i % (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
 			m_pSampleTiles[i].frameY = i / (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
-			m_pSampleTiles[i].index = i;
 			m_pSampleTiles[i].object = OBJ_NULL;
 			m_pSampleTiles[i].terrain = NOMALTILE;
 			
@@ -1663,7 +1660,6 @@ void mapTool::sampleTileinit()
 			m_pSampleTiles[i].rc = RectMake(m_nImageX + (i % SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, (i / SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE);
 			m_pSampleTiles[i].frameX = i % (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
 			m_pSampleTiles[i].frameY = i / (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
-			m_pSampleTiles[i].index = i;
 			m_pSampleTiles[i].terrain = NOMALTILE;
 			m_pSampleTiles[i].isCollide = false;
 		}

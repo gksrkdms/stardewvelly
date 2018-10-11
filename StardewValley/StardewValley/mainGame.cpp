@@ -262,8 +262,12 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("recovery_energy", "image/Stardew Valley/ui/recovery_energy.bmp", 50, 34, false, 0);
 	IMAGEMANAGER->addImage("recovery_hp", "image/Stardew Valley/ui/recovery_hp.bmp", 50, 34, false, 0);
 	IMAGEMANAGER->addImage("shop_textBox", "image/Stardew Valley/ui/shop_textBox.bmp", 209, 100, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("clock", "image/Stardew Valley/ui/clock.bmp", 11, 19, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("clock1", "image/Stardew Valley/ui/clock1.bmp", 72, 57, true, RGB(255, 0, 255));
+	
+	// ½Ã°è
+	IMAGEMANAGER->addImage("minutehand", "image/Stardew Valley/ui/clock.bmp", 11, 19, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("clock", "image/Stardew Valley/ui/clock1.bmp", 72, 57, true, RGB(255, 0, 255));
+	
+	// icon
 	IMAGEMANAGER->addImage("icon1", "image/Stardew Valley/ui/icon1.bmp", 16, 16, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("icon2", "image/Stardew Valley/ui/icon2.bmp", 16, 16, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("icon3", "image/Stardew Valley/ui/icon3.bmp", 16, 16, true, RGB(255, 0, 255));
