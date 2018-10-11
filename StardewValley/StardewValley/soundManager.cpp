@@ -80,7 +80,7 @@ void soundManager::play(string soundName, float volume)
 	{
 		if (p.first == soundName)
 		{
-			m_system->playSound(FMOD_CHANNEL_FREE, m_sound[index], false, &m_channel[index]);
+			m_system->playSound(FMOD_CHANNEL_FREE, (*p.second), false, &m_channel[index]);
 			//false : pause가 가능한지 안한지
 
 			m_channel[index]->setVolume(volume);

@@ -60,7 +60,7 @@ private:
 	item*		m_pTargetItem;	// 퀵슬롯 현재 아이템
 	fishing*	m_pFishing;
 
-	mapManager* m_pmap;
+	mapManager* m_pMap;
 
 	RECT	m_rc;				// 플래이어 렉트
 	RECT	m_TargetRc;			// 빨간네모 렉트
@@ -114,7 +114,7 @@ public:
 	void setPlayerState(PLAYERSTATE state) { m_playerState  = state; }
 
 	playerMenu* getPlayerMenu() { return m_pMenu; }
-	void getMap(mapManager* map) { m_pmap = map; }
+	void getMap(mapManager* map) { m_pMap = map; }
 
 	
 	player();
