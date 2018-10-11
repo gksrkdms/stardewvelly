@@ -4,6 +4,9 @@
 //시계 이미지 배율
 #define CLOCK_SCALAR 3
 
+// 게임시간단위로 한시간일때 현실시간으로 몇초인지 환산한 값
+#define CONVER_HOUR 60
+
 enum WEEK {
 	MON, TUE, WED, THUR, FRI, SAT, SUN
 };
@@ -28,8 +31,6 @@ private:
 	bool m_isAction; // hour 덧셈 한번만 실행되게 하려고 넣음
 	bool m_isCount; // 10min count
 	bool m_isNight; // 밤인지 확인
-
-	int m_nConvertHour; // 게임시간단위로 한시간일때 현실시간으로 몇초인지 환산한 값
 
 public:
 	gametime();

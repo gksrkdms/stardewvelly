@@ -24,7 +24,6 @@ HRESULT gametime::init()
 	m_isAction = false;
 	m_isCount = true;
 	m_alpha = 0;
-	m_nConvertHour = 60;
 	m_day = 1;
 	m_month = 1;
 	m_isNight = false;
@@ -41,18 +40,19 @@ void gametime::update()
 	m_zulaTime = (int)TIMEMANAGER->getZulaTime();
 
 	//시간
-	if (m_zulaTime % m_nConvertHour == 0 && !m_isAction && m_zulaTime != 0)
+	if (m_zulaTime % CONVER_HOUR == 0 && !m_isAction && m_zulaTime != 0)
 	{
 		m_isAction = true;
 		m_hour = m_hour + 1;
 		m_min = 0;
 	}
+
 	//분
-	else if (m_zulaTime % m_nConvertHour != 0)
+	else if (m_zulaTime % CONVER_HOUR != 0)
 	{
 		if (m_isAction)
 			m_isAction = false;
-		m_min = m_zulaTime % m_nConvertHour;
+		m_min = m_zulaTime % CONVER_HOUR;
 	}
 
 	// 오후 8시 이후에 어두워짐
