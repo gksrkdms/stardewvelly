@@ -82,7 +82,7 @@ void player::update()
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('O'))
-		m_pmap->loadMap("image/1234.map");
+		m_pMap->loadMap("image/1234.map");
 
 	// 플레이어 렉트 셋팅
 	m_rc = RectMake(m_nX + 26 - CAMERA->getX(), m_nY + 85 - CAMERA->getY(), m_nPlayerSizeX, m_nPlayerSizeY);
@@ -97,7 +97,7 @@ void player::update()
 	if (m_pTargetItem)
 	{
 		m_pTargetItem->setPlayXY(m_nX, m_nY);	// 도구아이템이 아닐때 플레이어 x,y받아오는 함수
-		if (m_playerState != PLAYER_FISHING)
+		if (m_playerState != PLAYER_FISHING && m_pMenu->getInven()->getLbutton() == false)
 		{
 			setItemMotion();
 		}						// 도구아이템 모션 상태
