@@ -346,6 +346,18 @@ void mainGame::addsound()
 	SOUNDMANAGER->addSound("sound/effect/startbutton.wav", false, false);
 
 
+	//³¬½Ã»ç¿îµå
+	SOUNDMANAGER->addSound("sound/effect/fishing/¸±°¨´Â¼Ò¸®.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/³¬½Ã¹öÆ°¼Ò¸®.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/³¬½ÃÁÙ´øÁü.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/´À³¦Ç¥¼Ò¸®.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/³¬½ÃÈ÷Æ®.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/Ã·º¡¼Ò¸®.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/¹°¼Ò¸®.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/¸±°¨´Â¼Ò¸®2.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/¶ì·Î¸®.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/³¬¾ÆÃ¤´Â¼Ò¸®.wav", false, false);
+
 
 
 }

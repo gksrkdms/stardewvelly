@@ -148,6 +148,7 @@ private:
 	bool		isMistake; //실수로 만들어진 불값
 	bool		isBring; // 낚인 물고기 손위로 올라오게 하는 불값
 	bool		isSetFish; // 랜덤으로 얻은 물고기
+	bool		isSoundOn; // 사운드 실행
 	BARSTATE	m_BarState;		// 가로바 게이지 상태
 	BARRESULT	m_BarResult;	// 가로바 게이지 결과
 	//PLAYERSEE	m_PlayerSee;    // 플레이어 보는방향
