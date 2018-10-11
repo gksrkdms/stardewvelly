@@ -18,7 +18,7 @@ HRESULT gametime::init()
 	m_pMinutehand = IMAGEMANAGER->findImage("minutehand");
 	TIMEMANAGER->setZulaTime(0);
 
-	m_hour = 19;
+	m_hour = 6;
 	m_min = 0;
 	m_zulaTime = 0;
 	m_isAction = false;
