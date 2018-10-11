@@ -35,6 +35,9 @@ HRESULT fishing::init()
 	m_pIchoo = IMAGEMANAGER->findImage("i_moveChoo");
 	// 낚인 물고기
 	m_pIgogi = IMAGEMANAGER->findImage("i_GetFish");
+	// 낚은물고기 알림판
+	m_pIboard = IMAGEMANAGER->findImage("i_NoticeBoard");
+	
 
 
 	///플레이어 좌표
@@ -165,6 +168,11 @@ HRESULT fishing::init()
 	m_iChooCount = 0;
 
 
+	//얻은고기 알림판
+	m_fBoardX = m_fPlayerX-100;
+	m_fBoardY = m_fPlayerY-200;
+
+
 	//필렉트 색깔 rgb
 	m_r = 255;
 	m_g = 0;
@@ -234,6 +242,7 @@ void fishing::update()
 
 void fishing::render(HDC hdc)
 {
+	
 	/*sprintf_s(m_szText, 128, "%d", (int)m_fGreenMinY);
 	TextOut(hdc, 100, 40, m_szText, strlen(m_szText));
 	sprintf_s(m_szText, 128, "%d", (int)m_fSrcCurrY);
@@ -306,6 +315,7 @@ void fishing::render(HDC hdc)
 		if (m_FishResult == GET_FISH)
 		{
 			m_pIgogi->frameRender(hdc, m_fZziX, m_fZziY, 0, 0); //낚인고기
+			m_pIboard->render(hdc, m_fBoardX, m_fBoardY); // 알림판
 		}
 		else if (m_FishResult == MISS_FISH)
 			m_pIplayer->frameRender(hdc, m_fZziX + 50, m_fZziY + 100, 2, 0);
@@ -880,8 +890,8 @@ void fishing::fishingFour()
 		{
 			m_fTime2 = 0;
 		
-			m_pPlayer->getPlayerMenu()->getInven()->addItem(101);
-
+			m_pPlayer->getPlayerMenu()->getInven()->addItem(207);
+		
 			isFishing = false;
 			m_pPlayer->setPlayerState(PLAYER_PLAY);
 			return;

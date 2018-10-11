@@ -303,6 +303,14 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("item_203", "image/Stardew Valley/item/item_203.bmp", 16, 16, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("item_204", "image/Stardew Valley/item/item_204.bmp", 16, 16, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("item_205", "image/Stardew Valley/item/item_205.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_206", "image/Stardew Valley/item/item_206.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_207", "image/Stardew Valley/item/item_207.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_208", "image/Stardew Valley/item/item_208.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_209", "image/Stardew Valley/item/item_209.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_210", "image/Stardew Valley/item/item_210.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_211", "image/Stardew Valley/item/item_211.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_212", "image/Stardew Valley/item/item_212.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_213", "image/Stardew Valley/item/item_213.bmp", 16, 16, true, RGB(255, 0, 255));
 
 	// 낚시관련 이미지
 	IMAGEMANAGER->addImage("i_GaroBar", "image/Stardew Valley/fishing/가로바.bmp", 200, 48, true, RGB(255, 0, 255));   // 원래사이즈 50,12 
@@ -319,6 +327,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("i_moveFish", "image/Stardew Valley/fishing/물고기.bmp", 37, 37, true, RGB(255, 0, 255)); // 19 19
 	IMAGEMANAGER->addImage("i_moveChoo", "image/Stardew Valley/fishing/추감기.bmp", 168, 55, 4, 1, true, RGB(255, 0, 255));// 72 21 
 	IMAGEMANAGER->addImage("i_GetFish", "image/Stardew Valley/fishing/금붕어.bmp", 102, 51, 2, 1, true, RGB(255, 0, 255));// 34 17  
+	IMAGEMANAGER->addImage("i_NoticeBoard", "image/Stardew Valley/fishing/고기알림.bmp", 292, 196, true, RGB(255, 0, 255)); // 73 49
 }
 
 void mainGame::addsound()

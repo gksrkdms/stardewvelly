@@ -327,6 +327,9 @@ void item::setItem(bool sameItem)
 		case 205:
 			itemName = "item_205";
 			break;
+		case 207:
+			itemName = "item_207";
+			break;
 		}
 		// 문자열과 txt데이터의 데이터와 일치하면
 		for (iterData = vecData.begin(); iterData != vecData.end(); iterData++)

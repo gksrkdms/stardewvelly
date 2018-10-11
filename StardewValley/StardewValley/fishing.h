@@ -60,6 +60,7 @@ private:
 	image *     m_pIfish;			// 움직이는 물고기 이미지
 	image *		m_pIchoo;			// 돌아가는 레버 이미지
 	image *     m_pIgogi;			// 잡힌 물고기 이미지
+	image *     m_pIboard;			// 잡힌 물고기 판때기
 
 	RECT		m_rcGaroBar;		// 가로게이지 렉트
 	RECT		m_rcSeroBar;		// 세로게이지 렉트
@@ -122,6 +123,9 @@ private:
 	float		m_fchooY;
 	int			m_iChooFrame;
 	int			m_iChooCount;
+
+	float		m_fBoardX;				//잡은물고기 판때기 좌표
+	float		m_fBoardY;
 
 	int			m_iChance;			// 성공률
 	int			m_iRandomChance;	// 랜덤값 담기는 변수
