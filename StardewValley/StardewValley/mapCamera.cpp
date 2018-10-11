@@ -56,7 +56,7 @@ void mapCamera::camera()
 	if (m_ptMoveCameraX < 0) m_ptMoveCameraX = 0;
 	if (m_ptMoveCameraX > MAPSIZEX- 50) m_ptMoveCameraX = MAPSIZEX- 50;
 	if (m_ptMoveCameraY < 0) m_ptMoveCameraY = 0;
-	if (m_ptMoveCameraY > MAPSIZEY- 50) m_ptMoveCameraY = MAPSIZEY- 50;
+	if (m_ptMoveCameraY > MAPSIZEY - 50) m_ptMoveCameraY = MAPSIZEY - 50;
 
 	m_ptCameraX = m_ptMoveCameraX - WINSIZEX / 2;
 	if (m_ptCameraX < 0) m_ptCameraX = 0;

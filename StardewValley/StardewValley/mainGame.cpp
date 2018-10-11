@@ -1,10 +1,8 @@
 #include "stdafx.h"
 #include "mainGame.h"
-#include "mapTool.h"
 #include "startScene.h"
 #include "gameScene.h"
-
-#include "mapManager.h"
+#include "mapTool.h"
 
 void mainGame::setBackBuffer()
 {
@@ -28,12 +26,8 @@ HRESULT mainGame::init()
 	imgload();
 	addsound();
 
-	// Maptool
 	m_pMap = new mapTool;
 	SCENEMANAGER->addScene("maptool", m_pMap);
-
-	m_pMapmgr = new mapManager;
-	SCENEMANAGER->addScene("mgr", m_pMapmgr);
 
 	m_pStartScene = new startScene;
 	SCENEMANAGER->addScene("startScene", m_pStartScene);

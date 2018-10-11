@@ -13,7 +13,6 @@ private:
 	WEEK m_week;
 
 	int m_alpha;
-	//float m_zulaTime;
 	int m_zulaTime;
 
 	int m_hour;

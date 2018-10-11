@@ -24,9 +24,6 @@ mapTool::~mapTool()
 
 HRESULT mapTool::init()
 {	
-	// 시간
-	PLAYTIMEMANAGER->init();
-
 	m_pTileSet = IMAGEMANAGER->findImage("earthAll");
 	m_pObject = IMAGEMANAGER->findImage("town_Shop");
 	m_pObject2 = IMAGEMANAGER->findImage("town_Nomal");
@@ -79,6 +76,24 @@ HRESULT mapTool::init()
 		}
 	}
 
+	// 샘플타일 기본 위치
+	m_nImageX = WINSIZEX - m_pTileSet->getWidth() - TILE_SIZE_1;
+
+	for (int i = 0; i < SAMPLE_TILE_X * SAMPLE_TILE_Y; i++)
+	{
+		m_pSampleTiles[i].rc = RectMake(m_nImageX + (i % SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, (i / SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE);
+		m_pSampleTiles[i].frameX = i % (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
+		m_pSampleTiles[i].frameY = i / (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
+		m_pSampleTiles[i].index = i;
+		m_pSampleTiles[i].object = MYHOME;
+		m_pSampleTiles[i].objectID = OBID_1;
+		m_pSampleTiles[i].isCollide = false;
+		//오브젝트 충돌 임시 저장소 1
+		m_ptempSampleObj1[i].isCollide = false;
+		m_ptempSampleObj2[i].isCollide = false;
+		m_ptempSampleObj3[i].isCollide = false;
+	}
+
 	// 상호작용가능한 땅
 	m_pSampleTiles[0].terrain = EARTH;
 	m_pSampleTiles[1].terrain = EARTH;
@@ -97,6 +112,15 @@ HRESULT mapTool::init()
 
 			else
 				m_pSampleTiles[y*20+x].terrain = FARMLAND;
+		}
+	}
+
+	//물
+	for (int y = 0; y < 4; y++)
+	{
+		for (int x = 6; x < 9; x++)
+		{
+			m_pSampleTiles[y * 20 + x].terrain = WETEREARTH;
 		}
 	}
 
@@ -119,25 +143,7 @@ HRESULT mapTool::init()
 	m_pSampleTiles[144].terrain = SEA;
 	m_pSampleTiles[146].terrain = SEA;
 	m_pSampleTiles[166].terrain = SEA;
-
-	// 샘플타일 기본 위치
-	m_nImageX = WINSIZEX - m_pTileSet->getWidth()- TILE_SIZE_1;
-
-	for (int i = 0; i < SAMPLE_TILE_X * SAMPLE_TILE_Y; i++)
-	{
-		m_pSampleTiles[i].rc = RectMake(m_nImageX + (i % SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, (i / SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE);
-		m_pSampleTiles[i].frameX = i % (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
-		m_pSampleTiles[i].frameY = i / (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
-		m_pSampleTiles[i].index = i;
-		m_pSampleTiles[i].object = MYHOME;
-		m_pSampleTiles[i].objectID = OBID_1;
-		m_pSampleTiles[i].isCollide = false;
-		//오브젝트 충돌 임시 저장소 1
-		m_ptempSampleObj1[i].isCollide = false;
-		m_ptempSampleObj2[i].isCollide = false;
-		m_ptempSampleObj3[i].isCollide = false;
-	}
-
+		
 	EnableWindow(m_hBtnSetCollision, FALSE);
 	EnableWindow(m_hBtnCancelCollision, FALSE);
 	
@@ -158,8 +164,6 @@ void mapTool::release()
 
 void mapTool::update()
 {
-	PLAYTIMEMANAGER->update();
-
 	// 타일 옮기기
 	if (m_isSampleOn)
 	{
@@ -230,8 +234,15 @@ void mapTool::render(HDC hdc)
 			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
 			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 
-			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+			if (m_pTiles[m_indexCamera].terrain == WETEREARTH)
+			{
+				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+					, 1, 1, TILE_SIZE_1, TILE_SIZE_1);
+			}
+			else
+				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
+
 		}
 	}
 
@@ -328,11 +339,6 @@ void mapTool::render(HDC hdc)
 							m_pTiles[m_indexCamera].objectFrameX,
 							m_pTiles[m_indexCamera].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
 					}
-					//m_pObject->frameRenderMini(hdc,
-					//	m_pMini[y*TILE_X + x].rc.left+ m_minipositionX,
-					//	m_pMini[y*TILE_X + x].rc.top+ m_minipositionY,
-					//	m_pTiles[y*TILE_X + x].objectFrameX,
-					//	m_pTiles[y*TILE_X + x].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
 				}
 			}
 		}
@@ -420,22 +426,28 @@ void mapTool::render(HDC hdc)
 	//	}
 	//}
 
-	//for (int y = 0; y < SAMPLE_TILE_Y; ++y)
-	//{
-	//	for (int x = 0; x < SAMPLE_TILE_X; x++)
-	//	{
-	//		if (m_pSampleTiles[y*SAMPLE_TILE_X+x].isCollide)
-	//		{
-	//			sprintf_s(str, 128, "%d", 1);
-	//			TextOut(hdc, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top, str, strlen(str));
-	//		}
-	//		else
-	//		{
-	//			sprintf_s(str, 128, "%d", 0);
-	//			TextOut(hdc, m_pSampleTiles[y*SAMPLE_TILE_X+x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top, str, strlen(str));
-	//		}
-	//	}
-	//}
+	// 충돌체 확인
+	if (m_isObject)
+	{
+		for (int y = 0; y < SAMPLE_TILE_Y; ++y)
+		{
+			for (int x = 0; x < SAMPLE_TILE_X; x++)
+			{
+				if (m_pSampleTiles[y*SAMPLE_TILE_X + x].isCollide)
+				{
+					sprintf_s(str, 128, "%d", 1);
+					TextOut(hdc, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top, str, strlen(str));
+				}
+				else
+				{
+					sprintf_s(str, 128, "%d", 0);
+					TextOut(hdc, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top, str, strlen(str));
+				}
+			}
+		}
+	}
+
+	
 
 	//for (int y = 0; y < TILE_Y; y++)
 	//{
@@ -465,7 +477,6 @@ void mapTool::render(HDC hdc)
 		Rectangle(hdc, rc.left, rc.top, rc.right, rc.bottom);
 	}
 
-	PLAYTIMEMANAGER->render(hdc);
 
 }
 
@@ -606,7 +617,6 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 	switch (iMessage)
 	{
 	case WM_CREATE:
-		//m_isClickSave = false;
 		//버튼 셋팅
 		m_hBtnSelectSample = CreateWindow("button", "SampleTile", WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
 			0, 90, 250, 70, hWnd, HMENU(BTN_GROUP1), g_hInstance, NULL);
@@ -757,17 +767,27 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 			//tilesize
 		case BTN_04:
 			if (SendMessage(m_hBtnSelectTileSize16, BM_GETCHECK, 0, 0) == BST_CHECKED)
+			{
 				TILE_SIZE_1 = 16;
+				reTileinit();
+			}
 			break;
 
 		case BTN_05:
 			if (SendMessage(m_hBtnSelectTileSize32, BM_GETCHECK, 0, 0) == BST_CHECKED)
+			{
 				TILE_SIZE_1 = 32;
+				reTileinit();
+			}
 			break;
 
 		case BTN_06:
 			if (SendMessage(m_hBtnSelectTileSize64, BM_GETCHECK, 0, 0) == BST_CHECKED)
+			{
 				TILE_SIZE_1 = 64;
+				reTileinit();
+			}
+
 			break;
 
 		case BTN_07:
@@ -1025,6 +1045,7 @@ void mapTool::terrainTileSave()
 				if (IntersectRect(&rcTemp, &m_pSampleTiles[y* SAMPLE_TILE_X + x].rc, &m_rcSave))
 				{
 					int iIndex = y * SAMPLE_TILE_X + x;
+					m_pSampleTiles[iIndex].terrain = m_pSampleTiles[iIndex].terrain;
 					m_vecSelectedTile.push_back(iIndex);
 					m_isDragSave = true;
 				}
@@ -1036,6 +1057,8 @@ void mapTool::terrainTileSave()
 				{
 					m_isClickSave = true;
 					m_sampleTileIndex = y * SAMPLE_TILE_X + x;
+
+					m_pSampleTiles[m_sampleTileIndex].terrain = m_pSampleTiles[y* SAMPLE_TILE_X + x].terrain;
 					break;
 				}
 			}
@@ -1191,32 +1214,32 @@ void mapTool::TileObjSet()
 
 void mapTool::objectEraserAll()
 {
-	for (int x = 0; x < TILE_X; ++x)
+	for (int y = 0; y < TILE_Y; ++y)
 	{
-		for (int y = 0; y < TILE_Y; ++y)
+		for (int x = 0; x < TILE_X; ++x)
 		{
-			m_pTiles[x * TILE_X + y].object = OBJ_NULL;
-			m_pTiles[x * TILE_X + y].isCollide = false; //충돌 없앰
+			m_pTiles[y * TILE_X + x].object = OBJ_NULL;
+			m_pTiles[y * TILE_X + x].isCollide = false; //충돌 없앰
 		}
 	}
 }
 
 void mapTool::objectEraser()
 {
-	for (int x = 0; x < TILE_X; ++x)
+	for (int y = 0; y < TILE_Y; ++y)
 	{
-		for (int y = 0; y < TILE_Y; ++y)
+		for (int x = 0; x < TILE_X; ++x)
 		{
-			if (PtInRect(&m_pTiles[x * TILE_X + y].rc, g_ptMouse))
+			if (PtInRect(&m_pTiles[y * TILE_X + x].rc, g_ptMouse))
 			{
 				if (m_isEraserCollision)
 				{
-					m_pTiles[x * TILE_X + y].isCollide = false; //충돌 없앰
+					m_pTiles[y * TILE_X + x].isCollide = false; //충돌 없앰
 				}
 				else
 				{
-					m_pTiles[x * TILE_X + y].object = OBJ_NULL;
-					m_pTiles[x * TILE_X + y].isCollide = false; //충돌 없앰
+					m_pTiles[y * TILE_X + x].object = OBJ_NULL;
+					m_pTiles[y * TILE_X + x].isCollide = false; //충돌 없앰
 				}
 			}
 		}
@@ -1255,7 +1278,7 @@ void mapTool::objectTypeInit()
 
 		m_pSampleTiles[220].object = OBJ_NULL;
 		m_pSampleTiles[221].object = OBJ_NULL;
-		for (int i = 12; i < 20; i++)
+		for (int i = 15; i < 20; i++)
 		{
 			m_pSampleTiles[11 * 20 + i].object = OBJ_NULL;
 		}
@@ -1457,6 +1480,59 @@ void mapTool::objectTypeInit()
 
 }
 
+void mapTool::TerrTypeInit()
+{
+	// 상호작용가능한 땅
+	m_pSampleTiles[0].terrain = EARTH;
+	m_pSampleTiles[1].terrain = EARTH;
+	m_pSampleTiles[2].terrain = EARTH;
+	m_pSampleTiles[3].terrain = EARTH;
+	m_pSampleTiles[4].terrain = EARTH;
+	m_pSampleTiles[5].terrain = EARTH;
+
+	// 경작지 구분
+	for (int y = 6; y < 10; ++y)
+	{
+		for (int x = 9; x < 17; x++)
+		{
+			if (x >= 13)
+				m_pSampleTiles[y * 20 + x].terrain = WETFARMLAND;
+
+			else
+				m_pSampleTiles[y * 20 + x].terrain = FARMLAND;
+		}
+	}
+
+	//물
+	for (int y = 0; y < 4; y++)
+	{
+		for (int x = 6; x < 9; x++)
+		{
+			m_pSampleTiles[y * 20 + x].terrain = WETEREARTH;
+		}
+	}
+
+	// 물
+	m_pSampleTiles[11].terrain = WATER;
+	m_pSampleTiles[31].terrain = WATER;
+	m_pSampleTiles[92].terrain = WATER;
+
+	for (int y = 6; y < 10; y++)
+	{
+		for (int x = 17; x < 20; x++)
+		{
+			m_pSampleTiles[y * 20 + x].terrain = WATER;
+		}
+	}
+
+	//바다
+	m_pSampleTiles[140].terrain = SEA;
+	m_pSampleTiles[141].terrain = SEA;
+	m_pSampleTiles[144].terrain = SEA;
+	m_pSampleTiles[146].terrain = SEA;
+	m_pSampleTiles[166].terrain = SEA;
+}
+
 void mapTool::changeImg()
 {
 	if (m_isObject)
@@ -1583,7 +1659,34 @@ void mapTool::sampleTileinit()
 			m_pSampleTiles[i].frameX = i % (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
 			m_pSampleTiles[i].frameY = i / (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
 			m_pSampleTiles[i].index = i;
+			m_pSampleTiles[i].terrain = NOMALTILE;
 			m_pSampleTiles[i].isCollide = false;
+		}
+		TerrTypeInit();
+	}
+}
+
+void mapTool::reTileinit()
+{
+	delete[] m_pTiles;
+	delete[] m_pMini;
+	TILE_X = MAPSIZEX / TILE_SIZE_1;
+	TILE_Y = MAPSIZEY / TILE_SIZE_1;
+	m_pTiles = new tagTile[TILE_X*TILE_Y];
+	m_pMini = new tagTile[TILE_X*TILE_Y];
+
+	for (int y = 0; y < TILE_Y; y++)
+	{
+		for (int x = 0; x < TILE_X; x++)
+		{
+			m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1, y*TILE_SIZE_1, TILE_SIZE_1, TILE_SIZE_1);
+			m_pTiles[y * TILE_X + x].terrainFrameX = 0;
+			m_pTiles[y * TILE_X + x].terrainFrameY = 1;
+			m_pTiles[y * TILE_X + x].terrain = NOMALTILE;
+			m_pTiles[y * TILE_X + x].object = OBJ_NULL;
+			m_pTiles[y * TILE_X + x].objectID = OBID_NULL;
+			m_pTiles[y * TILE_X + x].index = y * TILE_X + x;
+			m_pTiles[y * TILE_X + x].isCollide = false;
 		}
 	}
 }

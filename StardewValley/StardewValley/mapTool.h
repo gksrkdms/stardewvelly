@@ -5,21 +5,12 @@
 
 #include "mapObject.h"
 
-//#define TILE_SIZE_1	16
-#define TILE_SIZE_2	32
-
 //샘플타일 사이즈 필요
 #define TILE_SIZE_SAMPLE 16
 
-//#define TILE_X	MAPSIZEX/TILE_SIZE_SAMPLE
-//#define TILE_Y	MAPSIZEY/TILE_SIZE_SAMPLE
-
-//#define SAMPLE_TILE_X	20//20
-//#define SAMPLE_TILE_Y	20//20
-
 enum TERRAIN
 {
-	TERRNULL, NOMALTILE, WATER, SEA, EARTH, FARMLAND, WETFARMLAND, TR_NUM
+	TERRNULL, NOMALTILE, WATER, SEA, EARTH, FARMLAND, WETFARMLAND, WETEREARTH, EXIT, TR_NUM
 };
 
 enum OBJECT
@@ -72,7 +63,6 @@ enum BUTTONID
 	BTN_13,
 	BTN_14,
 	BTN_15,
-	BTN_16,
 	BTN_LEFT,
 	BTN_RIGHT,
 	BTN_GROUP1,
@@ -179,12 +169,6 @@ private:
 	
 	// obj 강도 지정
 
-
-	
-	//tagTile m_pTiles[TILE_X * TILE_Y];
-	//tagTile m_pTiles[TILE_X * TILE_Y];
-	//tagSampleTile m_pSampleTiles[SAMPLE_TILE_X * SAMPLE_TILE_Y];
-
 protected:
 	tagTile* m_pTiles;
 	tagSampleTile* m_pSampleTiles;
@@ -210,7 +194,6 @@ protected:
 	image*	m_pUibgsample;
 
 private:
-
 	// 오브젝트 샘플 이미지 선택
 	OBJECTIMG m_sampleObjChoice;
 
@@ -223,18 +206,18 @@ private:
 
 	int m_sampleTileIndex;
 
-	int m_selectNum;
-	int m_selectX;
-	int m_selectY;
-	int m_startX;
-	int m_startY;
+	int m_selectNum; //전체 범위 갯수
+	int m_selectX; //drag x범위
+	int m_selectY; // drag y 범위
+	int m_startX; //드래그 시작위치 x
+	int m_startY; // 드래그 시작위치 y
 
 	bool m_isClick = false;
 	bool m_isAddvec = false;
 	bool m_isDrag = false;
 	bool m_isDragSave = false;
 	bool m_isClickSave = false;
-	bool m_isMove = false;
+	bool m_isMove = false; //마우스 옆에 따라다니는 것
 	
 	bool m_isDrawtype = false; // 타일 그릴 때 한번그릴지 쭉그릴지
 	bool m_isSetCollision = false; // 충돌체 설정/ true = 충돌체 설정, false = cancel
@@ -257,14 +240,11 @@ private:
 	RECT m_rcDragCheck; // 드래그 한 렉트 있는가
 	int m_rcSwap;
 	RECT rcTemp;
-
-	int m_tileNum;
 	   
 	//미니맵
 	int m_minisize;
 	int m_minipositionX;
 	int m_minipositionY;
-	//tagTile m_pMini[TILE_X * TILE_Y];
 	tagTile* m_pMini;
 
 	tempSampleTile* m_ptempSampleObj1;
@@ -294,18 +274,18 @@ public:
 	void objectEraser(); //선택한 오브젝트 삭제 우클릭
 
 	void objectTypeInit(); // 오브젝트 타입설정
+	void TerrTypeInit(); // 타일 타입설정
 
 	void changeImg(); // 이미지 바꿈
 	void checkObjCollide(); // 오브젝트 충돌 검사
 
 	void sampleTileinit(); // 타일 이미지 바뀌면 초기화
-
+	void reTileinit(); // 타일사이즈 바뀌면 다시 초기화
+	
 	void saveMap(const char* szfileName);
-
 	void loadMap(const char* szfileName);
 
 	inline tagTile* getTile() { return m_pTiles; }
-	inline int getTileX() { return TILE_X; }
-	inline int getTileY() { return TILE_Y; }
+
 };
 

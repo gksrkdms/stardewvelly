@@ -11,9 +11,6 @@ mapManager::~mapManager()
 
 HRESULT mapManager::init()
 {
-	// ½Ã°£
-	PLAYTIMEMANAGER->init();
-
 	m_pTileSet = IMAGEMANAGER->findImage("earthAll");
 	m_pObject = IMAGEMANAGER->findImage("town_Shop");
 	m_pObject2 = IMAGEMANAGER->findImage("town_Nomal");
@@ -59,18 +56,18 @@ void mapManager::update()
 		}
 	}
 
-	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
-	{
-		for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
-		{
-			int cullX = CAMERA->getX() / TILE_SIZE_1;
-			int cullY = CAMERA->getY() / TILE_SIZE_1;
+	//for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
+	//{
+	//	for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
+	//	{
+	//		int cullX = CAMERA->getX() / TILE_SIZE_1;
+	//		int cullY = CAMERA->getY() / TILE_SIZE_1;
 
-			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
-			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
-			//m_vecTile[y*TILE_SIZE_1 + x] = m_pTiles[y*TILE_SIZE_1 + x];
-		}
-	}
+	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
+	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+	//		//m_vecTile[y*TILE_SIZE_1 + x] = m_pTiles[y*TILE_SIZE_1 + x];
+	//	}
+	//}
 
 }
 
@@ -95,8 +92,11 @@ void mapManager::render(HDC hdc)
 	{
 		for (int x = 0; x < TILE_X; x++)
 		{
-			int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
-			int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
+			//int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
+			//int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
+
+			int cullX = CAMERA->getX() / TILE_SIZE_1;
+			int cullY = CAMERA->getY() / TILE_SIZE_1;
 
 			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
 			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;

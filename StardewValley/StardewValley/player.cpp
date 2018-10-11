@@ -35,7 +35,6 @@ HRESULT player::init()
 	m_nMoveSpeed = 10;
 	m_nMoney = 50000;
 
-
 	m_rc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX, m_nPlayerSizeY);
 	m_TargetRc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX * 3, m_nPlayerSizeY * 3);
 	isMove = false;
@@ -80,10 +79,7 @@ void player::update()
 	{
 		m_pMenu->setMenu(true);
 	}
-
-	if (KEYMANAGER->isOnceKeyDown('O'))
-		m_pMap->loadMap("image/1234.map");
-
+	   
 	// 플레이어 렉트 셋팅
 	m_rc = RectMake(m_nX + 26 - CAMERA->getX(), m_nY + 85 - CAMERA->getY(), m_nPlayerSizeX, m_nPlayerSizeY);
 	// 바닥에 빨간색네모 타겟 렉트

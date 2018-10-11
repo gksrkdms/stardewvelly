@@ -138,6 +138,8 @@ void gametime::render(HDC hdc)
 
 	TIMEMANAGER->render(hdc);
 
+	//그림추가
+
 	char str[256];
 	SetBkMode(hdc, TRANSPARENT);
 
