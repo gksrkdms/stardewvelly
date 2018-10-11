@@ -5,6 +5,8 @@
 #include "inven.h"
 //0 60/  60 160  / 160 180
 
+
+
 HRESULT fishing::init()
 {
 	// 가로바
@@ -153,9 +155,10 @@ HRESULT fishing::init()
 
 	m_rcSeroBar.top = m_fSrcCurrY - 250;  /// 물고기획득바 초기값  
 
+	m_iRandomFish = 0; //206~209 랜덤물고기 담기는 값
 	m_iLuck = 7;  /// 성공확률 + 해줌
 	
-	m_iChance = 150; /// 성공확률 1~100
+	m_iChance = 100; /// 성공확률 1~100
 	m_iRandomChance = 0; // 1~100 랜덤숫자 담기는 변수
 
 
@@ -204,7 +207,7 @@ HRESULT fishing::init()
 	isGetFish = false;
 	isMistake = true; // 함수 내에 스페이스바키를 따로넣어서 마지막에 문제생겨서 만든 불값
 	isBring = false;
-
+	isSetFish = false;
 
 	return S_OK; //ok
 }
@@ -258,6 +261,7 @@ void fishing::render(HDC hdc)
 	sprintf_s(m_szText, 128, "%d", (int)m_fTime4);
 	TextOut(hdc, 100, 140, m_szText, strlen(m_szText));*/
 
+
 	if (isFishing)
 	{
 		if (isOne == true)
@@ -267,9 +271,7 @@ void fishing::render(HDC hdc)
 			FillRect(hdc, &m_rcGaroBar, brush);//렉트 색채워줌
 			DeleteObject(brush);// 색깔브러쉬 사용후 삭제
 		}
-		if (isMaxOn == true)
-			m_pImax->render(hdc, m_fMaxX, m_fMaxY); // max이미지
-
+	
 		if (isTwo || isThree || isHitOn)
 		{
 			m_pIzzi->frameRender(hdc, m_fZziX, m_fZziY, m_iFrameZziX, 1); //찌
@@ -285,9 +287,7 @@ void fishing::render(HDC hdc)
 		if (isHitOn == true)
 			m_pIhit->render(hdc, m_fHitX, m_fHitY, m_fHitBig); //히트
 
-		if (isFeelClick == true && m_iFeelAlpha > 0)
-			m_pIFeel->alphaRender(hdc, m_fFeelX, m_fFeelY, m_iFeelAlpha); //느낌표
-
+	
 
 		if (isThree)
 		{
@@ -314,11 +314,18 @@ void fishing::render(HDC hdc)
 
 		if (m_FishResult == GET_FISH)
 		{
-			m_pIgogi->frameRender(hdc, m_fZziX, m_fZziY, 0, 0); //낚인고기
+			m_pIgogi->render(hdc, m_fZziX, m_fZziY,4); //낚인고기
 			m_pIboard->render(hdc, m_fBoardX, m_fBoardY); // 알림판
+			m_pIgogi->render(hdc, m_fBoardX+40, m_fBoardY+70, 4); //낚인고기
 		}
 		else if (m_FishResult == MISS_FISH)
 			m_pIplayer->frameRender(hdc, m_fZziX + 50, m_fZziY + 100, 2, 0);
+
+		if (isFeelClick == true && m_iFeelAlpha > 0)
+			m_pIFeel->alphaRender(hdc, m_fFeelX, m_fFeelY, m_iFeelAlpha); //느낌표
+		if (isMaxOn == true)
+			m_pImax->render(hdc, m_fMaxX, m_fMaxY); // max이미지
+
 	}
 }
 // 가로 바
@@ -782,7 +789,16 @@ void fishing::fishingThree() // 물고기랑 싸움 시작
 			m_r = 0; m_g = 220; m_b = 0;
 
 			if (m_fSrcCurrY - m_fGreenMinY <= 0)
+			{
 				m_FishResult = GET_FISH;
+				if (isSetFish == false)
+				{
+					m_iRandomFish = RANDOM->getFromIntTo(206, 209);
+					m_pIgogi = IMAGEMANAGER->findImage(getFishIcon(m_iRandomFish));
+					isSetFish = true;
+				}
+			}
+				
 		}
 
 
@@ -803,11 +819,30 @@ void fishing::fishingThree() // 물고기랑 싸움 시작
 	}
 
 }
-
+const char * fishing::getFishIcon(int fishNum)
+{
+	switch (m_iRandomFish)
+	{
+	case 206:
+		return "item_206";
+		break;
+	case 207:
+		return "item_207";
+		break;
+	case 208:
+		return "item_208";
+		break;
+	case 209:
+		return "item_209";
+		break;
+	default:
+		break;
+	}
+}
 //물고기 랜덤움직임
 void fishing::fishMove()
 {
-	if (isThree)
+	/*if (isThree)
 	{
 		if (m_fFishY >= m_fGreenMinY + 5 && m_fFishY <= m_fGreenBarY + 31)
 		{
@@ -862,7 +897,7 @@ void fishing::fishMove()
 		{
 			m_fFishY = m_fGreenMinY + 5;
 		}
-	}
+	}*/
 }
 
 // 물고기를 잡은 경우
@@ -883,14 +918,14 @@ void fishing::fishingFour()
 		{
 			isBring = true;
 			
-		
 		}
 		
 		if (m_fTime2 > 2.5f)
 		{
 			m_fTime2 = 0;
 		
-			m_pPlayer->getPlayerMenu()->getInven()->addItem(207);
+
+			m_pPlayer->getPlayerMenu()->getInven()->addItem(m_iRandomFish);
 		
 			isFishing = false;
 			m_pPlayer->setPlayerState(PLAYER_PLAY);

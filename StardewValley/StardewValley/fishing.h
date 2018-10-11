@@ -61,7 +61,7 @@ private:
 	image *		m_pIchoo;			// 돌아가는 레버 이미지
 	image *     m_pIgogi;			// 잡힌 물고기 이미지
 	image *     m_pIboard;			// 잡힌 물고기 판때기
-
+	
 	RECT		m_rcGaroBar;		// 가로게이지 렉트
 	RECT		m_rcSeroBar;		// 세로게이지 렉트
 	RECT		m_rcFishBar;		// 물고기 게이지 렉트
@@ -129,6 +129,7 @@ private:
 
 	int			m_iChance;			// 성공률
 	int			m_iRandomChance;	// 랜덤값 담기는 변수
+	int			m_iRandomFish;		// 랜덤값 물고기 206~209
 	int			m_iLuck;			// 행운
 
 	int			m_r;  // 가로바렉트 색깔
@@ -146,7 +147,7 @@ private:
 	bool		isGetFish; // 물고기 낚고 결과
 	bool		isMistake; //실수로 만들어진 불값
 	bool		isBring; // 낚인 물고기 손위로 올라오게 하는 불값
-
+	bool		isSetFish; // 랜덤으로 얻은 물고기
 	BARSTATE	m_BarState;		// 가로바 게이지 상태
 	BARRESULT	m_BarResult;	// 가로바 게이지 결과
 	//PLAYERSEE	m_PlayerSee;    // 플레이어 보는방향
@@ -154,6 +155,8 @@ private:
 	player*		m_pPlayer;
 	
 	bool isFishing;		// 외부에서 쓰일 불값
+
+	const char * getFishIcon(int fishNum);
 	
 public:
 
@@ -177,8 +180,8 @@ public:
 	void fishBring();
 	
 	void setPlayer(player* play) { m_pPlayer = play; }
-	void setIsOne(bool isone) { isOne = isone; }
-	void setIsMistake(bool mistake) { isMistake = mistake; }
+	//void setIsOne(bool isone) { isOne = isone; }
+	//void setIsMistake(bool mistake) { isMistake = mistake; }
 	void setIsFishing(bool isfishing) { isFishing = isfishing; }
 	bool getIsFishing() { return isFishing; }
 	fishing();
