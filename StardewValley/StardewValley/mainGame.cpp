@@ -357,6 +357,7 @@ void mainGame::addsound()
 	SOUNDMANAGER->addSound("sound/effect/fishing/릴감는소리2.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/fishing/띠로리.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/fishing/낚아채는소리.wav", false, false);
+	
 
 
 

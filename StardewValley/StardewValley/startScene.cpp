@@ -11,7 +11,7 @@ HRESULT startScene::init()
 	m_pCloud1 = IMAGEMANAGER->findImage("title_004");
 	m_pCloud2 = IMAGEMANAGER->findImage("title_005");
 
-	//SOUNDMANAGER->play("sound/StardewValleyOverture.mp3");
+	SOUNDMANAGER->play("sound/StardewValleyOverture.mp3");
 	
 	m_pAni_1 = new animation;
 	m_pAni_1->init(m_pImg2->getWidth(), m_pImg2->getHeight(), 222, 174);

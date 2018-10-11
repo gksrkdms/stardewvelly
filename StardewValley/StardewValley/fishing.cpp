@@ -83,7 +83,7 @@ HRESULT fishing::init()
 	m_fZziY = m_fPlayerY;
 	m_iZziCount = 0;
 	m_iFrameZziX = 0;
-
+	m_fZziDistance = 100;
 	// 느낌표
 	m_fFeelX = m_fPlayerX + 30;
 	m_fFeelY = m_fPlayerY - 50;
@@ -173,7 +173,7 @@ HRESULT fishing::init()
 
 	//얻은고기 알림판
 	m_fBoardX = m_fPlayerX-100;
-	m_fBoardY = m_fPlayerY-200;
+	m_fBoardY = m_fPlayerY-220;
 
 
 	//필렉트 색깔 rgb
@@ -209,6 +209,8 @@ HRESULT fishing::init()
 	isBring = false;
 	isSetFish = false;
 	isSoundOn = false;
+	isSoundOn2 = false;
+
 	return S_OK; //ok
 }
 
@@ -315,8 +317,9 @@ void fishing::render(HDC hdc)
 
 		if (m_FishResult == GET_FISH)
 		{
-			m_pIgogi->render(hdc, m_fZziX, m_fZziY,4); //낚인고기
+			
 			m_pIboard->render(hdc, m_fBoardX, m_fBoardY); // 알림판
+			m_pIgogi->render(hdc, m_fZziX, m_fZziY, 4); //낚인고기
 			m_pIgogi->render(hdc, m_fBoardX+40, m_fBoardY+70, 4); //낚인고기
 		}
 		else if (m_FishResult == MISS_FISH)
@@ -456,7 +459,10 @@ void fishing::ifMax()
 	if (m_fRcCurrX - m_fGaroBarX >= 170 && m_BarState == STOP) // 맥스수치맞추면 맥스표시+맥스이미지 움직이고사라짐
 	{
 		isMaxOn = true;
-
+		if (!isSoundOn2)
+		{
+			isSoundOn2 = true;
+		}
 		if (m_fTime <= 0.2f)
 		{
 			m_fMaxY -= 8.f;
@@ -473,6 +479,7 @@ void fishing::ifMax()
 		if (m_fTime > 0.6f)
 		{
 			isMaxOn = false;
+
 		}
 	}
 	if (isMaxOn)
@@ -480,6 +487,7 @@ void fishing::ifMax()
 		m_fTime += TIMEMANAGER->getElapsedTime();
 		if (m_fTime > 3.f)
 		{
+		
 			m_fTime = 0;
 			return;
 		}
@@ -607,7 +615,13 @@ void fishing::fishingTwo()
 void fishing::zziThrow()
 {
 	m_iFrameZziX = 1;
-	
+	//float a= MY_UTIL::getDistance(m_fPlayerX, m_fPlayerY, m_fPlayerX - 100, m_fPlayerY - 100);
+
+	//m_fZziX += cosf(MY_UTIL::getAngle(m_fZziX, m_fZziY, a, a)) * 10;
+	//m_fZziY += -sinf(MY_UTIL::getAngle(m_fZziX, m_fZziY, a, a)) * 10;
+	//
+
+
 	if (m_pPlayer->getPlayerDir() == PLAYER_DOWN)//앞을보고있을떄
 	{
 		m_fTime3 += TIMEMANAGER->getElapsedTime();
@@ -718,7 +732,6 @@ void fishing::zziThrow()
 
 	}
 
-		
 	if (m_fTime3 > 1.2f)
 	{
 		SOUNDMANAGER->play("sound/effect/fishing/첨벙소리.wav", 0.2f);
@@ -863,6 +876,7 @@ void fishing::fishingThree() // 물고기랑 싸움 시작
 
 		if (m_FishResult == GET_FISH)
 		{
+			SOUNDMANAGER->play("sound/effect/fishing/낚시줄던짐.wav");
 			isGetFish = true;
 			
 		}
@@ -965,30 +979,30 @@ void fishing::fishingFour()
 {
 	if (isGetFish)
 	{
+		
 		m_iPlayerFrameY = 0;
 		m_iPlayerFrameX = 4;
 		isOne = false;
 		isTwo = false;
 		isThree = false;
 		m_fTime2 += TIMEMANAGER->getElapsedTime();
-
-		if (!isBring)
+		
+		if (!isBring)		
 			fishBring();
-		if (m_fTime2 > 0.7f && m_fTime2 < 0.8f)
+				
+		if (m_fTime2 > 0.5f && m_fTime2 < 0.6f)
 		{
-			isBring = true;
 			if (isSoundOn)
 			{
 				SOUNDMANAGER->play("sound/effect/fishing/띠로리.wav");
 				isSoundOn = false;
 			}
-			
-		}
-		
+			isBring = true;
+					
+		}	
 		if (m_fTime2 > 2.5f)
-		{
+		{		
 			m_fTime2 = 0;
-		
 		
 			m_pPlayer->getPlayerMenu()->getInven()->addItem(m_iRandomFish);
 		
@@ -1004,123 +1018,135 @@ void fishing::fishingFour()
 // 플레이어가 보는 방향에 따라 모션 정해주고 시간 받아서 낚인 물고기를 플레이어에게 이동하는 함수
 void fishing::fishBring()
 {
-
-	m_fTime3 += TIMEMANAGER->getElapsedTime();
-	if (m_pPlayer->getPlayerDir() == PLAYER_DOWN)//앞을보고있을떄
-	{
-
-		if (m_fTime3 < 0.1f)
+		if (m_pPlayer->getPlayerDir() == PLAYER_UP)//뒤
 		{
-			m_fZziX += 5.f;
-			m_fZziY -= 10.f;
+			m_fZziX += cosf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY, m_fPlayerX, m_fPlayerY - 30)) * 10;
+			m_fZziY += -sinf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY, m_fPlayerX, m_fPlayerY - 30)) * 10;
 		}
-		else if (m_fTime3 < 0.2f)
+		else
 		{
-			m_fZziY -= 10.f;
-		}
-		else if (m_fTime3 < 0.3f)
-		{
-			m_fZziX -= 8.f;
-			m_fZziY -= 15.f;
-		}
-		if (m_fTime3 > 0.4f && m_fTime3 < 0.4f)
-		{
-			m_fZziY -= 0.7f;
-		}
-		else if (m_fTime3 > 0.4f && m_fTime3 < 0.5f)
-		{
-			m_fZziY += 0.2f;
-		}
-	}
-	else if (m_pPlayer->getPlayerDir() == PLAYER_UP)//뒤
-	{
-
-		if (m_fTime3 < 0.1f)
-		{
-			m_fZziX -= 10.f;
-			m_fZziY += 10.f;
-		}
-		else if (m_fTime3 < 0.2f)
-		{
-			m_fZziY += 10.f;
-		}
-		else if (m_fTime3 < 0.3f)
-		{
-			m_fZziX += 5.f;
-			m_fZziY += 15.f;
-		}
-		if (m_fTime3 > 0.4f && m_fTime3 < 0.4f)
-		{
-			m_fZziY -= 0.7f;
-		}
-		else if (m_fTime3 > 0.4f && m_fTime3 < 0.5f)
-		{
-			m_fZziY += 0.2f;
-		}
-	}
-	else if (m_pPlayer->getPlayerDir() == PLAYER_LEFT)//왼
-	{
-
-		if (m_fTime3 < 0.1f)
-		{
-			m_fZziX += 5.f;
-			m_fZziY += 10.f;
-		}
-		else if (m_fTime3 < 0.2f)
-		{
-			m_fZziX += 10.f;
-			m_fZziY += 10.f;
-		}
-		else if (m_fTime3 < 0.3f)
-		{
-			m_fZziX += 20.f;
-			m_fZziY -= 35.f;
-		}
-		if (m_fTime3 > 0.4f && m_fTime3 < 0.4f)
-		{
-			m_fZziY -= 0.7f;
-		}
-		else if (m_fTime3 > 0.4f && m_fTime3 < 0.5f)
-		{
-			m_fZziY += 0.2f;
+			m_fZziX += cosf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY - 70, m_fPlayerX, m_fPlayerY)) * 10;
+			m_fZziY += -sinf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY - 70, m_fPlayerX, m_fPlayerY)) * 10;
 		}
 
-	}
-	else if (m_pPlayer->getPlayerDir() == PLAYER_RIGHT)//오
-	{
 
-		if (m_fTime3 < 0.1f)
-		{
-			m_fZziX -= 5.f;
-			m_fZziY += 10.f;
-		}
-		else if (m_fTime3 < 0.2f)
-		{
-			m_fZziX -= 10.f;
-			m_fZziY += 10.f;
-		}
-		else if (m_fTime3 < 0.3f)
-		{
-			m_fZziX -= 23.f;
-			m_fZziY -= 35.f;
-		}
-		if (m_fTime3 > 0.4f && m_fTime3 < 0.4f)
-		{
-			m_fZziY -= 0.7f;
-		}
-		else if (m_fTime3 > 0.4f && m_fTime3 < 0.5f)
-		{
-			m_fZziY += 0.2f;
-		}
+	//if (m_pPlayer->getPlayerDir() == PLAYER_DOWN)//앞을보고있을떄
+	//{
 
-	}
+	//	if (m_fTime3 < 0.1f)
+	//	{
+	//		m_fZziX += 5.f;
+	//		m_fZziY -= 10.f;
+	//	}
+	//	else if (m_fTime3 < 0.2f)
+	//	{
+	//		m_fZziY -= 10.f;
+	//	}
+	//	else if (m_fTime3 < 0.3f)
+	//	{
+	//		m_fZziX -= 8.f;
+	//		m_fZziY -= 15.f;
+	//	}
+	//	if (m_fTime3 > 0.4f && m_fTime3 < 0.4f)
+	//	{
+	//		m_fZziY -= 0.7f;
+	//	}
+	//	else if (m_fTime3 > 0.4f && m_fTime3 < 0.5f)
+	//	{
+	//		m_fZziY += 0.2f;
+	//	}
+	//}
+	//else if (m_pPlayer->getPlayerDir() == PLAYER_UP)//뒤
+	//{
 
-	if (m_fTime3 > 0.6f)
-	{
-		SOUNDMANAGER->play("sound/effect/fishing/낚시줄던짐.wav");
-		m_fTime3 = 0;
-	
-	}
+	//	if (m_fTime3 < 0.1f)
+	//	{
+	//		m_fZziX -= 10.f;
+	//		m_fZziY += 10.f;
+	//	}
+	//	else if (m_fTime3 < 0.2f)
+	//	{
+	//		m_fZziY += 10.f;
+	//	}
+	//	else if (m_fTime3 < 0.3f)
+	//	{
+	//		m_fZziX += 5.f;
+	//		m_fZziY += 15.f;
+	//	}
+	//	if (m_fTime3 > 0.4f && m_fTime3 < 0.4f)
+	//	{
+	//		m_fZziY -= 0.7f;
+	//	}
+	//	else if (m_fTime3 > 0.4f && m_fTime3 < 0.5f)
+	//	{
+	//		m_fZziY += 0.2f;
+	//	}
+	//}
+	//else if (m_pPlayer->getPlayerDir() == PLAYER_LEFT)//왼
+	//{
+
+	//	if (m_fTime3 < 0.1f)
+	//	{
+	//		m_fZziX += 5.f;
+	//		m_fZziY += 10.f;
+	//	}
+	//	else if (m_fTime3 < 0.2f)
+	//	{
+	//		m_fZziX += 10.f;
+	//		m_fZziY += 10.f;
+	//	}
+	//	else if (m_fTime3 < 0.3f)
+	//	{
+	//		m_fZziX += 20.f;
+	//		m_fZziY -= 35.f;
+	//	}
+	//	if (m_fTime3 > 0.4f && m_fTime3 < 0.4f)
+	//	{
+	//		m_fZziY -= 0.7f;
+	//	}
+	//	else if (m_fTime3 > 0.4f && m_fTime3 < 0.5f)
+	//	{
+	//		m_fZziY += 0.2f;
+	//	}
+
+	//}
+	//else if (m_pPlayer->getPlayerDir() == PLAYER_RIGHT)//오
+	//{
+
+	//	if (m_fTime3 < 0.1f)
+	//	{
+	//		m_fZziX -= 5.f;
+	//		m_fZziY += 10.f;
+	//	}
+	//	else if (m_fTime3 < 0.2f)
+	//	{
+	//		m_fZziX -= 10.f;
+	//		m_fZziY += 10.f;
+	//	}
+	//	else if (m_fTime3 < 0.3f)
+	//	{
+	//		m_fZziX -= 23.f;
+	//		m_fZziY -= 35.f;
+	//	}
+	//	if (m_fTime3 > 0.4f && m_fTime3 < 0.4f)
+	//	{
+	//		m_fZziY -= 0.7f;
+	//	}
+	//	else if (m_fTime3 > 0.4f && m_fTime3 < 0.5f)
+	//	{
+	//		m_fZziY += 0.2f;
+	//	}
+
+	//}
+
+
+	//if (m_fTime3 > 0.6f)
+	//{
+	//	
+	//	m_fTime3 = 0;
+	//	SOUNDMANAGER->play("sound/effect/fishing/낚시줄던짐.wav");
+	//
+	//}
 
 
 }

@@ -78,8 +78,10 @@ private:
 
 	float		m_fZziX;			//찌 이미지좌표
 	float		m_fZziY;
+	float       m_fZziDistance;
 	int			m_iFrameZziX;
 	int			m_iZziCount;
+
 
 	float		m_fGreenBarX;		// 초록색 물고기맞추는바 좌표
 	float		m_fGreenBarY;
@@ -127,6 +129,8 @@ private:
 	float		m_fBoardX;				//잡은물고기 판때기 좌표
 	float		m_fBoardY;
 
+	
+
 	int			m_iChance;			// 성공률
 	int			m_iRandomChance;	// 랜덤값 담기는 변수
 	int			m_iRandomFish;		// 랜덤값 물고기 206~209
@@ -149,6 +153,7 @@ private:
 	bool		isBring; // 낚인 물고기 손위로 올라오게 하는 불값
 	bool		isSetFish; // 랜덤으로 얻은 물고기
 	bool		isSoundOn; // 사운드 실행
+	bool        isSoundOn2; //부득이한 사용
 	BARSTATE	m_BarState;		// 가로바 게이지 상태
 	BARRESULT	m_BarResult;	// 가로바 게이지 결과
 	//PLAYERSEE	m_PlayerSee;    // 플레이어 보는방향
