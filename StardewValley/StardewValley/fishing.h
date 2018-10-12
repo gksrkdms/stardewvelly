@@ -186,6 +186,8 @@ public:
 	void fishingFour(); //잡은 후
 	void fishBring();
 	
+	void addSound(); // 폭발하지않게 사운드 옮김
+	void addImage();
 	void setPlayer(player* play) { m_pPlayer = play; }
 	//void setIsOne(bool isone) { isOne = isone; }
 	//void setIsMistake(bool mistake) { isMistake = mistake; }

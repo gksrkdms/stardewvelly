@@ -78,9 +78,15 @@ void shop::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 	{
 		if (isBuy == true)
+		{
 			buyItem();
+			SOUNDMANAGER->play("sound/effect/돈소리.wav", g_soundVolume.effect);
+		}
 		if (isSell == true)
+		{
 			sellItem();
+			SOUNDMANAGER->play("sound/effect/돈소리.wav", g_soundVolume.effect);
+		}
 	}
 	setItem();
 }
@@ -294,11 +300,13 @@ void shop::setItem()
 			if (m_nPage == 1)
 			{
 				m_nPage = MAXPAGE;
+				SOUNDMANAGER->play("sound/effect/선택음1.wav", g_soundVolume.effect);
 				isOnceSetItem = true;
 			}
 			else
 			{
 				m_nPage--;
+				SOUNDMANAGER->play("sound/effect/선택음1.wav", g_soundVolume.effect);
 				isOnceSetItem = true;
 			}
 		}
@@ -310,11 +318,13 @@ void shop::setItem()
 			if (m_nPage == MAXPAGE)
 			{
 				m_nPage = 1;
+				SOUNDMANAGER->play("sound/effect/선택음1.wav", g_soundVolume.effect);
 				isOnceSetItem = true;
 			}
 			else
 			{
 				m_nPage++;
+				SOUNDMANAGER->play("sound/effect/선택음1.wav", g_soundVolume.effect);
 				isOnceSetItem = true;
 			}
 		}

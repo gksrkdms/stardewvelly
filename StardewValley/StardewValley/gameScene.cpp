@@ -3,8 +3,11 @@
 #include "player.h"
 #include "mapManager.h"
 
+
+
 HRESULT gameScene::init()
 {
+	addSound();
 	m_pBG = IMAGEMANAGER->addImage("background", "image/background.bmp", MAPSIZEX, MAPSIZEY, true, RGB(255, 0, 255));
 	CAMERA->init();
 	m_pPlayer = new player;
@@ -18,7 +21,7 @@ HRESULT gameScene::init()
 	PLAYTIMEMANAGER->init();
 
 	//배경음
-	SOUNDMANAGER->play("sound/해피해피.wav", g_soundVolume.bgm);
+	SOUNDMANAGER->play("sound/CloudCountry.mp3", g_soundVolume.bgm);
 
 	return S_OK;
 }
@@ -61,7 +64,26 @@ void gameScene::render(HDC hdc)
 	sprintf_s(str, 128, "카메라y : %d", CAMERA->getY());
 	TextOut(hdc, 50, 150, str, strlen(str));
 }
+void gameScene::addSound()
+{
+	// 인벤옮기고 손떨어지게하는거
+	SOUNDMANAGER->addSound("sound/effect/changeitem.wav", false, false);
+	// 인벤 열기 닫기
+	SOUNDMANAGER->addSound("sound/effect/인벤토리.wav", false, false);
+	//상점 페이지넘기기
+	SOUNDMANAGER->addSound("sound/effect/선택음1.wav", false, false);
+	//상점 물건사고파는소리
+	SOUNDMANAGER->addSound("sound/effect/돈소리.wav", false, false);
 
+
+
+
+
+	//음식먹기
+	SOUNDMANAGER->addSound("sound/effect/아삭소리2.wav", false, false);
+
+
+}
 gameScene::gameScene()
 {
 }

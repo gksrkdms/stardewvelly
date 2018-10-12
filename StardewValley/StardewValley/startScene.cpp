@@ -47,6 +47,7 @@ void startScene::update()
 	// ±¸¸§ ÀÌµ¿ÇÏ´Â°Å
 	for (int i = 0; i < 5; i++)
 	{
+
 		m_nArrayX1[i] -= (i / 2) + 1;
 		m_nArrayX2[i] -= (i / 2) + 1;
 
@@ -64,6 +65,7 @@ void startScene::update()
 			if (isMouseIn[i]== false)
 			{
 				SOUNDMANAGER->play("sound/effect/startbutton.wav",g_soundVolume.effect);
+
 				isMouseIn[i] = true;
 			}
 			
@@ -86,7 +88,7 @@ void startScene::update()
 				case 0:
 					// °ÔÀÓ¾À
 					SOUNDMANAGER->stop("sound/StardewValleyOverture.mp3");
-					SOUNDMANAGER->play("sound/effect/Ã·Å¬¸¯.wav", g_soundVolume.effect);
+					SOUNDMANAGER->play("sound/effect/Ã·Å¬¸¯.wav");//, g_soundVolume.effect);
 					SCENEMANAGER->changeScene("gameScene");
 					break;
 				case 1:
@@ -95,7 +97,7 @@ void startScene::update()
 				case 2:
 					// ¸ÊÅø¾À
 					SOUNDMANAGER->stop("sound/StardewValleyOverture.mp3");
-					SOUNDMANAGER->play("sound/effect/Ã·Å¬¸¯.wav", g_soundVolume.effect);
+					SOUNDMANAGER->play("sound/effect/Ã·Å¬¸¯.wav");//, g_soundVolume.effect);
 					SCENEMANAGER->changeScene("maptool");
 					break;
 				case 3:

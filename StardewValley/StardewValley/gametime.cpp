@@ -146,7 +146,7 @@ void gametime::render(HDC hdc)
 	sprintf_s(str, 256, "time : %f", TIMEMANAGER->getZulaTime());
 	TextOut(hdc, 0, 150, str, strlen(str));
 
-	sprintf_s(str, 256, "zulatime : %f", m_zulaTime);
+	sprintf_s(str, 256, "zulatime : %f", (double)m_zulaTime);
 	TextOut(hdc, 0, 200, str, strlen(str));
 
 	sprintf_s(str, 256, "hour : %d", m_hour);

@@ -52,6 +52,7 @@ void playerMenu::update()
 		{
 			if (KEYMANAGER->isOnceKeyDown('E'))
 			{
+				SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
 				m_pInven->setInvenDir(INVEN_QUICKBAR);	// 인벤토리 상태를 퀵바로
 				m_menuDir = MENU_INVEN;					// 메뉴상태값을 인벤토리로 초기화
 				isMenu = false;							// 인벤토리 false

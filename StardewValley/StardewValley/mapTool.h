@@ -101,7 +101,7 @@ typedef struct tagTile
 	bool isCollide;
 
 	RECT rc;
-};
+} TAGTILE;
 
 struct tagSampleTile
 {

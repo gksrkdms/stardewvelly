@@ -9,6 +9,7 @@
 
 HRESULT fishing::init()
 {
+	addImage();
 	// 가로바
 	m_pIgaroBar = IMAGEMANAGER->findImage("i_GaroBar");
 	// 맥스
@@ -40,7 +41,7 @@ HRESULT fishing::init()
 	// 낚은물고기 알림판
 	m_pIboard = IMAGEMANAGER->findImage("i_NoticeBoard");
 	
-
+	addSound();
 
 	///플레이어 좌표
 	m_fPlayerX = m_pPlayer->getX() - CAMERA->getX();
@@ -924,6 +925,7 @@ const char * fishing::getFishIcon(int fishNum)
 	default:
 		break;
 	}
+	return NULL;
 }
 const char * fishing::getFishName(int fishNum)
 {
@@ -944,10 +946,11 @@ const char * fishing::getFishName(int fishNum)
 	default:
 		break;
 	}
+	return NULL;
 }
 //물고기 랜덤움직임
 void fishing::fishMove()
-{/*
+{
 	if (isThree)
 	{
 		if (m_fFishY >= m_fGreenMinY + 5 && m_fFishY <= m_fGreenBarY + 31)
@@ -1003,7 +1006,7 @@ void fishing::fishMove()
 		{
 			m_fFishY = m_fGreenMinY + 5;
 		}
-	}*/
+	}
 }
 
 // 물고기를 잡은 경우
@@ -1180,6 +1183,42 @@ void fishing::fishBring()
 	//}
 
 
+}
+
+void fishing::addSound()
+{
+	////낚시사운드
+	SOUNDMANAGER->addSound("sound/effect/fishing/릴감는소리.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/낚시버튼소리.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/낚시줄던짐.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/느낌표소리.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/낚시히트.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/첨벙소리.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/물소리.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/릴감는소리2.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/띠로리.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/낚아채는소리.wav", false, false);
+}
+
+void fishing::addImage()
+{
+
+	// 낚시관련 이미지
+	IMAGEMANAGER->addImage("i_GaroBar", "image/Stardew Valley/fishing/가로바.bmp", 200, 48, true, RGB(255, 0, 255));   // 원래사이즈 50,12 
+	IMAGEMANAGER->addImage("i_Max", "image/Stardew Valley/fishing/맥스.bmp", 116, 48, true, RGB(255, 0, 255)); //원사이즈 58,24 
+	IMAGEMANAGER->addImage("i_Zzi", "image/Stardew Valley/fishing/찌.bmp", 120, 40, 3, 1, true, RGB(255, 0, 255)); //원사이즈 30,10 
+	IMAGEMANAGER->addImage("i_Player", "image/Stardew Valley/fishing/player.bmp", 400, 640, 5, 5, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("i_PlayerFishing", "image/Stardew Valley/fishing/플레이어낚시.bmp", 768, 768, 4, 4, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("i_Feel", "image/Stardew Valley/fishing/느낌표.bmp", 30, 45, true, RGB(255, 0, 255)); //원사이즈 10,15 
+	IMAGEMANAGER->addImage("i_Hit", "image/Stardew Valley/fishing/히트.bmp", 148, 64, true, RGB(255, 0, 255)); //원사이즈 74,32 
+	IMAGEMANAGER->addImage("i_SeroBar", "image/Stardew Valley/fishing/세로바.bmp", 160, 500, true, RGB(255, 0, 255)); //원사이즈 39,150  
+	IMAGEMANAGER->addImage("i_WhitebarL", "image/Stardew Valley/fishing/흰풍선왼위.bmp", 210, 550, true, RGB(255, 0, 255)); //원사이즈 52,185 
+	IMAGEMANAGER->addImage("i_WhitebarR", "image/Stardew Valley/fishing/흰풍선오아.bmp", 210, 550, true, RGB(255, 0, 255)); //원사이즈 52,185  
+	IMAGEMANAGER->addImage("i_GreenBar", "image/Stardew Valley/fishing/초록바만든거.bmp", 37, 77, true, RGB(255, 0, 255)); // 9,9 
+	IMAGEMANAGER->addImage("i_moveFish", "image/Stardew Valley/fishing/물고기.bmp", 37, 37, true, RGB(255, 0, 255)); // 19 19
+	IMAGEMANAGER->addImage("i_moveChoo", "image/Stardew Valley/fishing/추감기.bmp", 168, 55, 4, 1, true, RGB(255, 0, 255));// 72 21 
+	IMAGEMANAGER->addImage("i_GetFish", "image/Stardew Valley/fishing/금붕어.bmp", 102, 51, 2, 1, true, RGB(255, 0, 255));// 34 17  
+	IMAGEMANAGER->addImage("i_NoticeBoard", "image/Stardew Valley/fishing/고기알림.bmp", 292, 196, true, RGB(255, 0, 255)); // 73 49
 }
 
 

@@ -96,7 +96,7 @@ private:
 	void setSyncMotion(PLAYERMOTION motion, int* x, int* y);	//모션 싱크로 맞추는 함수
 	void setItemMotion();	// 퀵바아이템에 따른 플레이어 모션
 	void useItem();			// 소모품 아이템사용
-
+	void addSound();
 public:
 	HRESULT init();
 	void release();
