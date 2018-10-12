@@ -176,35 +176,6 @@ player::~player()
 // 맵정보 받아와야함
 void player::setTargetXY()
 {
-	//vector<tagTile>	vecTile;
-	//vector<tagTile>::iterator	iterTile;
-	//vecTile = m_pMap->getvecTile();
-
-	//for (iterTile = vecTile.begin(); iterTile != vecTile.end(); iterTile++)
-	//{
-	//	if (IntersectRect(&m_temprc, &iterTile->rc, &m_TargetRc))
-	//	{
-	//		if (isTargetRc == true)
-	//		{
-	//			if (PtInRect(&iterTile->rc, g_ptMouse))
-	//			{
-	//				if ((*iterTile).terrain == WATER)
-	//				{
-	//					i++;
-	//				}
-	//				m_nTargetX = iterTile->rc.left;
-	//				m_nTargetY = iterTile->rc.top;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			m_nTargetX = iterTile->rc.left;
-	//			m_nTargetY = iterTile->rc.top;
-	//			break;
-	//		}
-	//	}
-	//}		
-
 	for (int y = 0; y < WINSIZEY / m_pMap->getTileSize() + 1; y++)
 	{
 		for (int x = 0; x < WINSIZEX / m_pMap->getTileSize() + 1; x++)

@@ -106,7 +106,7 @@ void startScene::render(HDC hdc)
 		m_pCloud1->render(hdc, m_nArrayX1[i], m_nArrayY1[i]);
 		m_pCloud2->render(hdc, m_nArrayX2[i], m_nArrayY2[i]);
 	}
-	m_pImg1->render(hdc, WINSIZEX / 5, 50);
+	m_pImg1->render(hdc, WINSIZEX / 5, 50,2);
 	for (int i = 0; i < 4; i++)
 	{
 		//MakeRect(hdc, m_rc[i]);
