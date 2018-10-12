@@ -46,11 +46,12 @@ void gameScene::render(HDC hdc)
 {
 	//m_pBG->render(hdc, 0, 0, CAMERA->getX(), CAMERA->getY(), WINSIZEX, WINSIZEY);
 	m_pMapManager->render(hdc);
+	PLAYTIMEMANAGER->render(hdc);
 	m_pPlayer->render(hdc);
 
 	TIMEMANAGER->render(hdc);
 
-	PLAYTIMEMANAGER->render(hdc);
+	m_pPlayer->numRender(hdc);
 	
 	char str[128];
 	sprintf_s(str, 128, "Ä«¸Ş¶óx : %d", CAMERA->getX());

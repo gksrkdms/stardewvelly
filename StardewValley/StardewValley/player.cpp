@@ -12,6 +12,7 @@ HRESULT player::init()
 {
 	//m_pPlayer = IMAGEMANAGER->findImage("player_idle");
 	m_pTarget = IMAGEMANAGER->findImage("focustile_001");
+	m_pNumber = IMAGEMANAGER->findImage("goldnumber");
 	m_pAni = new animation;
 	m_playerDir = PLAYER_DOWN;
 	m_playerState = PLAYER_PLAY;
@@ -33,7 +34,7 @@ HRESULT player::init()
 	m_nPlayerSizeX = 32;
 	m_nPlayerSizeY = 32;
 	m_nMoveSpeed = 10;
-	m_nMoney = 50000;
+	m_nMoney = 54321;
 
 	m_rc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX, m_nPlayerSizeY);
 	m_TargetRc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX * 3, m_nPlayerSizeY * 3);
@@ -156,6 +157,32 @@ void player::render(HDC hdc)
 	}
 
 	m_pFishing->render(hdc);
+	//numRender(hdc);
+}
+
+void player::numRender(HDC hdc)
+{
+	int num = 0;
+	int digit = log10((double)m_nMoney);
+	int digit2 = 10;
+	int tempMoney = m_nMoney;
+
+	for (int i = 0; i < digit - 1; i++)
+	{
+		digit2 = digit2 * 10;
+	}
+
+	for (int i = 0; i < digit + 1; i++)
+	{
+		if (i == digit)
+		num = tempMoney % digit2;
+		else
+		num = tempMoney / digit2;
+		tempMoney = tempMoney - num * digit2;
+		if (digit2 != 10)
+			digit2 = digit2 / 10;
+		m_pNumber->frameRender(hdc, 1122 + i * 24, 205, num, 0);
+	}
 }
 
 player::player()

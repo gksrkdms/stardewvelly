@@ -151,9 +151,7 @@ void mapManager::loadMap(const char* szfileName)
 		FILE_ATTRIBUTE_NORMAL,
 		NULL);
 
-	int b = 20;
 	ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
-	int a = 20;
 
 	CloseHandle(hFile);
 }

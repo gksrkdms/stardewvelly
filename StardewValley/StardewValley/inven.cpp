@@ -18,7 +18,7 @@ HRESULT inven::init()
 	m_pTempHand->init(0, 0);
 	m_pQuickItem = NULL;
 
-	m_nBgX = 200;
+	m_nBgX = 150;
 	m_nBgY = 150;
 	m_nSlotX = m_nBgX + 40;
 	m_nSlot1Y = m_nBgY + 50;
@@ -507,7 +507,7 @@ void inven::setDir()
 	if (m_invenDir == INVEN_INVEN)
 	{
 		m_pInvenBG = IMAGEMANAGER->findImage("inven_004");
-		m_nBgX = 200;
+		m_nBgX = 150;
 		m_nBgY = 150;
 		m_nSlotX = m_nBgX + 40;
 		m_nSlot1Y = m_nBgY + 50;

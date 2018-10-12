@@ -157,40 +157,43 @@ void playerMenu::menuUpdate()
 				isMenu = false;							// 인벤토리 false
 			}
 		}
-		for (int i = 0; i < 8; i++)
-		{
-			if (PtInRect(&m_IconRc[i], g_ptMouse))
-			{
-				isMouseIn[i] = true;
-			}
-			else
-			{
-				isMouseIn[i] = false;
-			}
-		}
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		if (m_menuDir != MENU_SHOP)
 		{
 			for (int i = 0; i < 8; i++)
 			{
-				if (isMouseIn[i] == true)
+				if (PtInRect(&m_IconRc[i], g_ptMouse))
 				{
-					m_menuDir = (MENUDIR)i;
+					isMouseIn[i] = true;
+				}
+				else
+				{
+					isMouseIn[i] = false;
 				}
 			}
-		}
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				for (int i = 0; i < 8; i++)
+				{
+					if (isMouseIn[i] == true)
+					{
+						m_menuDir = (MENUDIR)i;
+					}
+				}
+			}
 
-		// 메뉴창 y축 랜더
-		for (int i = 0; i < 8; i++)
-		{
-			if ((MENUDIR)i == m_menuDir)
+			// 메뉴창 y축 랜더
+			for (int i = 0; i < 8; i++)
 			{
-				m_nIconY[i] = m_pInven->getBgY() - m_pIcon[i]->getHeight() * ICONSCALA + 10;
+				if ((MENUDIR)i == m_menuDir)
+				{
+					m_nIconY[i] = m_pInven->getBgY() - m_pIcon[i]->getHeight() * ICONSCALA + 10;
+				}
+				else
+				{
+					m_nIconY[i] = m_pInven->getBgY() - m_pIcon[i]->getHeight() * ICONSCALA;
+				}
+				m_IconRc[i] = RectMake(m_nIconX[i], m_nIconY[i], m_pIcon[i]->getWidth() * ICONSCALA, m_pIcon[i]->getHeight() * ICONSCALA);
 			}
-			else
-			{
-				m_nIconY[i] = m_pInven->getBgY() - m_pIcon[i]->getHeight() * ICONSCALA;
-			}
-			m_IconRc[i] = RectMake(m_nIconX[i], m_nIconY[i], m_pIcon[i]->getWidth() * ICONSCALA, m_pIcon[i]->getHeight() * ICONSCALA);
 		}
 	}
 }

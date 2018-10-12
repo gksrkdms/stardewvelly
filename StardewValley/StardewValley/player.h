@@ -52,6 +52,7 @@ class player
 private:
 	image*		m_pPlayer;		// 플레이어 이미지
 	image*		m_pTarget;		// 바닥타일 타겟 이미지(빨간색 네모)
+	image*		m_pNumber;
 	animation *	m_pAni;			// 플레이어 프래임랜더
 	PLAYERDIR	m_playerDir;	// 플래이어 방향 상태
 	PLAYERSTATE	m_playerState;	// 플레이어 행동 상태
@@ -102,6 +103,7 @@ public:
 	void release();
 	void update();
 	void render(HDC hdc);
+	void numRender(HDC hdc);
 
 	int getX() { return m_nX; }					// 카메라 매니저에 쓰일 x,y겟터셋터들
 	void setX(int x) { m_nX = x; }
