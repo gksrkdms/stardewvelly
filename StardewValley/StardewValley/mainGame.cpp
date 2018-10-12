@@ -357,7 +357,7 @@ void mainGame::addsound()
 	SOUNDMANAGER->addSound("sound/effect/playerAct/°î¼Ò¸®.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/playerAct/³´Áú.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/playerAct/¸Ç¶¥¿¡.wav", false, false);
-	//SOUNDMANAGER->addSound("sound/effect/playerAct/µµ³¢Áú.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/µµ³¢Áú.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/playerAct/¹°»Ñ¸®°³2.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/playerAct/¹ç°¥´Ù.wav", false, false);
 
@@ -373,7 +373,15 @@ void mainGame::addsound()
 	SOUNDMANAGER->addSound("sound/effect/fishing/¸±°¨´Â¼Ò¸®2.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/fishing/¶ì·Î¸®.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/fishing/³¬¾ÆÃ¤´Â¼Ò¸®.wav", false, false);
+
+	SOUNDMANAGER->addSound("sound/effect/playerAct/zzz.wav", false, false);
+
+	SOUNDMANAGER->play("sound/effect/playerAct/zzz.wav", 1.f);
 	
+
+	int a = 20;
+
+
 
 
 
