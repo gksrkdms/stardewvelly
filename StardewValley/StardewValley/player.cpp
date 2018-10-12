@@ -117,8 +117,8 @@ void player::update()
 
 void player::render(HDC hdc)
 {
+	// 플레이어 랜더
 	if (m_pFishing->getIsFishing() == false)
-		// 플레이어 랜더
 	{
 		m_pPlayer->aniRender(hdc, m_nX - CAMERA->getX() - m_nSyncX, m_nY - CAMERA->getY() - m_nSyncY, m_pAni);
 	}
@@ -146,7 +146,7 @@ void player::render(HDC hdc)
 	char str[128];
 
 	sprintf_s(str, 128, "%d", i);
-	TextOut(hdc, 1000, 50, str, strlen(str));
+	TextOut(hdc, 500, 50, str, strlen(str));
 
 	//MakeRect(hdc, m_temprc);
 	//MakeRect(hdc, m_rc);
@@ -372,7 +372,7 @@ void player::setKey()
 // 이동함수 (수정해야함)
 void player::move(PLAYERDIR playerdir)
 {
-	switch (playerdir)
+	/*switch (playerdir)
 	{
 	case PLAYER_LEFT:
 		m_nX -= m_nMoveSpeed;
@@ -386,37 +386,96 @@ void player::move(PLAYERDIR playerdir)
 	case PLAYER_DOWN:
 		m_nY += m_nMoveSpeed;
 		break;
-	}
+	}*/
+
+
 
 	// 맵정보 받아와야함
+	for (int y = 0; y < WINSIZEY / m_pMap->getTileSize() + 1; y++)
+	{
+		for (int x = 0; x < WINSIZEX / m_pMap->getTileSize() + 1; x++)
+		{
+			int cullX = CAMERA->getX() / m_pMap->getTileSize();
+			int cullY = CAMERA->getY() / m_pMap->getTileSize();
 
-	//vector<tagTile>	vecTile;
-	//vector<tagTile>::iterator	iterTile;
-	//vecTile = m_pMap->getTile();
-	//for (iterTile = vecTile.begin(); iterTile != vecTile.end(); iterTile++)
-	//{
-	//	if (iterTile->object == OBJ_BLOCK_1 && IntersectRect(&m_TargetRc, &iterTile->rc, &m_rc))
-	//	{
-	//		switch (playerdir)
-	//		{
-	//		case PLAYER_LEFT:
-	//			//m_nX += m_nMoveSpeed;
-	//			break;
-	//		case PLAYER_RIGHT:
-	//			m_nX -= m_nMoveSpeed;
-	//			return;
-	//			break;
-	//		case PLAYER_UP:
-	//			//	m_nY += m_nMoveSpeed;
-	//			break;
-	//		case PLAYER_DOWN:
-	//			//m_playerCollision = COLL_DOWN;
-	//			m_nY -= m_nMoveSpeed;
-	//			return;
-	//			break;
-	//		}
-	//	}
-	//}
+			int m_indexCamera;
+			m_indexCamera = (y + cullY)*m_pMap->getTileX() + (x + cullX);
+			
+			if (m_indexCamera >= (m_pMap->getTileX() * m_pMap->getTileY())) continue;
+
+			//충돌x
+			if (!(m_pMap->getTile(m_indexCamera)->isCollide) && IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
+			{
+				m_isMove = true;
+			}
+
+			//충돌시
+			else
+			{
+				if ((m_pMap->getTile(m_indexCamera)->isCollide) && IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
+				{
+					m_isMove = false;
+
+					switch (playerdir)
+					{
+					case PLAYER_LEFT:
+						m_playerCollision = COLL_LEFT;
+						break;
+					case PLAYER_RIGHT:
+						m_playerCollision = COLL_RIGHT;
+						break;
+					case PLAYER_UP:
+						m_playerCollision = COLL_UP;
+						break;
+					case PLAYER_DOWN:
+						m_playerCollision = COLL_DOWN;
+						break;
+					}
+					//m_playerCollision = COLL_LEFT;
+				}
+			}
+		}
+	}
+
+	// 충돌x
+	if (m_isMove)
+	{
+		switch (playerdir)
+		{
+		case PLAYER_LEFT:
+			m_nX -= m_nMoveSpeed;
+			break;
+		case PLAYER_RIGHT:
+			m_nX += m_nMoveSpeed;
+			break;
+		case PLAYER_UP:
+			m_nY -= m_nMoveSpeed;
+			break;
+		case PLAYER_DOWN:
+			m_nY += m_nMoveSpeed;
+			break;
+		}
+	}
+
+	// 충돌o
+	else
+	{
+		switch (playerdir)
+		{
+		case PLAYER_LEFT:
+			m_nX -= m_nMoveSpeed;
+			break;
+		case PLAYER_RIGHT:
+			//m_nX += m_nMoveSpeed;
+			break;
+		case PLAYER_UP:
+			m_nY -= m_nMoveSpeed;
+			break;
+		case PLAYER_DOWN:
+			m_nY += m_nMoveSpeed;
+			break;
+		}
+	}
 }
 
 // 모션에따라서 이미지교체 + 애니메이션 셋팅해줌

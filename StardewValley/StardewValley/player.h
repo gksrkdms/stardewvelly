@@ -98,6 +98,7 @@ private:
 	void useItem();			// 소모품 아이템사용
 
 	int i;
+	bool m_isMove =false;
 
 public:
 	HRESULT init();

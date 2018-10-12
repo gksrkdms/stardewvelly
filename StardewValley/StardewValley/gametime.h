@@ -2,7 +2,7 @@
 #include "singletonBase.h"
 
 //시계 이미지 배율
-#define CLOCK_SCALAR 3
+#define CLOCK_SCALAR 4
 
 // 게임시간단위로 한시간일때 현실시간으로 몇초인지 환산한 값
 #define CONVER_HOUR 60
@@ -22,7 +22,7 @@ private:
 
 	int m_alpha; // 알파랜더 알파값
 	int m_zulaTime; // 게임 전체시간
-	int m_nMinAngle; // 분침 각도
+	float m_nMinAngle; // 분침 각도
 
 	int m_hour;
 	int m_min;
@@ -32,6 +32,8 @@ private:
 	bool m_isAction; // hour 덧셈 한번만 실행되게 하려고 넣음
 	bool m_isCount; // 10min count
 	bool m_isNight; // 밤인지 확인
+
+	int m_nPrintMin;
 
 public:
 	gametime();

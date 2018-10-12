@@ -11,7 +11,7 @@ HRESULT gameScene::init()
 	m_pPlayer->init();
 	m_pMapManager = new mapManager;
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/1234.map");
+	m_pMapManager->loadMap("image/ddd.map");
 	m_pPlayer->getMap(m_pMapManager);
 
 	//게임시간
@@ -28,6 +28,7 @@ void gameScene::release()
 	delete m_pPlayer;
 	m_pMapManager->release();
 	delete m_pMapManager;
+	RemoveFontResource("font/모리스체.ttf");
 
 }
 
@@ -44,6 +45,10 @@ void gameScene::update()
 
 void gameScene::render(HDC hdc)
 {
+	AddFontResourceA("font/모리스체.ttf");
+	HFONT myFont = CreateFont(21, 0, 0, 0, 800, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "모리스9");
+	HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+
 	//m_pBG->render(hdc, 0, 0, CAMERA->getX(), CAMERA->getY(), WINSIZEX, WINSIZEY);
 	m_pMapManager->render(hdc);
 	m_pPlayer->render(hdc);
@@ -57,6 +62,9 @@ void gameScene::render(HDC hdc)
 	TextOut(hdc, 50, 100, str, strlen(str));
 	sprintf_s(str, 128, "카메라y : %d", CAMERA->getY());
 	TextOut(hdc, 50, 150, str, strlen(str));
+
+	SelectObject(hdc, oldFont);
+	DeleteObject(myFont);
 }
 
 gameScene::gameScene()

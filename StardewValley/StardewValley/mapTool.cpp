@@ -369,9 +369,9 @@ void mapTool::render(HDC hdc)
 
 			}
 			
-			// 확인
-			if (m_isMove)
-				m_pObject->frameRender(hdc, g_ptMouse.x, g_ptMouse.y, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY);		
+			//// 확인
+			//if (m_isMove)
+			//	m_pObject->frameRender(hdc, g_ptMouse.x, g_ptMouse.y, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY);		
 		}
 
 		else
