@@ -8,6 +8,8 @@ class fishing;
 
 class mapManager;
 
+#define TARGET_SIZE 2
+
 enum PLAYERDIR
 {
 	PLAYER_LEFT,
@@ -61,13 +63,11 @@ private:
 	item*		m_pTargetItem;	// 퀵슬롯 현재 아이템
 	fishing*	m_pFishing;
 
-	mapManager* m_pMap;
 
 	RECT	m_rc;				// 플래이어 렉트
 	RECT	m_TargetRc;			// 빨간네모 렉트
 	RECT	m_temprc;			// 빨간네모 렉트
-	//Map*	m_pMap;				// 맵 포인터
-
+	mapManager* m_pMap;			// 맵 포인터
 
 	PRIVATESYNTHESIZE(int, m_nMoney, Money);
 
@@ -98,6 +98,9 @@ private:
 	void setItemMotion();	// 퀵바아이템에 따른 플레이어 모션
 	void useItem();			// 소모품 아이템사용
 
+	int i;
+	bool m_isMove =false;
+
 public:
 	HRESULT init();
 	void release();
@@ -118,6 +121,8 @@ public:
 	playerMenu* getPlayerMenu() { return m_pMenu; }
 	void getMap(mapManager* map) { m_pMap = map; }
 
+	//int getTargetX() { return m_nTargetX; }
+	//int getTargetY() { return m_nTargetY; }
 	
 	player();
 	~player();

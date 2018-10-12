@@ -238,7 +238,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("dark", "image/dark.bmp", WINSIZEX, WINSIZEY);
 
 	// 타이틀
-	IMAGEMANAGER->addImage("title_001", "image/Stardew Valley/title/title_001.bmp", 400 * 2, 183 * 2, true, RGB(255, 0, 255));	// 스타듀밸리
+	IMAGEMANAGER->addImage("title_001", "image/Stardew Valley/title/title_001.bmp", 400, 183, true, RGB(255, 0, 255));	// 스타듀밸리
 	IMAGEMANAGER->addImage("title_002", "image/Stardew Valley/title/title_002.bmp", 888, 348, 4, 2, true, RGB(255, 0, 255));	// 메뉴
 	IMAGEMANAGER->addImage("title_003", "image/Stardew Valley/title/title_003.bmp", 400, 183, 1, 2, true, RGB(255, 0, 255));	// 뒤로가기
 	IMAGEMANAGER->addImage("title_004", "image/Stardew Valley/title/title_004.bmp", 123, 55, true, RGB(255, 0, 255));	// 구름 1
@@ -267,7 +267,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("goldnumber", "image/Stardew Valley/ui/goldnumber.bmp", 200, 28, 10, 1, true, RGB(255, 0, 255));
 	
 	// 시계
-	IMAGEMANAGER->addImage("minutehand", "image/Stardew Valley/ui/clock.bmp", 11, 19, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("minutehand", "image/Stardew Valley/ui/clock.bmp", 48, 64, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("clock", "image/Stardew Valley/ui/clock1.bmp", 72, 57, true, RGB(255, 0, 255));
 	
 	// icon

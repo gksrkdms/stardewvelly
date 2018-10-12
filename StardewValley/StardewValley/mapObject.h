@@ -1,6 +1,12 @@
 #pragma once
+
 class mapObject
 {
+protected:
+	int m_nFrameX;
+	int m_nFrameY;
+	int m_nStrength;
+
 public:
 	mapObject();
 	virtual ~mapObject();

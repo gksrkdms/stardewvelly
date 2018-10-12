@@ -38,6 +38,12 @@ HRESULT mapManager::init()
 			m_pTiles[y * TILE_X + x].isCollide = false;
 		}
 	}
+	
+	m_vecTile.resize(TILE_Y*TILE_X);
+
+	//m_pPlayer->getTargetX();
+	//m_pPlayer->getTargetY();
+	
 	return S_OK;
 }
 
@@ -65,7 +71,9 @@ void mapManager::update()
 
 	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
 	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
-	//		//m_vecTile[y*TILE_SIZE_1 + x] = m_pTiles[y*TILE_SIZE_1 + x];
+
+	//		m_vecTile.push_back(m_pTiles[m_indexCamera]);
+
 	//	}
 	//}
 
@@ -136,6 +144,33 @@ void mapManager::render(HDC hdc)
 
 		}
 	}
+
+	char str[128];
+
+	for (int y = 0; y < TILE_Y; y++)
+	{	
+	for (int x = 0; x < TILE_X; x++)
+		{
+			int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
+			int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
+
+			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
+			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+
+			if (m_pTiles[m_indexCamera].terrain==WATER)
+			{
+				sprintf_s(str, 128, "%d", 1);
+				TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
+			}
+			else
+			{
+				sprintf_s(str, 128, "%d", 0);
+				TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
+			}
+			//sprintf_s(str, 128, "%d", m_pTiles[m_indexCamera].index);
+			//TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
+		}
+	}
 }
 
 void mapManager::loadMap(const char* szfileName)
@@ -152,6 +187,7 @@ void mapManager::loadMap(const char* szfileName)
 		NULL);
 
 	ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
-
+	   
 	CloseHandle(hFile);
+
 }

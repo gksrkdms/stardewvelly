@@ -1,6 +1,10 @@
 #pragma once
 #include "scene.h"
+
+#define TITLE_SCALAR 2
+
 class animation;
+
 class startScene : public scene
 {
 private:

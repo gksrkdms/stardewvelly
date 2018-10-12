@@ -244,8 +244,6 @@ void mapTool::render(HDC hdc)
 				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 					, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
 			}
-
-
 		}
 	}
 
@@ -371,9 +369,9 @@ void mapTool::render(HDC hdc)
 
 			}
 			
-			// 확인
-			if (m_isMove)
-				m_pObject->frameRender(hdc, g_ptMouse.x, g_ptMouse.y, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY);		
+			//// 확인
+			//if (m_isMove)
+			//	m_pObject->frameRender(hdc, g_ptMouse.x, g_ptMouse.y, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY);		
 		}
 
 		else

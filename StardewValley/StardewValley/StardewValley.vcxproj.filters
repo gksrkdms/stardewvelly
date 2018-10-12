@@ -67,6 +67,9 @@
     <Filter Include="MainGame\gameScene\fishing">
       <UniqueIdentifier>{420152a5-0c37-466c-9a40-bc5ec14aeef1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\gameScene\progressBar">
+      <UniqueIdentifier>{2847cda8-bd90-447d-85cd-ebb131f3a872}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -183,6 +186,9 @@
     <ClInclude Include="fishing.h">
       <Filter>MainGame\gameScene\fishing</Filter>
     </ClInclude>
+    <ClInclude Include="progressBar.h">
+      <Filter>MainGame\gameScene\progressBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -283,6 +289,9 @@
     </ClCompile>
     <ClCompile Include="fishing.cpp">
       <Filter>MainGame\gameScene\fishing</Filter>
+    </ClCompile>
+    <ClCompile Include="progressBar.cpp">
+      <Filter>MainGame\gameScene\progressBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

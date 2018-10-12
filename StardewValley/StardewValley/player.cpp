@@ -31,8 +31,8 @@ HRESULT player::init()
 	m_nSyncX = 0;
 	m_nSyncY = 0;
 	m_fRange = 60.0f;
-	m_nPlayerSizeX = 32;
-	m_nPlayerSizeY = 32;
+	m_nPlayerSizeX = 64;
+	m_nPlayerSizeY = 64;
 	m_nMoveSpeed = 10;
 	m_nMoney = 54321;
 
@@ -82,9 +82,9 @@ void player::update()
 	}
 	   
 	// 플레이어 렉트 셋팅
-	m_rc = RectMake(m_nX + 26 - CAMERA->getX(), m_nY + 85 - CAMERA->getY(), m_nPlayerSizeX, m_nPlayerSizeY);
+	m_rc = RectMake(m_nX + 8 - CAMERA->getX(), m_nY + 63 - CAMERA->getY(), m_nPlayerSizeX, m_nPlayerSizeY);
 	// 바닥에 빨간색네모 타겟 렉트
-	m_TargetRc = RectMake(m_nX + 26 - CAMERA->getX() - (m_nPlayerSizeX / 2), m_nY + 85 - CAMERA->getY() - (m_nPlayerSizeY / 2), m_nPlayerSizeX * 2, m_nPlayerSizeY * 2);
+	m_TargetRc = RectMake(m_nX + 8 - CAMERA->getX() - (m_nPlayerSizeX / 2), m_nY + 63 - CAMERA->getY() - (m_nPlayerSizeY / 2), m_nPlayerSizeX * 2, m_nPlayerSizeY * 2);
 	// 메뉴클래스 업데이트
 	m_pMenu->update();
 	// 타일의 xy받아오는 함수
@@ -118,8 +118,8 @@ void player::update()
 
 void player::render(HDC hdc)
 {
+	// 플레이어 랜더
 	if (m_pFishing->getIsFishing() == false)
-		// 플레이어 랜더
 	{
 		m_pPlayer->aniRender(hdc, m_nX - CAMERA->getX() - m_nSyncX, m_nY - CAMERA->getY() - m_nSyncY, m_pAni);
 	}
@@ -135,7 +135,7 @@ void player::render(HDC hdc)
 			case ITEM_ACT:
 				if (isTargetRc)
 				{
-					m_pTarget->render(hdc, m_nTargetX, m_nTargetY);
+					m_pTarget->render(hdc, m_nTargetX, m_nTargetY, TARGET_SIZE);
 				}
 				break;
 			case ITEM_SEED:
@@ -143,6 +143,12 @@ void player::render(HDC hdc)
 			}
 		}
 	}
+
+	char str[128];
+
+	sprintf_s(str, 128, "%d", i);
+	TextOut(hdc, 500, 50, str, strlen(str));
+
 	//MakeRect(hdc, m_temprc);
 	//MakeRect(hdc, m_rc);
 	MakeRect(hdc, m_TargetRc);
@@ -198,30 +204,40 @@ player::~player()
 // 맵정보 받아와야함
 void player::setTargetXY()
 {
-	//vector<tagTile>	vecTile;
-	//vector<tagTile>::iterator	iterTile;
-	//vecTile = m_pMap->getTile();
+	for (int y = 0; y < WINSIZEY / m_pMap->getTileSize() + 1; y++)
+	{
+		for (int x = 0; x < WINSIZEX / m_pMap->getTileSize() + 1; x++)
+		{
+			int cullX = CAMERA->getX() / m_pMap->getTileSize();
+			int cullY = CAMERA->getY() / m_pMap->getTileSize();
 
-	//for (iterTile = vecTile.begin(); iterTile != vecTile.end(); iterTile++)
-	//{
-	//	if (IntersectRect(&m_temprc, &iterTile->rc, &m_TargetRc))
-	//	{
-	//		if (isTargetRc == true)
-	//		{
-	//			if (PtInRect(&iterTile->rc, g_ptMouse))
-	//			{
-	//				m_nTargetX = iterTile->rc.left;
-	//				m_nTargetY = iterTile->rc.top;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			m_nTargetX = iterTile->rc.left;
-	//			m_nTargetY = iterTile->rc.top;
-	//			break;
-	//		}
-	//	}
-	//}
+			int m_indexCamera;
+			m_indexCamera = (y + cullY)*m_pMap->getTileX() + (x + cullX);
+			if (m_indexCamera >= (m_pMap->getTileX() * m_pMap->getTileY())) continue;
+
+			if (IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_TargetRc))
+			{
+				if (isTargetRc == true)
+				{
+					if (PtInRect(&m_pMap->getTile(m_indexCamera)->rc, g_ptMouse))
+					{
+						//물일때 확인
+						if (m_pMap->getTile(m_indexCamera)->terrain == WATER)
+							i++;
+
+						m_nTargetX = m_pMap->getTile(m_indexCamera)->rc.left;
+						m_nTargetY = m_pMap->getTile(m_indexCamera)->rc.top;
+					}
+				}
+				else
+				{
+					m_nTargetX = m_pMap->getTile(m_indexCamera)->rc.left;
+					m_nTargetY = m_pMap->getTile(m_indexCamera)->rc.top;
+					break;
+				}
+			}
+		}
+	}
 }
 
 // 키 세팅
@@ -384,7 +400,7 @@ void player::setKey()
 // 이동함수 (수정해야함)
 void player::move(PLAYERDIR playerdir)
 {
-	switch (playerdir)
+	/*switch (playerdir)
 	{
 	case PLAYER_LEFT:
 		m_nX -= m_nMoveSpeed;
@@ -398,37 +414,96 @@ void player::move(PLAYERDIR playerdir)
 	case PLAYER_DOWN:
 		m_nY += m_nMoveSpeed;
 		break;
-	}
+	}*/
+
+
 
 	// 맵정보 받아와야함
+	for (int y = 0; y < WINSIZEY / m_pMap->getTileSize() + 1; y++)
+	{
+		for (int x = 0; x < WINSIZEX / m_pMap->getTileSize() + 1; x++)
+		{
+			int cullX = CAMERA->getX() / m_pMap->getTileSize();
+			int cullY = CAMERA->getY() / m_pMap->getTileSize();
 
-	//vector<tagTile>	vecTile;
-	//vector<tagTile>::iterator	iterTile;
-	//vecTile = m_pMap->getTile();
-	//for (iterTile = vecTile.begin(); iterTile != vecTile.end(); iterTile++)
-	//{
-	//	if (iterTile->object == OBJ_BLOCK_1 && IntersectRect(&m_TargetRc, &iterTile->rc, &m_rc))
-	//	{
-	//		switch (playerdir)
-	//		{
-	//		case PLAYER_LEFT:
-	//			//m_nX += m_nMoveSpeed;
-	//			break;
-	//		case PLAYER_RIGHT:
-	//			m_nX -= m_nMoveSpeed;
-	//			return;
-	//			break;
-	//		case PLAYER_UP:
-	//			//	m_nY += m_nMoveSpeed;
-	//			break;
-	//		case PLAYER_DOWN:
-	//			//m_playerCollision = COLL_DOWN;
-	//			m_nY -= m_nMoveSpeed;
-	//			return;
-	//			break;
-	//		}
-	//	}
-	//}
+			int m_indexCamera;
+			m_indexCamera = (y + cullY)*m_pMap->getTileX() + (x + cullX);
+			
+			if (m_indexCamera >= (m_pMap->getTileX() * m_pMap->getTileY())) continue;
+
+			//충돌x
+			if (!(m_pMap->getTile(m_indexCamera)->isCollide) && IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
+			{
+				m_isMove = true;
+			}
+
+			//충돌시
+			else
+			{
+				if ((m_pMap->getTile(m_indexCamera)->isCollide) && IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
+				{
+					m_isMove = false;
+
+					switch (playerdir)
+					{
+					case PLAYER_LEFT:
+						m_playerCollision = COLL_LEFT;
+						break;
+					case PLAYER_RIGHT:
+						m_playerCollision = COLL_RIGHT;
+						break;
+					case PLAYER_UP:
+						m_playerCollision = COLL_UP;
+						break;
+					case PLAYER_DOWN:
+						m_playerCollision = COLL_DOWN;
+						break;
+					}
+					//m_playerCollision = COLL_LEFT;
+				}
+			}
+		}
+	}
+
+	// 충돌x
+	if (m_isMove)
+	{
+		switch (playerdir)
+		{
+		case PLAYER_LEFT:
+			m_nX -= m_nMoveSpeed;
+			break;
+		case PLAYER_RIGHT:
+			m_nX += m_nMoveSpeed;
+			break;
+		case PLAYER_UP:
+			m_nY -= m_nMoveSpeed;
+			break;
+		case PLAYER_DOWN:
+			m_nY += m_nMoveSpeed;
+			break;
+		}
+	}
+
+	// 충돌o
+	else
+	{
+		switch (playerdir)
+		{
+		case PLAYER_LEFT:
+			m_nX -= m_nMoveSpeed;
+			break;
+		case PLAYER_RIGHT:
+			//m_nX += m_nMoveSpeed;
+			break;
+		case PLAYER_UP:
+			m_nY -= m_nMoveSpeed;
+			break;
+		case PLAYER_DOWN:
+			m_nY += m_nMoveSpeed;
+			break;
+		}
+	}
 }
 
 // 모션에따라서 이미지교체 + 애니메이션 셋팅해줌
