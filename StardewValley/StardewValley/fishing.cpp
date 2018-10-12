@@ -43,8 +43,8 @@ HRESULT fishing::init()
 
 
 	///플레이어 좌표
-	m_fPlayerX = m_pPlayer->getX();
-	m_fPlayerY = m_pPlayer->getY();
+	m_fPlayerX = m_pPlayer->getX() - CAMERA->getX();
+	m_fPlayerY = m_pPlayer->getY() - CAMERA->getY();
 
 	m_iPlayerCount = 0;						// 플레이어 프레임 카운트
 	m_iPlayerFrameX = 0;					// 플레이어 프레임
@@ -94,7 +94,8 @@ HRESULT fishing::init()
 	m_fHitY = NULL;
 	m_fHitBig = 2; //스칼라
 
-
+	//물고기 길이
+	m_fFishLong = 0;
 
 	if (m_pPlayer->getPlayerDir() == PLAYER_LEFT || m_pPlayer->getPlayerDir() == PLAYER_UP)
 	{
@@ -220,8 +221,9 @@ void fishing::release()
 
 void fishing::update()
 {
-	m_fPlayerX = m_pPlayer->getX();
-	m_fPlayerY = m_pPlayer->getY();
+
+	m_fPlayerX = m_pPlayer->getX()- CAMERA->getX();
+	m_fPlayerY = m_pPlayer->getY()- CAMERA->getY();
 	if (isFishing)
 	{
 		if (isMistake && KEYMANAGER->isStayKeyDown(VK_LBUTTON))  // 처음 시작 시 한번만 실행
@@ -321,6 +323,11 @@ void fishing::render(HDC hdc)
 			m_pIboard->render(hdc, m_fBoardX, m_fBoardY); // 알림판
 			m_pIgogi->render(hdc, m_fZziX, m_fZziY, 4); //낚인고기
 			m_pIgogi->render(hdc, m_fBoardX+40, m_fBoardY+70, 4); //낚인고기
+			sprintf_s(m_szText, 128, "%s", getFishName(m_iRandomFish));
+			TextOut(hdc, m_fBoardX + 150, m_fBoardY + 70, m_szText, strlen(m_szText));
+
+			sprintf_s(m_szText, 128, " %.1f 인치! ", m_fFishLong);
+			TextOut(hdc, m_fBoardX + 155, m_fBoardY + 100, m_szText, strlen(m_szText));
 		}
 		else if (m_FishResult == MISS_FISH)
 			m_pIplayer->frameRender(hdc, m_fZziX + 50, m_fZziY + 100, 2, 0);
@@ -341,7 +348,7 @@ void fishing::fishingOne()
 		{
 			if (!isSoundOn)
 			{
-				SOUNDMANAGER->play("sound/effect/fishing/릴감는소리.wav");
+				SOUNDMANAGER->play("sound/effect/fishing/릴감는소리.wav", g_soundVolume.effect);
 				isSoundOn = true;
 			}
 			m_iPlayerCount++;
@@ -375,7 +382,7 @@ void fishing::fishingOne()
 		{
 			if (isSoundOn)
 			{
-				SOUNDMANAGER->play("sound/effect/fishing/낚시버튼소리.wav");
+				SOUNDMANAGER->play("sound/effect/fishing/낚시버튼소리.wav", g_soundVolume.effect);
 				isSoundOn = false;
 			}
 				
@@ -417,8 +424,7 @@ void fishing::fishingOne()
 				{
 					if (!isSoundOn)
 					{
-						SOUNDMANAGER->play("sound/effect/fishing/낚시줄던짐.wav");
-
+						SOUNDMANAGER->play("sound/effect/fishing/낚시줄던짐.wav", g_soundVolume.effect);
 						isSoundOn = true;
 					}
 				}
@@ -501,7 +507,7 @@ void fishing::ifHit()
 	{
 		if (!isSoundOn)
 		{
-			SOUNDMANAGER->play("sound/effect/fishing/낚시히트.wav");
+			SOUNDMANAGER->play("sound/effect/fishing/낚시히트.wav", g_soundVolume.effect);
 			isSoundOn = true;
 		}
 
@@ -534,7 +540,7 @@ void fishing::fishingTwo()
 	{
 		if (m_BarResult == RED)
 		{
-			SOUNDMANAGER->play("sound/effect/fishing/낚아채는소리.wav");
+			SOUNDMANAGER->play("sound/effect/fishing/낚아채는소리.wav", g_soundVolume.effect);
 			isFishing = false;
 			m_pPlayer->setPlayerState(PLAYER_PLAY);
 			return;
@@ -549,8 +555,12 @@ void fishing::fishingTwo()
 			m_fTime4 += TIMEMANAGER->getElapsedTime();
 
 			if (m_fTime4 < 0.1f)
+			{
 				m_iRandomChance = RANDOM->getFromIntTo(1, 100);
 				
+			}
+				
+			
 			
 
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
@@ -569,7 +579,7 @@ void fishing::fishingTwo()
 				}
 				else
 				{
-					SOUNDMANAGER->play("sound/effect/fishing/낚아채는소리.wav");
+					SOUNDMANAGER->play("sound/effect/fishing/낚아채는소리.wav", g_soundVolume.effect);
 					isFishing = false;
 					m_pPlayer->setPlayerState(PLAYER_PLAY);
 					return;
@@ -581,7 +591,7 @@ void fishing::fishingTwo()
 				isFeelClick = true;
 				if (isSoundOn)
 				{
-					SOUNDMANAGER->play("sound/effect/fishing/느낌표소리.wav", 0.7f);
+					SOUNDMANAGER->play("sound/effect/fishing/느낌표소리.wav", g_soundVolume.effect);
 					isSoundOn = false;
 				}
 				
@@ -615,6 +625,7 @@ void fishing::fishingTwo()
 void fishing::zziThrow()
 {
 	m_iFrameZziX = 1;
+	
 	//float a= MY_UTIL::getDistance(m_fPlayerX, m_fPlayerY, m_fPlayerX - 100, m_fPlayerY - 100);
 
 	//m_fZziX += cosf(MY_UTIL::getAngle(m_fZziX, m_fZziY, a, a)) * 10;
@@ -734,7 +745,7 @@ void fishing::zziThrow()
 
 	if (m_fTime3 > 1.2f)
 	{
-		SOUNDMANAGER->play("sound/effect/fishing/첨벙소리.wav", 0.2f);
+		SOUNDMANAGER->play("sound/effect/fishing/첨벙소리.wav", g_soundVolume.effect);
 		isThrowing = true;
 		m_fTime3 = 0;
 	}
@@ -746,7 +757,7 @@ void fishing::zziMove()
 	m_iZziCount++;
 	if (m_iZziCount % 200 == 1)
 	{
-		SOUNDMANAGER->play("sound/effect/fishing/물소리.wav");
+		SOUNDMANAGER->play("sound/effect/fishing/물소리.wav", g_soundVolume.effect);
 	}
 	
 	if (m_iZziCount % 100 == 1)
@@ -787,7 +798,7 @@ void fishing::fishingThree() // 물고기랑 싸움 시작
 						RECT rc;
 						if (IntersectRect(&rc, &m_rcFishBar, &m_rcGreenBar))
 						{
-							SOUNDMANAGER->play("sound/effect/fishing/릴감는소리2.wav");
+							SOUNDMANAGER->play("sound/effect/fishing/릴감는소리2.wav", g_soundVolume.effect);
 
 						}
 					}
@@ -866,6 +877,7 @@ void fishing::fishingThree() // 물고기랑 싸움 시작
 				if (isSetFish == false)
 				{
 					m_iRandomFish = RANDOM->getFromIntTo(206, 209);
+					m_fFishLong = RANDOM->getFromFloatTo(0.f, 300.f);
 					m_pIgogi = IMAGEMANAGER->findImage(getFishIcon(m_iRandomFish));
 					isSetFish = true;
 				}
@@ -876,7 +888,7 @@ void fishing::fishingThree() // 물고기랑 싸움 시작
 
 		if (m_FishResult == GET_FISH)
 		{
-			SOUNDMANAGER->play("sound/effect/fishing/낚시줄던짐.wav");
+			SOUNDMANAGER->play("sound/effect/fishing/낚시줄던짐.wav", g_soundVolume.effect);
 			isGetFish = true;
 			
 		}
@@ -885,7 +897,7 @@ void fishing::fishingThree() // 물고기랑 싸움 시작
 		{
 
 			//this->init();
-			SOUNDMANAGER->play("sound/effect/fishing/낚아채는소리.wav");
+			SOUNDMANAGER->play("sound/effect/fishing/낚아채는소리.wav", g_soundVolume.effect);
 			isFishing = false;
 			m_pPlayer->setPlayerState(PLAYER_PLAY);
 			return;
@@ -897,7 +909,7 @@ const char * fishing::getFishIcon(int fishNum)
 {
 	switch (m_iRandomFish)
 	{
-	case 206:
+	case 206://해삼
 		return "item_206";
 		break;
 	case 207:
@@ -913,9 +925,29 @@ const char * fishing::getFishIcon(int fishNum)
 		break;
 	}
 }
+const char * fishing::getFishName(int fishNum)
+{
+	switch (m_iRandomFish)
+	{
+	case 206://해삼
+		return " 해삼 !";
+		break;
+	case 207:
+		return " 게살버거 ! ";
+		break;
+	case 208:
+		return " 금붕어 ! ";
+		break;
+	case 209:
+		return " 꼴뚜기 ! ";
+		break;
+	default:
+		break;
+	}
+}
 //물고기 랜덤움직임
 void fishing::fishMove()
-{
+{/*
 	if (isThree)
 	{
 		if (m_fFishY >= m_fGreenMinY + 5 && m_fFishY <= m_fGreenBarY + 31)
@@ -971,7 +1003,7 @@ void fishing::fishMove()
 		{
 			m_fFishY = m_fGreenMinY + 5;
 		}
-	}
+	}*/
 }
 
 // 물고기를 잡은 경우
@@ -994,13 +1026,13 @@ void fishing::fishingFour()
 		{
 			if (isSoundOn)
 			{
-				SOUNDMANAGER->play("sound/effect/fishing/띠로리.wav");
+				SOUNDMANAGER->play("sound/effect/fishing/띠로리.wav", g_soundVolume.effect);
 				isSoundOn = false;
 			}
 			isBring = true;
 					
 		}	
-		if (m_fTime2 > 2.5f)
+		if (m_fTime2 > 3.5f)
 		{		
 			m_fTime2 = 0;
 		
@@ -1138,7 +1170,6 @@ void fishing::fishBring()
 	//	}
 
 	//}
-
 
 	//if (m_fTime3 > 0.6f)
 	//{

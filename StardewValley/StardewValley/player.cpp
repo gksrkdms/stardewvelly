@@ -510,6 +510,7 @@ void player::setItemMotion()
 				{
 				case ACTITEM_AXE:
 					m_playerMotion = MOTION_AXE;
+					SOUNDMANAGER->play("sound/effect/playerAct/¸Ç¶¥¿¡.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_axe", 4, 4);
 					switch (m_playerDir)
 					{
@@ -530,6 +531,7 @@ void player::setItemMotion()
 				case ACTITEM_SPADE:
 					m_playerMotion = MOTION_SPADE;
 					setMotion(m_pAni, &m_pPlayer, "player_spade", 4, 4);
+					
 					switch (m_playerDir)
 					{
 					case PLAYER_LEFT:
@@ -545,9 +547,11 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 4, false, false, 5);
 						break;
 					}
+					SOUNDMANAGER->play("sound/effect/playerAct/¹ç°¥´Ù.wav", g_soundVolume.effect);
 					break;
 				case ACTITEM_WATER:
 					m_playerMotion = MOTION_WATER;
+					SOUNDMANAGER->play("sound/effect/playerAct/¹°»Ñ¸®°³2.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_water", 2, 4);
 					switch (m_playerDir)
 					{
@@ -567,6 +571,7 @@ void player::setItemMotion()
 					break;
 				case ACTITEM_PICKAX:
 					m_playerMotion = MOTION_PICKAX;
+					SOUNDMANAGER->play("sound/effect/playerAct/¸Ç¶¥¿¡.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_mine", 3, 4);
 					switch (m_playerDir)
 					{
@@ -586,6 +591,7 @@ void player::setItemMotion()
 					break;
 				case ACTITEM_NOT:
 					m_playerMotion = MOTION_NOT;
+					SOUNDMANAGER->play("sound/effect/playerAct/³´Áú.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_not", 3, 4);
 					switch (m_playerDir)
 					{

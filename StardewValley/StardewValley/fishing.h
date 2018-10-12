@@ -129,6 +129,7 @@ private:
 	float		m_fBoardX;				//잡은물고기 판때기 좌표
 	float		m_fBoardY;
 
+	float       m_fFishLong; //물고기길이
 	
 
 	int			m_iChance;			// 성공률
@@ -143,7 +144,6 @@ private:
 	bool		isOne;  //처음 낚시 시작 버튼누르면 true, 가로바 결과 나오면 false
 	bool		isTwo;  //가로바 결과 나오면 true, 찌던지고 기다리며 물고기가 물거나 놓치거나 , 물고기 물었을때 누르면  false
 	bool		isThree; // 물었을떄 누르면 히트뜨고 히트가끝나면서  true,  물고기 싸움끝나고 얻었을때 false
-
 	bool		isMaxOn; //맥스일때 이미지 스위치
 	bool		isThrowing; // 찌 던지고 true, true일때 찌 위아래로 흔들리게  zzimove() 
 	bool		isFeelClick; // 물고기물면 느낌표 뜸 
@@ -154,6 +154,7 @@ private:
 	bool		isSetFish; // 랜덤으로 얻은 물고기
 	bool		isSoundOn; // 사운드 실행
 	bool        isSoundOn2; //부득이한 사용
+
 	BARSTATE	m_BarState;		// 가로바 게이지 상태
 	BARRESULT	m_BarResult;	// 가로바 게이지 결과
 	//PLAYERSEE	m_PlayerSee;    // 플레이어 보는방향
@@ -163,7 +164,7 @@ private:
 	bool isFishing;		// 외부에서 쓰일 불값
 
 	const char * getFishIcon(int fishNum);
-	
+	const char * getFishName(int fishNum);
 public:
 
 	HRESULT init();

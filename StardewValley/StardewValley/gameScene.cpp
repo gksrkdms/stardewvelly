@@ -17,6 +17,9 @@ HRESULT gameScene::init()
 	//게임시간
 	PLAYTIMEMANAGER->init();
 
+	//배경음
+	SOUNDMANAGER->play("sound/해피해피.wav", g_soundVolume.bgm);
+
 	return S_OK;
 }
 

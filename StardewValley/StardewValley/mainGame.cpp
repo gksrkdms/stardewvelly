@@ -14,6 +14,9 @@ HRESULT mainGame::init()
 {
 	hdc = GetDC(g_hWnd);
 
+	g_soundVolume.bgm = 1.00f;
+	g_soundVolume.effect = 1.00f;
+
 	KEYMANAGER->init();
 	IMAGEMANAGER->init();
 	TIMEMANAGER->init();
@@ -340,10 +343,23 @@ void mainGame::addsound()
 {
 	// start scene
 	SOUNDMANAGER->addSound("sound/StardewValleyOverture.mp3", true, true);
+	SOUNDMANAGER->addSound("sound/effect/첨클릭.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/startbutton.wav", false, false);
+
+
+	//gameScene
+	SOUNDMANAGER->addSound("sound/해피해피.wav", true, true);
 
 	// 인벤옮기고 손떨어지게하는거
 	SOUNDMANAGER->addSound("sound/effect/changeitem.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/startbutton.wav", false, false);
+	
+	//플레이어 액션
+	SOUNDMANAGER->addSound("sound/effect/playerAct/곡소리.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/낫질.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/맨땅에.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/playerAct/도끼질.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/물뿌리개2.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/밭갈다.wav", false, false);
 
 
 	//낚시사운드

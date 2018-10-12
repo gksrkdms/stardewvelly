@@ -15,7 +15,6 @@ private:
 
 	RECT m_rc[4];			// 마우스 체크 렉트
 	bool isMouseIn[4];		// 마우스 체크 불값
-
 	int	m_nArrayX1[5];		// 구름1,2 x,y
 	int	m_nArrayY1[5];
 	int	m_nArrayX2[5];
