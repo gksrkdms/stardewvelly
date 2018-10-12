@@ -22,12 +22,13 @@ private:
 
 	int m_alpha; // 알파랜더 알파값
 	int m_zulaTime; // 게임 전체시간
+	int m_nMinAngle; // 분침 각도
 
 	int m_hour;
 	int m_min;
 	int m_day; // 날
 	int m_month; // 달
-
+	   
 	bool m_isAction; // hour 덧셈 한번만 실행되게 하려고 넣음
 	bool m_isCount; // 10min count
 	bool m_isNight; // 밤인지 확인

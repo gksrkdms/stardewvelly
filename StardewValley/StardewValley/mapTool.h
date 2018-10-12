@@ -3,10 +3,12 @@
 #include <vector>
 #include <algorithm>
 
-#include "mapObject.h"
+//#include "mapObject.h"
 
 //샘플타일 사이즈 필요
 #define TILE_SIZE_SAMPLE 16
+
+class mapObject;
 
 enum TERRAIN
 {
@@ -284,7 +286,6 @@ public:
 	void saveMap(const char* szfileName);
 	void loadMap(const char* szfileName);
 
-	inline tagTile* getTile() { return m_pTiles; }
 
 };
 

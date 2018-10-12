@@ -170,6 +170,7 @@
     <ClInclude Include="objTree.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerMenu.h" />
+    <ClInclude Include="progressBar.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="scene.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="objTree.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerMenu.cpp" />
+    <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="shop.cpp" />
     <ClCompile Include="StardewValley.cpp" />
     <ClCompile Include="mainGame.cpp" />

@@ -264,7 +264,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("shop_textBox", "image/Stardew Valley/ui/shop_textBox.bmp", 209, 100, true, RGB(255, 0, 255));
 	
 	// ½Ã°è
-	IMAGEMANAGER->addImage("minutehand", "image/Stardew Valley/ui/clock.bmp", 11, 19, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("minutehand", "image/Stardew Valley/ui/clock.bmp", 48, 64, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("clock", "image/Stardew Valley/ui/clock1.bmp", 72, 57, true, RGB(255, 0, 255));
 	
 	// icon

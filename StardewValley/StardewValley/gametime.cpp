@@ -27,6 +27,7 @@ HRESULT gametime::init()
 	m_day = 1;
 	m_month = 1;
 	m_isNight = false;
+	m_nMinAngle = 180;
 
 	return S_OK;
 }
@@ -64,20 +65,41 @@ void gametime::update()
 			m_isNight = true;
 		}
 
-		// 10분 단위로 자름, 10분마다 어두워짐
-		if (m_min % 10 == 0 && m_isCount)
+		//// 10분 단위로 자름, 10분마다 어두워짐
+		//if (m_min % 10 == 0 && m_isCount)
+		//{
+		//	m_isCount = false;
+		//	m_alpha = m_alpha + 5;
+
+		//	if (m_alpha >= 200)
+		//		m_alpha = 200;
+		//}
+		//else if (m_min % 10 != 0)
+		//{
+		//	if (!m_isCount)
+		//		m_isCount = true;
+		//}
+	}
+
+	// 10분 단위로 자름, 10분마다 어두워짐
+	if (m_min % 10 == 0 && m_isCount)
+	{
+		m_isCount = false;
+		m_nMinAngle = m_nMinAngle + 1.5;
+
+		if (m_isNight)
 		{
-			m_isCount = false;
 			m_alpha = m_alpha + 5;
 
 			if (m_alpha >= 200)
 				m_alpha = 200;
 		}
-		else if (m_min % 10 != 0)
-		{
-			if (!m_isCount)
-				m_isCount = true;
-		}
+
+	}
+	else if (m_min % 10 != 0)
+	{
+		if (!m_isCount)
+			m_isCount = true;
 	}
 
 	// 날짜
@@ -99,11 +121,18 @@ void gametime::update()
 		}
 	}
 
+	//새벽 3시면 강제로 다음날됨
+	if (m_hour == 3)
+	{
+		m_hour = 6;
+	}
+
 	//아침
 	if (m_hour == 6)
 	{
 		m_alpha = 0;
 		m_isNight = false;
+		m_nMinAngle = 180;
 	}
 
 	//요일
@@ -155,7 +184,9 @@ void gametime::render(HDC hdc)
 	// 시계 랜더
 	if(m_pClock)
 		m_pClock->render(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR -10, 20, CLOCK_SCALAR);
-		m_pMinutehand->render(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR +40, 20, CLOCK_SCALAR);
+		m_pMinutehand->rotateRender(hdc, m_nMinAngle, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR -15, -18, CLOCK_SCALAR);
+	//m_pMinutehand->rotateRender(hdc, 0, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 40, 20+ m_pClock->getHeight(), CLOCK_SCALAR);
+		//m_pMinutehand->render(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR +40, 20, CLOCK_SCALAR);
 
 	TIMEMANAGER->render(hdc);
 

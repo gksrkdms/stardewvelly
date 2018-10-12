@@ -97,6 +97,9 @@ public:
 
 	// 이미지 축적
 	void frameRenderMini(HDC hdc, int destX, int destY, int currFrameX, int currFrameY, int scalar, int tilesizeX, int tilesizeY);
+	
+	//회전 이미지
+	void rotateRender(HDC hdc, float rotateAngle, float fX, float fY, int scalar);
 
 	// 알파 블렌드 렌더
 	void alphaRender(HDC hdc, BYTE alpha);

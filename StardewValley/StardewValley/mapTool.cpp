@@ -244,8 +244,6 @@ void mapTool::render(HDC hdc)
 				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 					, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
 			}
-
-
 		}
 	}
 
