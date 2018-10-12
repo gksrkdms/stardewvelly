@@ -37,8 +37,8 @@ private:
 	int	m_nSlot2Y;
 	int	m_nSlot3Y;
 
-	int m_nBgX;	// 인벤토리 배경 xy좌표
-	int m_nBgY;
+	PRIVATESYNTHESIZE(int, m_nBgX, BgX);	// 인벤토리 배경 xy좌표
+	PRIVATESYNTHESIZE(int, m_nBgY, BgY);
 
 	int m_nUiX;	// ui xy좌표
 	int m_nUiY;
@@ -77,6 +77,7 @@ public:
 	void release();
 	void update();
 	void render(HDC hdc);
+	void quickbarRender(HDC hdc);
 
 	void addItem(int itemnum);			// 인벤토리에 아이템 추가
 	void invenAdd();					// 인벤토리 확장 함수

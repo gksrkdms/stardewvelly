@@ -7,7 +7,7 @@ HRESULT inven::init()
 {
 	m_pSlot1 = IMAGEMANAGER->findImage("inven_001");
 	m_pSlot2 = m_pSlot3 = IMAGEMANAGER->findImage("inven_002");
-	m_pInvenBG = IMAGEMANAGER->findImage("inven_003");
+	m_pInvenBG = IMAGEMANAGER->findImage("inven_004");
 	m_pUiBG = IMAGEMANAGER->findImage("quickbar");
 	m_pNumber = IMAGEMANAGER->findImage("barnumber");
 	m_pTarget = IMAGEMANAGER->findImage("focustile_001");
@@ -18,8 +18,8 @@ HRESULT inven::init()
 	m_pTempHand->init(0, 0);
 	m_pQuickItem = NULL;
 
-	m_nBgX = 50;
-	m_nBgY = 50;
+	m_nBgX = 200;
+	m_nBgY = 150;
 	m_nSlotX = m_nBgX + 40;
 	m_nSlot1Y = m_nBgY + 50;
 	m_nSlot2Y = m_nBgY + 120;
@@ -160,21 +160,6 @@ void inven::update()
 
 void inven::render(HDC hdc)
 {
-	// 퀵바(필드)상태일때 ui와 아이템 랜더
-	if (m_invenDir == INVEN_QUICKBAR)
-	{
-		m_pUiBG->render(hdc, m_nUiX, m_nUiY);
-		m_pSlot1->render(hdc, m_nSlotX, m_nSlot1Y);
-		m_pTarget->render(hdc, m_nUiX + 16 + (m_nQuickNum - 1) * 64, m_nUiY + 16, 2);
-
-		for (int i = 0; i < 12; i++)
-		{
-			m_iterItem = m_mapItem.find(i);
-			m_iterItem->second->render(hdc);
-			m_pNumber->frameRender(hdc, m_nUiX + 20 + (i * 64), m_nUiY + 20, i, 0);
-		}
-	}
-
 	// 인벤토리메뉴일때 ui와 모든아이템 랜더
 	if (m_invenDir == INVEN_INVEN)
 	{
@@ -213,6 +198,24 @@ void inven::render(HDC hdc)
 			char str[128];
 			sprintf_s(str, 128, "%d", m_pHand->getItemNum());
 			TextOut(hdc, m_pHand->getX() + 45, m_pHand->getY() + 45, str, strlen(str));
+		}
+	}
+}
+
+void inven::quickbarRender(HDC hdc)
+{
+	// 퀵바(필드)상태일때 ui와 아이템 랜더
+	if (m_invenDir == INVEN_QUICKBAR)
+	{
+		m_pUiBG->render(hdc, m_nUiX, m_nUiY);
+		m_pSlot1->render(hdc, m_nSlotX, m_nSlot1Y);
+		m_pTarget->render(hdc, m_nUiX + 16 + (m_nQuickNum - 1) * 64, m_nUiY + 16, 2);
+
+		for (int i = 0; i < 12; i++)
+		{
+			m_iterItem = m_mapItem.find(i);
+			m_iterItem->second->render(hdc);
+			m_pNumber->frameRender(hdc, m_nUiX + 20 + (i * 64), m_nUiY + 20, i, 0);
 		}
 	}
 }
@@ -503,9 +506,9 @@ void inven::setDir()
 	// 인벤토리 열었을때
 	if (m_invenDir == INVEN_INVEN)
 	{
-		m_pInvenBG = IMAGEMANAGER->findImage("inven_003");
-		m_nBgX = 50;
-		m_nBgY = 50;
+		m_pInvenBG = IMAGEMANAGER->findImage("inven_004");
+		m_nBgX = 200;
+		m_nBgY = 150;
 		m_nSlotX = m_nBgX + 40;
 		m_nSlot1Y = m_nBgY + 50;
 		m_nSlot2Y = m_nBgY + 120;
