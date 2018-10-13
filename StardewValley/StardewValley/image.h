@@ -93,6 +93,7 @@ public:
 	// 프레임 렌더
 	void frameRender(HDC hdc, int destX, int destY,
 		int currFrameX, int currFrameY);
+	void frameRender(HDC hdc, int destX, int destY, int currFrameX, int currFrameY, int scalar);
 	void frameRenderTile(HDC hdc, int destX, int destY, int currFrameX, int currFrameY, int tilesizeX, int tilesizeY);
 
 	// 이미지 축적

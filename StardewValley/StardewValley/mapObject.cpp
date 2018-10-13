@@ -27,3 +27,7 @@ void mapObject::update()
 void mapObject::render(HDC hdc)
 {
 }
+
+void mapObject::render(HDC hdc, int x, int y)
+{
+}

@@ -222,7 +222,7 @@ void player::setTargetXY()
 					if (PtInRect(&m_pMap->getTile(m_indexCamera)->rc, g_ptMouse))
 					{
 						//물일때 확인
-						if (m_pMap->getTile(m_indexCamera)->terrain == WATER)
+						if (m_pMap->getTile(m_indexCamera)->object == TREE_SMALL)
 							i++;
 
 						m_nTargetX = m_pMap->getTile(m_indexCamera)->rc.left;
