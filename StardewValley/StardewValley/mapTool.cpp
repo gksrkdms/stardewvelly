@@ -483,8 +483,8 @@ void mapTool::render(HDC hdc)
 // ∏ﬁ¿Œ
 LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
-	HDC hdc;
-	PAINTSTRUCT ps;
+	//HDC hdc;
+	//PAINTSTRUCT ps;
 	RECT crt;
 
 	switch (iMessage)
@@ -582,9 +582,10 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 	case WM_COMMAND:
 	{
 		switch (LOWORD(wParam))
-		{	
+		{
+		case 0:
+			break;
 		}
-		break;
 	}
 
 	case WM_SIZE:
@@ -610,9 +611,9 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 
 LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
-	HDC hdc;
-	PAINTSTRUCT ps;
-	RECT crt;
+	//HDC hdc;
+	//PAINTSTRUCT ps;
+	//RECT crt;
 
 	switch (iMessage)
 	{
@@ -1719,7 +1720,7 @@ void mapTool::saveMap(const char* szfileName)
 
 void mapTool::loadMap(const char* szfileName)
 {
-	char str[128];
+	//char str[128];
 	DWORD read;
 
 	HANDLE hFile;

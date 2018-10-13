@@ -101,6 +101,7 @@ private:
 	int i;
 	bool m_isMove =false;
 
+	void addSound();
 public:
 	HRESULT init();
 	void release();

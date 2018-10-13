@@ -10,6 +10,7 @@
 
 HRESULT player::init()
 {
+	addSound();
 	//m_pPlayer = IMAGEMANAGER->findImage("player_idle");
 	m_pTarget = IMAGEMANAGER->findImage("focustile_001");
 	m_pNumber = IMAGEMANAGER->findImage("goldnumber");
@@ -246,8 +247,11 @@ void player::setKey()
 
 	if (KEYMANAGER->isStayKeyDown('A'))
 	{
+		if (SOUNDMANAGER->isPlaying("sound/effect/startbutton.wav") == false)
+			SOUNDMANAGER->play("sound/effect/startbutton.wav", g_soundVolume.effect);
 		if (isMove == false)
 		{
+			
 			switch (m_playerMotion)
 			{
 			case MOTION_IDLE:
@@ -257,6 +261,7 @@ void player::setKey()
 				startMotion(m_pAni, 15, 20, false, true, 8);
 				break;
 			}
+
 			isMove = true;
 		}
 		m_playerDir = PLAYER_LEFT;
@@ -280,6 +285,8 @@ void player::setKey()
 	}
 	if (KEYMANAGER->isStayKeyDown('D'))
 	{
+		if (SOUNDMANAGER->isPlaying("sound/effect/startbutton.wav") == false)
+			SOUNDMANAGER->play("sound/effect/startbutton.wav", g_soundVolume.effect);
 		if (isMove == false)
 		{
 			switch (m_playerMotion)
@@ -314,8 +321,11 @@ void player::setKey()
 	}
 	if (KEYMANAGER->isStayKeyDown('W'))
 	{
+		if(SOUNDMANAGER->isPlaying("sound/effect/startbutton.wav") ==false)
+		SOUNDMANAGER->play("sound/effect/startbutton.wav", g_soundVolume.effect);
 		if (isMove == false)
 		{
+		
 			switch (m_playerMotion)
 			{
 			case MOTION_IDLE:
@@ -348,6 +358,8 @@ void player::setKey()
 	}
 	if (KEYMANAGER->isStayKeyDown('S'))
 	{
+		if (SOUNDMANAGER->isPlaying("sound/effect/startbutton.wav") == false)
+			SOUNDMANAGER->play("sound/effect/startbutton.wav", g_soundVolume.effect);
 		if (isMove == false)
 		{
 			if (isMove == false)
@@ -387,8 +399,10 @@ void player::setKey()
 
 	if (KEYMANAGER->isOnceKeyDown('E'))
 	{
+		SOUNDMANAGER->play("sound/effect/ÀÎº¥Åä¸®.wav", g_soundVolume.effect);
 		m_playerState = PLAYER_MENU;
 		m_pMenu->setMenuDir(MENU_INVEN);
+		
 	}
 	if (KEYMANAGER->isOnceKeyDown('R'))
 	{
@@ -613,6 +627,7 @@ void player::setItemMotion()
 				{
 				case ACTITEM_AXE:
 					m_playerMotion = MOTION_AXE;
+					SOUNDMANAGER->play("sound/effect/playerAct/¸Ç¶¥¿¡.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_axe", 4, 4);
 					switch (m_playerDir)
 					{
@@ -633,6 +648,7 @@ void player::setItemMotion()
 				case ACTITEM_SPADE:
 					m_playerMotion = MOTION_SPADE;
 					setMotion(m_pAni, &m_pPlayer, "player_spade", 4, 4);
+					
 					switch (m_playerDir)
 					{
 					case PLAYER_LEFT:
@@ -648,9 +664,11 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 4, false, false, 5);
 						break;
 					}
+					SOUNDMANAGER->play("sound/effect/playerAct/¹ç°¥´Ù.wav", g_soundVolume.effect);
 					break;
 				case ACTITEM_WATER:
 					m_playerMotion = MOTION_WATER;
+					SOUNDMANAGER->play("sound/effect/playerAct/¹°»Ñ¸®°³2.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_water", 2, 4);
 					switch (m_playerDir)
 					{
@@ -670,6 +688,7 @@ void player::setItemMotion()
 					break;
 				case ACTITEM_PICKAX:
 					m_playerMotion = MOTION_PICKAX;
+					SOUNDMANAGER->play("sound/effect/playerAct/¸Ç¶¥¿¡.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_mine", 3, 4);
 					switch (m_playerDir)
 					{
@@ -689,6 +708,7 @@ void player::setItemMotion()
 					break;
 				case ACTITEM_NOT:
 					m_playerMotion = MOTION_NOT;
+					SOUNDMANAGER->play("sound/effect/playerAct/³´Áú.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_not", 3, 4);
 					switch (m_playerDir)
 					{
@@ -736,6 +756,7 @@ void player::setItemMotion()
 				case ACTITEM_SWORD:
 					m_playerMotion = MOTION_SWORD;
 					setMotion(m_pAni, &m_pPlayer, "player_sword", 3, 4);
+					SOUNDMANAGER->play("sound/effect/playerAct/³´Áú.wav", g_soundVolume.effect);
 					switch (m_playerDir)
 					{
 					case PLAYER_LEFT:
@@ -834,7 +855,9 @@ void player::useItem()
 				switch (m_pTargetItem->getItemId())
 				{
 				case 201:
+					SOUNDMANAGER->play("sound/effect/¾Æ»è¼Ò¸®2.wav", g_soundVolume.effect);
 					m_pTargetItem->useItem();
+					
 					break;
 				}
 				break;
@@ -843,4 +866,16 @@ void player::useItem()
 			}
 		}
 	}
+}
+
+void player::addSound()
+{
+	//ÇÃ·¹ÀÌ¾î ¾×¼Ç
+	SOUNDMANAGER->addSound("sound/effect/playerAct/°î¼Ò¸®.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/³´Áú.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/¸Ç¶¥¿¡.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/µµ³¢Áú.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/¹°»Ñ¸®°³2.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/¹ç°¥´Ù.wav", false, false);
+
 }

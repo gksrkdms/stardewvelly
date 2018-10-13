@@ -64,6 +64,31 @@ void playerMenu::update()
 
 	// 메뉴 업데이트
 	menuUpdate();
+	// 메뉴가 호출되면
+	if (isMenu)
+	{
+		// 메뉴가 인벤토리,상점,제작,등등 체크해줌
+		if (m_menuDir == MENU_INVEN)
+		{
+			m_pInven->setInvenDir(INVEN_INVEN);	// 메뉴가 인벤토리일떄 인벤토리 랜더를위해 상태값변경
+		}
+		if (m_menuDir == MENU_SHOP)
+		{
+			m_pShop->update();
+			m_pInven->setInvenDir(INVEN_SHOP);	// 메뉴가 상점일떄 인벤토리 랜더를 위해 상태값변경
+		}
+		// 손에 아이템이 없을떄만 메뉴창을 닫을수있게함
+		if (m_pInven->getHandItem() == false)
+		{
+			if (KEYMANAGER->isOnceKeyDown('E'))
+			{
+				SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
+				m_pInven->setInvenDir(INVEN_QUICKBAR);	// 인벤토리 상태를 퀵바로
+				m_menuDir = MENU_INVEN;					// 메뉴상태값을 인벤토리로 초기화
+				isMenu = false;							// 인벤토리 false
+			}
+		}
+	}
 
 }
 

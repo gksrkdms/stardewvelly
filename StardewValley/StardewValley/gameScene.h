@@ -14,6 +14,8 @@ private:
 	mapManager*	m_pMapManager;
 
 public:
+	void addSound();
+
 	virtual HRESULT init();
 	virtual void release();
 	virtual void update();
