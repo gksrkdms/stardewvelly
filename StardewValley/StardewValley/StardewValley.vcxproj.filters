@@ -189,6 +189,9 @@
     <ClInclude Include="progressBar.h">
       <Filter>MainGame\gameScene\progressBar</Filter>
     </ClInclude>
+    <ClInclude Include="objCrop.h">
+      <Filter>MainGame\MapTool\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -292,6 +295,9 @@
     </ClCompile>
     <ClCompile Include="progressBar.cpp">
       <Filter>MainGame\gameScene\progressBar</Filter>
+    </ClCompile>
+    <ClCompile Include="objCrop.cpp">
+      <Filter>MainGame\MapTool\object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

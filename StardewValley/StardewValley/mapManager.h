@@ -2,6 +2,8 @@
 #include "mapTool.h"
 #include <vector>
 
+class mapObject;
+
 class mapManager: public mapTool
 {
 private:
@@ -13,6 +15,7 @@ private:
 
 	string m_mapName;
 
+	mapObject* m_pObjectMap;
 
 public:
 	mapManager();

@@ -17,5 +17,7 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render(HDC hdc);
+	virtual void render(HDC hdc, int x, int y);
+
 };
 

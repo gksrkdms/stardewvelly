@@ -233,6 +233,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("object3", "image/maptool/object3.bmp", 320, 320,20,20, true, RGB(255, 255, 255));
 	
 	IMAGEMANAGER->addImage("objtree", "image/maptool/object/objtree.bmp", 176, 654,11,41, true, RGB(255, 255, 255));
+	IMAGEMANAGER->addImage("objtree2", "image/maptool/object/environment_003.bmp", 432, 560,9,7, true, RGB(255, 0, 255));
 	
 	
 	

@@ -43,5 +43,7 @@ public:
 	void release();
 	void update();
 	void render(HDC hdc);
+
+	inline int getMin() { return m_min; }
 };
 

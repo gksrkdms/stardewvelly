@@ -357,6 +357,44 @@ void image::frameRender(HDC hdc, int destX, int destY, int currFrameX, int currF
 	}
 }
 
+void image::frameRender(HDC hdc, int destX, int destY, int currFrameX, int currFrameY, int scalar)
+{
+	m_pImageInfo->nCurrFrameX = currFrameX;
+	m_pImageInfo->nCurrFrameY = currFrameY;
+
+	if (currFrameX > m_pImageInfo->nMaxFrameX)
+		m_pImageInfo->nCurrFrameX = m_pImageInfo->nMaxFrameX;
+	if (currFrameY > m_pImageInfo->nMaxFrameY)
+		m_pImageInfo->nCurrFrameY = m_pImageInfo->nMaxFrameY;
+
+	if (m_isTransparent)
+	{
+		GdiTransparentBlt(
+			hdc,	// 복사될 목적지 DC
+			destX, destY,		// 복사될 좌표 시작점
+			m_pImageInfo->nFrameWidth*scalar,
+			m_pImageInfo->nFrameHeight*scalar,	// 복사될 크기
+
+									// 대상
+			m_pImageInfo->hMemDC,	// 복사할 대상 DC
+			m_pImageInfo->nFrameWidth * m_pImageInfo->nCurrFrameX,
+			m_pImageInfo->nFrameHeight * m_pImageInfo->nCurrFrameY,// 복사될 영역 시작좌표
+			m_pImageInfo->nFrameWidth,
+			m_pImageInfo->nFrameHeight,	// 복사될 영역지정 좌표
+
+			m_transColor);			// 복사에서 제외할 색상
+	}
+	else
+	{
+		BitBlt(
+			hdc,
+			destX, destY,
+			m_pImageInfo->nWidth, m_pImageInfo->nHeight,
+			m_pImageInfo->hMemDC,
+			0, 0, SRCCOPY);
+	}
+}
+
 void image::frameRenderTile(HDC hdc, int destX, int destY, int currFrameX, int currFrameY, int tilesizeX, int tilesizeY)
 {
 	m_pImageInfo->nCurrFrameX = currFrameX;
