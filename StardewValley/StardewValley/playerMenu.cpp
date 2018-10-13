@@ -71,6 +71,11 @@ void playerMenu::render(HDC hdc)
 {
 	m_pInven->quickbarRender(hdc);	// 퀵바 랜더
 
+	for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
+	{
+		m_iterItem->second->QuickBarToolTiprender(hdc);
+	}
+
 	// 메뉴가 호출됬을떄( true일떄)
 	if (isMenu)
 	{
@@ -84,11 +89,11 @@ void playerMenu::render(HDC hdc)
 			// 메뉴 상태값이 상점이 아니면
 			// 인벤토리 툴팁을 랜더함(마우스 오버시)
 			// 상점은 상점전용의 툴팁이따로잇음
+			// 메뉴창 메뉴 아이콘 랜더
 			for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
 			{
 				m_iterItem->second->ToolTiprender(hdc);
 			}
-			// 메뉴창 메뉴 아이콘 랜더
 			for (int i = 0; i < 8; i++)
 			{
 				//MakeRect(hdc, m_IconRc[i]);

@@ -144,6 +144,33 @@ void item::ToolTiprender(HDC hdc)
 	}
 }
 
+void item::QuickBarToolTiprender(HDC hdc)
+{
+	char str[128];
+	if (isItemOn == true)
+	{
+		if (isToolTip == true)
+		{
+			m_pToolTipImg->render(hdc, m_nMouseX + 10, m_nMouseY + 10);											// 툴팁 윈도우
+			DrawText(hdc, m_ItemName.c_str(), strlen(m_ItemName.c_str()), &m_NameRc, DT_WORDBREAK);				// 아이템 이름
+			DrawText(hdc, m_ItemKindName.c_str(), strlen(m_ItemKindName.c_str()), &m_KindRc, DT_WORDBREAK);		// 아이템 종류(도구,씨앗 등)
+			DrawText(hdc, m_ItemToolTip.c_str(), strlen(m_ItemToolTip.c_str()), &m_ToolTipRc, DT_WORDBREAK);	// 아이템 상세내용
+																												// 아이템이 소모품이면 기력,체력 회복량 등 표시
+			if (m_itemKind == ITEM_CONSUME)
+			{
+				m_pEnergy->render(hdc, m_nEnergyX, m_nEnergyY);
+				m_pHp->render(hdc, m_nHpX, m_nHpY);
+				sprintf_s(str, 128, "%d", m_nEnergy);
+				TextOut(hdc, m_nEnergyX + 60, m_nEnergyY + 10, str, strlen(str));
+				TextOut(hdc, m_nEnergyX + 80, m_nEnergyY + 10, "기력", strlen("기력"));
+				sprintf_s(str, 128, "%d", m_nHp);
+				TextOut(hdc, m_nHpX + 60, m_nHpY + 10, str, strlen(str));
+				TextOut(hdc, m_nHpX + 80, m_nHpY + 10, "체력", strlen("체력"));
+			}
+		}
+	}
+}
+
 // 상점 리스트 랜더용 아이템이름, 가격 등
 void item::ShopRender(HDC hdc, int nameX, int nameY, int moneyX, int moneyY)
 {

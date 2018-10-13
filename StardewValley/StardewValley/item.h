@@ -93,6 +93,7 @@ public:
 	void update();
 	void render(HDC hdc);
 	void ToolTiprender(HDC hdc); // 인벤토리메뉴, 상점인벤토리 툴팁용
+	void QuickBarToolTiprender(HDC hdc); // 퀵바 툴팁용
 	void ShopRender(HDC hdc, int nameX, int nameY, int moneyX, int moneyY); // 상점 리스트 랜더용 아이템이름, 가격 등
 	void ShopInvenRender(HDC hdc); // 상점용 인벤토리 랜더
 	void ShopInvenToolTip(HDC hdc);// 상점용 툴팁 랜더

@@ -11,6 +11,9 @@ HRESULT inven::init()
 	m_pUiBG = IMAGEMANAGER->findImage("quickbar");
 	m_pNumber = IMAGEMANAGER->findImage("barnumber");
 	m_pTarget = IMAGEMANAGER->findImage("focustile_001");
+	m_pSort = IMAGEMANAGER->findImage("sort");
+	m_pTrashCan = IMAGEMANAGER->findImage("trash_can");
+	m_pUiToolTip = IMAGEMANAGER->findImage("menu_textBox");
 
 	m_pHand = new item;
 	m_pHand->init(0, 0);
@@ -37,6 +40,7 @@ HRESULT inven::init()
 	m_invenDir = INVEN_QUICKBAR;
 	isUiDown = true;
 	isLbutton = false;
+
 
 	// 인벤토리 사이즈(36)만큼 객체생성후 map에 담아준다
 	for (int i = 0; i < 36; i++)
@@ -71,6 +75,11 @@ HRESULT inven::init()
 	//	WINSIZEX - 300,
 	//	200, 100, 40,
 	//	g_hWnd, HMENU(0), g_hInstance, NULL);
+
+	m_sortRc = RectMake(m_pInvenBG->getWidth() + 150, 200, m_pSort->getWidth(), m_pSort->getHeight());
+	m_TrashRc = RectMake(m_pInvenBG->getWidth() + 170, 400, m_pTrashCan->getWidth() * 4, m_pTrashCan->getHeight() * 4);
+	isSort = false;
+	isTrash = false;
 
 	return S_OK;
 }
@@ -112,6 +121,12 @@ void inven::update()
 	// 손에 집은 아이템 x,y마우스 따라다니게
 	m_pHand->setX(g_ptMouse.x + 5);
 	m_pHand->setY(g_ptMouse.y + 5);
+
+	if (m_invenDir == INVEN_INVEN)
+	{
+		// ui상태 업데이트
+		setUiUpdate();
+	}
 
 	if (m_invenDir == INVEN_QUICKBAR)
 	{
@@ -172,6 +187,14 @@ void inven::render(HDC hdc)
 			m_iterItem->second->render(hdc);
 			m_iterItem->second->setMouseY(g_ptMouse.y + 5);
 		}
+		if(isSort)
+		m_pSort->floatRender(hdc, m_pInvenBG->getWidth() + 150, 200, 0, 0, m_pSort->getWidth(), m_pSort->getHeight(), 1.05f);
+		else
+		m_pSort->floatRender(hdc, m_pInvenBG->getWidth() + 150, 200, 0, 0, m_pSort->getWidth(), m_pSort->getHeight(), 1.0f);
+		if(isTrash)
+			m_pTrashCan->floatRender(hdc, m_pInvenBG->getWidth() + 170, 400, 0, 0, m_pTrashCan->getWidth(), m_pTrashCan->getHeight(), 4.2f);
+		else
+			m_pTrashCan->floatRender(hdc, m_pInvenBG->getWidth() + 170, 400, 0, 0, m_pTrashCan->getWidth(), m_pTrashCan->getHeight(), 4.0f);
 	}
 	// 제작메뉴일떄 ui와 인벤토리 랜더 (미구현)
 	if (m_invenDir == INVEN_MAKE)
@@ -717,6 +740,46 @@ void inven::setKey()
 		if (KEYMANAGER->isOnceKeyDown('V'))
 		{
 			addItem(3);
+		}
+	}
+}
+
+void inven::setUiUpdate()
+{
+	if (PtInRect(&m_sortRc, g_ptMouse))
+	{
+		isSort = true;
+	}
+	else
+	{
+		isSort = false;
+	}
+	if (PtInRect(&m_TrashRc, g_ptMouse))
+	{
+		isTrash = true;
+	}
+	else
+	{
+		isTrash = false;
+	}
+
+	if (isSort)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			sortInven();
+		}
+	}
+
+	if (isTrash)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			if (isHandItem && m_pHand->getItemSell() == true)
+			{
+				m_pHand->deleteItem();
+				isHandItem = false;
+			}
 		}
 	}
 }

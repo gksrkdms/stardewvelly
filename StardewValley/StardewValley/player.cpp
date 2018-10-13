@@ -94,6 +94,7 @@ void player::update()
 	if (m_pTargetItem)
 	{
 		m_pTargetItem->setPlayXY(m_nX, m_nY);	// 도구아이템이 아닐때 플레이어 x,y받아오는 함수
+		// L버튼 가능을하기위해 낚시상태가 아닐떄, 인벤클래스의 L버튼불값이 false일떄
 		if (m_playerState != PLAYER_FISHING && m_pMenu->getInven()->getLbutton() == false)
 		{
 			setItemMotion();

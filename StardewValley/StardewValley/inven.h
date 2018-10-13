@@ -32,6 +32,14 @@ private:
 	image*	m_pNumber;	// 퀵바 넘버
 	image*	m_pTarget;	// 퀵바 타겟 이미지(빨간색 네모)
 
+	image*	m_pSort;		// 아이템 정렬 이미지
+	image*	m_pTrashCan;	// 쓰레기통
+	image*	m_pUiToolTip;	// 정렬,쓰레기통 툴팁
+	RECT	m_sortRc;		// 아이템 정렬 렉트
+	RECT	m_TrashRc;		// 쓰레기통 렉트
+	bool	isSort;			// 아이템 정렬 불값
+	bool	isTrash;		// 쓰레기통 불값
+
 	int	m_nSlotX;	//인벤토리 슬롯x,y좌표
 	int	m_nSlot1Y;
 	int	m_nSlot2Y;
@@ -70,6 +78,7 @@ private:
 	void setClickQuickItem();
 	void setClickShopItem();
 	void setKey();		// 키 셋팅
+	void setUiUpdate();	// 정렬, 쓰레기통 업데이트
 
 
 public:
