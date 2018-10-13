@@ -84,7 +84,7 @@ void player::update()
 	// 플레이어 렉트 셋팅
 	m_rc = RectMake(m_nX + 8 - CAMERA->getX(), m_nY + 63 - CAMERA->getY(), m_nPlayerSizeX, m_nPlayerSizeY);
 	// 바닥에 빨간색네모 타겟 렉트
-	m_TargetRc = RectMake(m_nX + 8 - CAMERA->getX() - (m_nPlayerSizeX / 2), m_nY + 63 - CAMERA->getY() - (m_nPlayerSizeY / 2), m_nPlayerSizeX * 2, m_nPlayerSizeY * 2);
+	m_TargetRc = RectMake(m_nX + 8 - CAMERA->getX() - (m_nPlayerSizeX / 2), m_nY + 63 - CAMERA->getY() - (m_nPlayerSizeY / 2), m_nPlayerSizeX* 2, m_nPlayerSizeY * 2);
 	// 메뉴클래스 업데이트
 	m_pMenu->update();
 	// 타일의 xy받아오는 함수
@@ -150,8 +150,8 @@ void player::render(HDC hdc)
 	TextOut(hdc, 500, 50, str, strlen(str));
 
 	//MakeRect(hdc, m_temprc);
-	//MakeRect(hdc, m_rc);
-	MakeRect(hdc, m_TargetRc);
+	MakeRect(hdc, m_rc);
+	//MakeRect(hdc, m_TargetRc);
 
 	m_pMenu->render(hdc);
 
