@@ -1187,7 +1187,7 @@ void fishing::fishBring()
 
 void fishing::addSound()
 {
-	////낚시사운드
+	//낚시사운드
 	SOUNDMANAGER->addSound("sound/effect/fishing/릴감는소리.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/fishing/낚시버튼소리.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/fishing/낚시줄던짐.wav", false, false);
