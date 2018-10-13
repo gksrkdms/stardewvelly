@@ -14,6 +14,9 @@ HRESULT mainGame::init()
 {
 	hdc = GetDC(g_hWnd);
 
+	g_soundVolume.bgm = 0.4f;
+	g_soundVolume.effect = 1.f;
+
 	KEYMANAGER->init();
 	IMAGEMANAGER->init();
 	TIMEMANAGER->init();
@@ -325,34 +328,17 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("item_212", "image/Stardew Valley/item/item_212.bmp", 16, 16, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("item_213", "image/Stardew Valley/item/item_213.bmp", 16, 16, true, RGB(255, 0, 255));
 
-	// 낚시관련 이미지
-	IMAGEMANAGER->addImage("i_GaroBar", "image/Stardew Valley/fishing/가로바.bmp", 200, 48, true, RGB(255, 0, 255));   // 원래사이즈 50,12 
-	IMAGEMANAGER->addImage("i_Max", "image/Stardew Valley/fishing/맥스.bmp", 116, 48, true, RGB(255, 0, 255)); //원사이즈 58,24 
-	IMAGEMANAGER->addImage("i_Zzi", "image/Stardew Valley/fishing/찌.bmp", 120, 40, 3, 1, true, RGB(255, 0, 255)); //원사이즈 30,10 
-	IMAGEMANAGER->addImage("i_Player", "image/Stardew Valley/fishing/player.bmp", 400, 640, 5, 5, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("i_PlayerFishing", "image/Stardew Valley/fishing/플레이어낚시.bmp", 768, 768, 4, 4, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("i_Feel", "image/Stardew Valley/fishing/느낌표.bmp", 30, 45, true, RGB(255, 0, 255)); //원사이즈 10,15 
-	IMAGEMANAGER->addImage("i_Hit", "image/Stardew Valley/fishing/히트.bmp", 148, 64, true, RGB(255, 0, 255)); //원사이즈 74,32 
-	IMAGEMANAGER->addImage("i_SeroBar", "image/Stardew Valley/fishing/세로바.bmp", 160, 500, true, RGB(255, 0, 255)); //원사이즈 39,150  
-	IMAGEMANAGER->addImage("i_WhitebarL", "image/Stardew Valley/fishing/흰풍선왼위.bmp", 210, 550, true, RGB(255, 0, 255)); //원사이즈 52,185 
-	IMAGEMANAGER->addImage("i_WhitebarR", "image/Stardew Valley/fishing/흰풍선오아.bmp", 210, 550, true, RGB(255, 0, 255)); //원사이즈 52,185  
-	IMAGEMANAGER->addImage("i_GreenBar", "image/Stardew Valley/fishing/초록바만든거.bmp", 37, 77, true, RGB(255, 0, 255)); // 9,9 
-	IMAGEMANAGER->addImage("i_moveFish", "image/Stardew Valley/fishing/물고기.bmp", 37, 37, true, RGB(255, 0, 255)); // 19 19
-	IMAGEMANAGER->addImage("i_moveChoo", "image/Stardew Valley/fishing/추감기.bmp", 168, 55, 4, 1, true, RGB(255, 0, 255));// 72 21 
-	IMAGEMANAGER->addImage("i_GetFish", "image/Stardew Valley/fishing/금붕어.bmp", 102, 51, 2, 1, true, RGB(255, 0, 255));// 34 17  
-	IMAGEMANAGER->addImage("i_NoticeBoard", "image/Stardew Valley/fishing/고기알림.bmp", 292, 196, true, RGB(255, 0, 255)); // 73 49
 }
 
 void mainGame::addsound()
 {
 	// start scene
 	SOUNDMANAGER->addSound("sound/StardewValleyOverture.mp3", true, true);
-
-	// 인벤옮기고 손떨어지게하는거
-	SOUNDMANAGER->addSound("sound/effect/changeitem.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/첨클릭.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/startbutton.wav", false, false);
 
-
+	//gameScene
+	SOUNDMANAGER->addSound("sound/CloudCountry.mp3", true, true);
 
 
 }

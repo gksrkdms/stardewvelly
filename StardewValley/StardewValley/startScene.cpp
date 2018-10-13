@@ -11,8 +11,8 @@ HRESULT startScene::init()
 	m_pCloud1 = IMAGEMANAGER->findImage("title_004");
 	m_pCloud2 = IMAGEMANAGER->findImage("title_005");
 
-	SOUNDMANAGER->play("sound/StardewValleyOverture.mp3");
-	
+	SOUNDMANAGER->play("sound/StardewValleyOverture.mp3", g_soundVolume.bgm);
+
 	m_pAni_1 = new animation;
 	m_pAni_1->init(m_pImg2->getWidth(), m_pImg2->getHeight(), 222, 174);
 	//m_pAni_1->setFPS(1);
@@ -47,11 +47,13 @@ void startScene::update()
 	// 구름 이동하는거
 	for (int i = 0; i < 5; i++)
 	{
+
 		m_nArrayX1[i] -= (i / 2) + 1;
 		m_nArrayX2[i] -= (i / 2) + 1;
 
 		if (m_nArrayX1[i] < -120) m_nArrayX1[i] = WINSIZEX;
 		if (m_nArrayX2[i] < -50) m_nArrayX2[i] = WINSIZEX;
+		
 	}
 
 	// 마우스 렉트에 들어갔는지 비교
@@ -59,14 +61,17 @@ void startScene::update()
 	{
 		if (PtInRect(&m_rc[i], g_ptMouse))
 		{
-			if (isMouseIn[i] == false)
+			
+			if (isMouseIn[i]== false)
 			{
-				SOUNDMANAGER->play("sound/effect/startbutton.wav");
+				SOUNDMANAGER->play("sound/effect/startbutton.wav",g_soundVolume.effect);
+
 				isMouseIn[i] = true;
 			}
+			
 		}
 		else
-		{
+		{		
 			isMouseIn[i] = false;
 		}
 	}
@@ -82,6 +87,8 @@ void startScene::update()
 				{
 				case 0:
 					// 게임씬
+					SOUNDMANAGER->stop("sound/StardewValleyOverture.mp3");
+					SOUNDMANAGER->play("sound/effect/첨클릭.wav");//, g_soundVolume.effect);
 					SCENEMANAGER->changeScene("gameScene");
 					break;
 				case 1:
@@ -89,6 +96,8 @@ void startScene::update()
 					break;
 				case 2:
 					// 맵툴씬
+					SOUNDMANAGER->stop("sound/StardewValleyOverture.mp3");
+					SOUNDMANAGER->play("sound/effect/첨클릭.wav");//, g_soundVolume.effect);
 					SCENEMANAGER->changeScene("maptool");
 					break;
 				case 3:
