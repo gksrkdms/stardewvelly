@@ -61,6 +61,11 @@ void startScene::update()
 	{
 		if (PtInRect(&m_rc[i], g_ptMouse))
 		{
+			if (isMouseIn[i] == false)
+			{
+				SOUNDMANAGER->play("sound/effect/startbutton.wav");
+				isMouseIn[i] = true;
+			}
 			
 			if (isMouseIn[i]== false)
 			{
