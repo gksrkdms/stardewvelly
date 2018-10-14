@@ -81,20 +81,20 @@ void mapManager::update()
 
 void mapManager::render(HDC hdc)
 {
-	for (int y = 0; y < TILE_Y; y++)
-	{
-		for (int x = 0; x < TILE_X; x++)
-		{
-			int cullX = CAMERA->getX() / TILE_SIZE_1;
-			int cullY = CAMERA->getY() / TILE_SIZE_1;
+	//for (int y = 0; y < TILE_Y; y++)
+	//{
+	//	for (int x = 0; x < TILE_X; x++)
+	//	{
+	//		int cullX = CAMERA->getX() / TILE_SIZE_1;
+	//		int cullY = CAMERA->getY() / TILE_SIZE_1;
 
-			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
-			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
+	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 
-			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-				, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
-		}
-	}
+	//		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+	//			, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
+	//	}
+	//}
 
 	for (int y = 0; y < TILE_Y; y++)
 	{
@@ -108,6 +108,9 @@ void mapManager::render(HDC hdc)
 
 			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
 			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+
+			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+				, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
 
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, m_pTiles[m_indexCamera].terrainFrameX, m_pTiles[m_indexCamera].terrainFrameY, TILE_SIZE_1, TILE_SIZE_1);
@@ -147,30 +150,30 @@ void mapManager::render(HDC hdc)
 
 	char str[128];
 
-	for (int y = 0; y < TILE_Y; y++)
-	{	
-	for (int x = 0; x < TILE_X; x++)
-		{
-			int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
-			int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
+	//for (int y = 0; y < TILE_Y; y++)
+	//{	
+	//for (int x = 0; x < TILE_X; x++)
+	//	{
+	//		int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
+	//		int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
 
-			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
-			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
+	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 
-			if (m_pTiles[m_indexCamera].terrain==WATER)
-			{
-				sprintf_s(str, 128, "%d", 1);
-				TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
-			}
-			else
-			{
-				sprintf_s(str, 128, "%d", 0);
-				TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
-			}
-			//sprintf_s(str, 128, "%d", m_pTiles[m_indexCamera].index);
-			//TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
-		}
-	}
+	//		if (m_pTiles[m_indexCamera].terrain==WATER)
+	//		{
+	//			sprintf_s(str, 128, "%d", 1);
+	//			TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
+	//		}
+	//		else
+	//		{
+	//			sprintf_s(str, 128, "%d", 0);
+	//			TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
+	//		}
+	//		//sprintf_s(str, 128, "%d", m_pTiles[m_indexCamera].index);
+	//		//TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
+	//	}
+	//}
 }
 
 void mapManager::loadMap(const char* szfileName)

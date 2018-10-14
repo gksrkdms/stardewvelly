@@ -69,11 +69,15 @@ void playerMenu::update()
 
 void playerMenu::render(HDC hdc)
 {
-	m_pInven->quickbarRender(hdc);	// 퀵바 랜더
-
-	for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
+	if (isMenu == false)
 	{
-		m_iterItem->second->QuickBarToolTiprender(hdc);
+		m_pInven->quickbarRender(hdc);	// 퀵바 랜더
+
+		// 퀵바 툴팁 랜더
+		for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
+		{
+			m_iterItem->second->ToolTiprender(hdc);
+		}
 	}
 
 	// 메뉴가 호출됬을떄( true일떄)

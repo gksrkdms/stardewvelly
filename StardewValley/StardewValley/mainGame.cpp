@@ -252,7 +252,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("inven_004", "image/Stardew Valley/ui/inven_004.bmp", 848, 580, false, 0);
 	IMAGEMANAGER->addImage("quickbar", "image/Stardew Valley/ui/quickbar.bmp", 800, 96, true, (255, 0, 255));
 	IMAGEMANAGER->addImage("focustile_001", "image/Stardew Valley/ui/focustile_001.bmp", 32, 32, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("focustile_002", "image/Stardew Valley/ui/focustile_002.bmp", 32, 16, 2, 1, false, 0);
+	IMAGEMANAGER->addImage("focustile_002", "image/Stardew Valley/ui/focustile_002.bmp", 32, 16, 2, 1, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("shop_make", "image/Stardew Valley/ui/shop_make.bmp", 824, 252, false, 0);
 	IMAGEMANAGER->addImage("shop_window", "image/Stardew Valley/ui/shop_window.bmp", 1080, 460, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("show_list", "image/Stardew Valley/ui/show_list.bmp", 1032, 94, true, RGB(255, 0, 255));
@@ -263,11 +263,13 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("recovery_energy", "image/Stardew Valley/ui/recovery_energy.bmp", 50, 34, false, 0);
 	IMAGEMANAGER->addImage("recovery_hp", "image/Stardew Valley/ui/recovery_hp.bmp", 50, 34, false, 0);
 	IMAGEMANAGER->addImage("shop_textBox", "image/Stardew Valley/ui/shop_textBox.bmp", 209, 100, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("menu_textBox", "image/Stardew Valley/ui/menu_textBox.bmp", 73, 60, false);
+	IMAGEMANAGER->addImage("menu_textBox", "image/Stardew Valley/ui/menu_textBox.bmp", 73, 60, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("goldnumber", "image/Stardew Valley/ui/goldnumber.bmp", 200, 28, 10, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("sort", "image/Stardew Valley/ui/sort.bmp", 65, 65, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("trash_can", "image/Stardew Valley/ui/trash_can.bmp", 16, 26, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("trash_head", "image/Stardew Valley/ui/trash_head.bmp", 18, 20, true, RGB(255,0,255));
+	IMAGEMANAGER->addImage("dmg", "image/Stardew Valley/ui/dmg.bmp", 44, 44, true, RGB(255,0,255));
+	IMAGEMANAGER->addImage("goldui", "image/Stardew Valley/ui/goldui.bmp", 260, 68, true, RGB(255,0,255));
 	
 	// ½Ã°è
 	IMAGEMANAGER->addImage("minutehand", "image/Stardew Valley/ui/clock.bmp", 48, 64, true, RGB(255, 0, 255));

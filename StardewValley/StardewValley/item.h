@@ -1,5 +1,7 @@
 #pragma once
 
+class progressBar;
+
 enum ITEMKINDS
 {
 	ITEM_NULL,
@@ -63,7 +65,9 @@ private:
 	PRIVATESYNTHESIZE(int, m_nMaxWaterDurability, MaxWaterDurability);	// 물뿌리개 최대 내구도
 	PRIVATESYNTHESIZE(int, m_nEnergy, Energy);		// 에너지 회복량
 	PRIVATESYNTHESIZE(int, m_nHp, Hp);				// 체력 회복량
-
+	PRIVATESYNTHESIZE(int, m_nMinDmg, MinDmg);				// 최소 데미지
+	PRIVATESYNTHESIZE(int, m_nMaxDmg, MaxDmg);				// 최대 데미지
+	PRIVATESYNTHESIZE(progressBar*, waterBar, WaterBar);	// 물뿌리개 내구도바
 	int m_nMouseX;	// 마우스 받아올 xy
 	PRIVATESYNTHESIZE(int, m_nMouseY, MouseY);
 	int m_nMouseY2;
@@ -82,6 +86,7 @@ private:
 	RECT m_ToolTipRc;
 	image* m_pEnergy;	//에너지 그림
 	image* m_pHp;		// 체력 그림
+	image* m_pDmg;		// 데미지 그림
 	image* m_pShopToolTip; // 상점용 인벤툴팁
 
 	void setItem(bool sameItem);				// 받은 정보 아이템 세팅
@@ -93,7 +98,6 @@ public:
 	void update();
 	void render(HDC hdc);
 	void ToolTiprender(HDC hdc); // 인벤토리메뉴, 상점인벤토리 툴팁용
-	void QuickBarToolTiprender(HDC hdc); // 퀵바 툴팁용
 	void ShopRender(HDC hdc, int nameX, int nameY, int moneyX, int moneyY); // 상점 리스트 랜더용 아이템이름, 가격 등
 	void ShopInvenRender(HDC hdc); // 상점용 인벤토리 랜더
 	void ShopInvenToolTip(HDC hdc);// 상점용 툴팁 랜더
@@ -102,6 +106,7 @@ public:
 	void deleteItem();			// 아이템 삭제
 	void setPlayXY(int x, int y); // 플레이어 머리위 좌표 받아오는 함수
 	void useItem(); // 아이템 사용함수 (기능 미완성)
+	void progressWaterDurability(int durability);
 
 	item();
 	~item();

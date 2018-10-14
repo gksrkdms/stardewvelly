@@ -119,8 +119,12 @@ void inven::update()
 
 	setDir(); // 플레이어 상황에 따른 인벤토리값 셋팅함수
 	// 손에 집은 아이템 x,y마우스 따라다니게
-	m_pHand->setX(g_ptMouse.x + 5);
-	m_pHand->setY(g_ptMouse.y + 5);
+	if (isHandItem == true)
+	{
+		m_pHand->setX(g_ptMouse.x + 5);
+		m_pHand->setY(g_ptMouse.y + 5);
+		//m_pHand->update(true);
+	}
 
 	if (m_invenDir == INVEN_INVEN)
 	{
@@ -187,12 +191,22 @@ void inven::render(HDC hdc)
 			m_iterItem->second->render(hdc);
 			m_iterItem->second->setMouseY(g_ptMouse.y + 5);
 		}
-		if(isSort)
-		m_pSort->floatRender(hdc, m_pInvenBG->getWidth() + 150, 200, 0, 0, m_pSort->getWidth(), m_pSort->getHeight(), 1.05f);
+		// 정렬 아이콘 랜더
+		if (isSort)
+		{
+			m_pSort->floatRender(hdc, m_pInvenBG->getWidth() + 150, 200, 0, 0, m_pSort->getWidth(), m_pSort->getHeight(), 1.05f);
+			m_pUiToolTip->render(hdc, g_ptMouse.x + 10, g_ptMouse.y + 10);
+			TextOut(hdc, g_ptMouse.x + 25, g_ptMouse.y + 28, "정렬", strlen("정렬"));
+		}
 		else
 		m_pSort->floatRender(hdc, m_pInvenBG->getWidth() + 150, 200, 0, 0, m_pSort->getWidth(), m_pSort->getHeight(), 1.0f);
-		if(isTrash)
+		// 쓰레기통 아이콘 랜더
+		if (isTrash)
+		{
 			m_pTrashCan->floatRender(hdc, m_pInvenBG->getWidth() + 170, 400, 0, 0, m_pTrashCan->getWidth(), m_pTrashCan->getHeight(), 4.2f);
+			m_pUiToolTip->floatRender(hdc, g_ptMouse.x + 10, g_ptMouse.y + 10, 0, 0, m_pUiToolTip->getWidth(), m_pUiToolTip->getHeight(), 1.3f);
+			TextOut(hdc, g_ptMouse.x + 25, g_ptMouse.y + 35, "버리기", strlen("버리기"));
+		}
 		else
 			m_pTrashCan->floatRender(hdc, m_pInvenBG->getWidth() + 170, 400, 0, 0, m_pTrashCan->getWidth(), m_pTrashCan->getHeight(), 4.0f);
 	}
@@ -214,14 +228,15 @@ void inven::render(HDC hdc)
 	// 손에 아이템이 활성화될때 랜더
 	if (isHandItem == true)
 	{
-		m_pHand->getImg()->render(hdc, m_pHand->getX(), m_pHand->getY(), 3);
-		if (m_pHand->getItemNum() > 1 && m_pHand->getStackItem() == true)
-		{
-			// 손에들려있는 아이템 갯수 랜더
-			char str[128];
-			sprintf_s(str, 128, "%d", m_pHand->getItemNum());
-			TextOut(hdc, m_pHand->getX() + 45, m_pHand->getY() + 45, str, strlen(str));
-		}
+		m_pHand->render(hdc);
+		//m_pHand->getImg()->render(hdc, m_pHand->getX(), m_pHand->getY(), 3);
+		//if (m_pHand->getItemNum() > 1 && m_pHand->getStackItem() == true)
+		//{
+		//	// 손에들려있는 아이템 갯수 랜더
+		//	char str[128];
+		//	sprintf_s(str, 128, "%d", m_pHand->getItemNum());
+		//	TextOut(hdc, m_pHand->getX() + 45, m_pHand->getY() + 45, str, strlen(str));
+		//}
 	}
 }
 
@@ -486,7 +501,11 @@ void inven::dataSwap(item * item1, item * item2)
 	item1->setWaterDurability(item2->getWaterDurability()); // 물뿌리개 내구도
 	item1->setMaxWaterDurability(item2->getMaxWaterDurability()); // 물뿌리개 최대내구도
 	item1->setEnergy(item2->getEnergy());				// 에너지 회복량
-	item2->setHp(item2->getHp());						// hp 회복량
+	item1->setHp(item2->getHp());						// hp 회복량
+	item1->setMinDmg(item2->getMinDmg());				// 최소데미지
+	item1->setMaxDmg(item2->getMaxDmg());				// 최대데미지
+	item1->setWaterBar(item2->getWaterBar());			// 프로그래스바 주소값
+	item2->setWaterBar(NULL);							// 정보 넘기면 NULL로;
 	item1->setItemOn(item2->getItemOn());				// 아이템활성화 여부
 	item1->setItemNum(item2->getItemNum());				// 아이템 수량
 }
