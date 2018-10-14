@@ -14,7 +14,7 @@ HRESULT gameScene::init()
 	m_pPlayer->init();
 	m_pMapManager = new mapManager;
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/ddd.map");
+	m_pMapManager->loadMap("image/fff.map");
 	m_pPlayer->getMap(m_pMapManager);
 
 	//게임시간

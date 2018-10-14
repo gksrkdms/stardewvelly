@@ -201,6 +201,9 @@ private:
 	std::vector<int> m_vecSelectedTile;
 	std::vector<int>::iterator m_iterSelectedTile;
 
+	image* m_pDrag;
+	RECT m_Dragrc;
+
 	int	m_nImageX;
 
 	bool m_isObject;
@@ -251,7 +254,13 @@ private:
 	tempSampleTile* m_ptempSampleObj1;
 	tempSampleTile* m_ptempSampleObj2;
 	tempSampleTile* m_ptempSampleObj3;
-	   
+
+	const int ways = 8;
+						// 왼쪽 오른쪽 위 아래 왼쪽대각선위 왼쪽대각선아래 오른쪽대각선위 왼쪽대각선아래		
+	const int way[8][2] ={{-1,0},{ 1, 0 },{ 0, -1 },{ 0, 1 },{ -1, -1 },{ -1, 1 },{ 1, -1 },{ 1, 1 } };
+	int m_weight[2][2];
+	int m_nweight;
+
 public:
 	mapTool();
 	~mapTool();

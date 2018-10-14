@@ -9,7 +9,6 @@ const UINT nFileNameMaxLen = 512;
 char szFileName[nFileNameMaxLen];
 TCHAR szFileName2[256] = _T("");
 
-RECT rc;
 
 int SAMPLE_TILE_X;
 int SAMPLE_TILE_Y;
@@ -30,8 +29,9 @@ HRESULT mapTool::init()
 	m_pObject3 = IMAGEMANAGER->findImage("object3");
 	m_pbg = IMAGEMANAGER->findImage("whitebackground");
 	m_pUibgsample = IMAGEMANAGER->findImage("maptoolui");
+	m_pDrag = IMAGEMANAGER->findImage("mapCollision");
 
-	g_hWndChildSample = CreateWindow(TEXT("MapSample"), NULL, WS_CHILD | WS_VISIBLE| WS_OVERLAPPEDWINDOW,
+	g_hWndChildSample = CreateWindow(TEXT("MapSample"), "Setting", WS_CHILD | WS_VISIBLE| WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		TILE_SIZE_SAMPLE * 50, WINSIZEY - 470, WINSIZEX - TILE_SIZE_SAMPLE * 50, 450, g_hWnd, (HMENU)0, g_hInstance, NULL);
 	
 	TILE_SIZE_1 = 64;
@@ -203,6 +203,81 @@ void mapTool::update()
 		}
 	}
 
+	// 8방향 검사
+	for (int y = 0; y < TILE_Y; y++)
+	{
+		for (int x = 0; x < TILE_X; x++)
+		{
+			if (m_pTiles[y*TILE_X + x].terrain == FARMLAND)
+			{
+				for (int i = 0; i < ways; i++)
+				{
+					int nx = x + way[i][0], ny = y + way[i][1];
+					if (nx < 0 || nx >= TILE_X || ny < 0 || ny >= TILE_Y) continue;
+					
+					// processing
+					int index = ny * TILE_X + nx;
+					//if (m_pTiles[index].terrain == FARMLAND)
+					//{
+					//	m_nweight++;
+					//}
+
+					/*if (m_pTiles[index].terrain != FARMLAND)
+					{
+						switch (i)
+						{
+						case 0:
+							m_weight[0][0] += 1;
+							m_weight[0][1] += 1;
+							break;
+
+						case 1:
+							m_weight[0][1] += 1;
+							m_weight[1][1] += 1;
+							break;
+
+						case 2:
+							m_weight[0][0] += 1;
+							m_weight[1][0] += 1;
+							break;
+
+						case 3:
+							m_weight[0][1] += 1;
+							m_weight[1][1] += 1;
+							break;
+
+						case 4:
+							m_weight[0][0] += 1;
+							break;
+
+						case 5:
+							m_weight[0][1] += 1;
+							break;
+
+						case 6:
+							m_weight[1][0] += 1;
+							break;
+
+						case 7:
+							m_weight[1][1] += 1;
+							break;
+						}
+					}*/
+				}
+				//m_weight[2][2] = { 0 };
+			}
+
+		}
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			m_weight[i][j];
+		}
+	}
+
 	// camera 이동
 	CAMERAMANAGER->update();
 	for (int y = 0; y < TILE_Y; y++)
@@ -211,7 +286,7 @@ void mapTool::update()
 		{
 			m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1 - CAMERAMANAGER->getCameraX(), y*TILE_SIZE_1 - CAMERAMANAGER->getCameraY(), TILE_SIZE_1, TILE_SIZE_1);
 		}
-	}	
+	}
 
 	// 씬전환
 	if (KEYMANAGER->isOnceKeyDown('P'))
@@ -366,9 +441,7 @@ void mapTool::render(HDC hdc)
 			case IMGOBJ_3:
 				m_pObject3->render(hdc, m_nImageX, 0);
 				break;
-
-			}
-			
+			}			
 			//// 확인
 			//if (m_isMove)
 			//	m_pObject->frameRender(hdc, g_ptMouse.x, g_ptMouse.y, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY);		
@@ -392,13 +465,13 @@ void mapTool::render(HDC hdc)
 	sprintf_s(str, 128, "%d", CAMERAMANAGER->getCameraY());
 	TextOut(hdc, 0, 350, str, strlen(str));
 
-	sprintf_s(str, 128, "left : %d", rc.left);
+	sprintf_s(str, 128, "left : %d", m_Dragrc.left);
 	TextOut(hdc, 1000, 150, str, strlen(str));
-	sprintf_s(str, 128, "top : %d", rc.top);
+	sprintf_s(str, 128, "top : %d", m_Dragrc.top);
 	TextOut(hdc, 1000, 50, str, strlen(str));
-	sprintf_s(str, 128, "right : %d", rc.right);
+	sprintf_s(str, 128, "right : %d", m_Dragrc.right);
 	TextOut(hdc, 850, 50, str, strlen(str));
-	sprintf_s(str, 128, "bottom : %d", rc.bottom);
+	sprintf_s(str, 128, "bottom : %d", m_Dragrc.bottom);
 	TextOut(hdc, 850, 150, str, strlen(str));
 
 	//for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
@@ -435,20 +508,12 @@ void mapTool::render(HDC hdc)
 			{
 				if (m_pSampleTiles[y*SAMPLE_TILE_X + x].isCollide)
 				{
-					sprintf_s(str, 128, "%d", 1);
-					TextOut(hdc, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top, str, strlen(str));
-				}
-				else
-				{
-					sprintf_s(str, 128, "%d", 0);
-					TextOut(hdc, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top, str, strlen(str));
+					m_pDrag->render(hdc, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top);
 				}
 			}
 		}
 	}
-
 	
-
 	//for (int y = 0; y < TILE_Y; y++)
 	//{
 	//	for (int x = 0; x < TILE_X; x++)
@@ -474,7 +539,13 @@ void mapTool::render(HDC hdc)
 	//드래그 보기
 	if (m_isDrag)
 	{
-		Rectangle(hdc, rc.left, rc.top, rc.right, rc.bottom);
+		HBRUSH myBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
+		HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, myBrush);
+
+		Rectangle(hdc, m_Dragrc.left, m_Dragrc.top, m_Dragrc.right, m_Dragrc.bottom);
+	
+		SelectObject(hdc, oldBrush);
+		DeleteObject(myBrush);
 	}
 
 
@@ -490,18 +561,18 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 	switch (iMessage)
 	{
 	case WM_CREATE:
-		rc = RectMakeCenter(0, 0, 0, 0);
+		m_Dragrc = RectMakeCenter(0, 0, 0, 0);
 		return 0;
 
 	case WM_LBUTTONDOWN:
 		g_ptMouse.x = LOWORD(lParam);
 		g_ptMouse.y = HIWORD(lParam);
-		rc.left = LOWORD(lParam);
-		rc.top = HIWORD(lParam);
+		m_Dragrc.left = LOWORD(lParam);
+		m_Dragrc.top = HIWORD(lParam);
 
 		// 타일 0,0에서 부터 시작하기 위해 보정
-		rc.left = (rc.left / TILE_SIZE_1)*TILE_SIZE_1;
-		rc.top = (rc.top / TILE_SIZE_1)*TILE_SIZE_1;
+		m_Dragrc.left = (m_Dragrc.left / TILE_SIZE_1)*TILE_SIZE_1;
+		m_Dragrc.top = (m_Dragrc.top / TILE_SIZE_1)*TILE_SIZE_1;
 		m_isClick = true;
 		return 0;
 
@@ -518,8 +589,8 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 			/*rc.right = rc.left+((g_ptMouse.x - rc.left) / TILE_SIZE_1)*TILE_SIZE_1;
 			rc.bottom = rc.top + ((g_ptMouse.y - rc.top) / TILE_SIZE_1)*TILE_SIZE_1;*/			
 
-			rc.right = rc.left + ((g_ptMouse.x - rc.left) / TILE_SIZE_SAMPLE)*TILE_SIZE_SAMPLE;
-			rc.bottom = rc.top + ((g_ptMouse.y - rc.top) / TILE_SIZE_SAMPLE)*TILE_SIZE_SAMPLE;
+			m_Dragrc.right = m_Dragrc.left + ((g_ptMouse.x - m_Dragrc.left) / TILE_SIZE_SAMPLE)*TILE_SIZE_SAMPLE;
+			m_Dragrc.bottom = m_Dragrc.top + ((g_ptMouse.y - m_Dragrc.top) / TILE_SIZE_SAMPLE)*TILE_SIZE_SAMPLE;
 		}
 
 		else
@@ -533,22 +604,22 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 		m_isClick = false;
 		m_isDrag = false;
 		m_isClickSave = false;
-		m_rcDragCheck = rc;
-		if (rc.top > rc.bottom)
+		m_rcDragCheck = m_Dragrc;
+		if (m_Dragrc.top > m_Dragrc.bottom)
 		{
-			m_rcSwap = rc.top;
-			rc.top = rc.bottom;
-			rc.bottom = m_rcSwap;
+			m_rcSwap = m_Dragrc.top;
+			m_Dragrc.top = m_Dragrc.bottom;
+			m_Dragrc.bottom = m_rcSwap;
 		}
-		if (rc.left > rc.right)
+		if (m_Dragrc.left > m_Dragrc.right)
 		{
-			m_rcSwap = rc.left;
-			rc.left = rc.right;
-			rc.right = m_rcSwap;
+			m_rcSwap = m_Dragrc.left;
+			m_Dragrc.left = m_Dragrc.right;
+			m_Dragrc.right = m_rcSwap;
 		}
-		m_rcSave = rc;
+		m_rcSave = m_Dragrc;
 		m_isAddvec = true;
-		rc = RectMakeCenter(0, 0, 0,0);
+		m_Dragrc = RectMakeCenter(0, 0, 0,0);
 		m_rcSwap = -1;
 		return 0;
 
@@ -598,11 +669,7 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 		return 0;
 
 	case WM_DESTROY:
-		g_wndCount--;
-		if (g_wndCount == 0)
-		{
-			PostQuitMessage(0);
-		}
+		PostQuitMessage(0);		
 		return 0;
 	}
 

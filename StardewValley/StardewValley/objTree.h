@@ -7,7 +7,6 @@ class objTree : public mapObject
 {
 private:
 	image* m_ptree;
-	animation *	m_pAni;			// 나무 프레임랜더
 	
 public:
 	objTree();

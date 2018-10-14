@@ -2,6 +2,7 @@
 #include "mapManager.h"
 
 #include "objTree.h"
+#include "objCrop.h"
 
 mapManager::mapManager()
 {
@@ -44,10 +45,10 @@ HRESULT mapManager::init()
 	m_pObjectMap = new objTree;
 	m_pObjectMap->init();
 
-	m_vecTile.resize(TILE_Y*TILE_X);
+	m_pObjectCrop = new objCrop;
+	m_pObjectCrop->init();
 
-	//m_pPlayer->getTargetX();
-	//m_pPlayer->getTargetY();
+	m_vecTile.resize(TILE_Y*TILE_X);
 	
 	return S_OK;
 }
@@ -68,10 +69,14 @@ void mapManager::update()
 	}
 
 	m_pObjectMap->update();
+	m_pObjectCrop->update();
+}
 
-	//for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
+void mapManager::render(HDC hdc)
+{
+	//for (int y = 0; y < TILE_Y; y++)
 	//{
-	//	for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
+	//	for (int x = 0; x < TILE_X; x++)
 	//	{
 	//		int cullX = CAMERA->getX() / TILE_SIZE_1;
 	//		int cullY = CAMERA->getY() / TILE_SIZE_1;
@@ -79,15 +84,11 @@ void mapManager::update()
 	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
 	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 
-	//		m_vecTile.push_back(m_pTiles[m_indexCamera]);
-
+	//		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+	//			, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
 	//	}
 	//}
 
-}
-
-void mapManager::render(HDC hdc)
-{
 	for (int y = 0; y < TILE_Y; y++)
 	{
 		for (int x = 0; x < TILE_X; x++)
@@ -98,23 +99,16 @@ void mapManager::render(HDC hdc)
 			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
 			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 
-			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-				, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
-		}
-	}
-
-	for (int y = 0; y < TILE_Y; y++)
-	{
-		for (int x = 0; x < TILE_X; x++)
-		{
-			//int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
-			//int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
-
-			int cullX = CAMERA->getX() / TILE_SIZE_1;
-			int cullY = CAMERA->getY() / TILE_SIZE_1;
-
-			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
-			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+			if (m_pTiles[m_indexCamera].terrain == WETEREARTH)
+			{
+				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+					, 19, 7, TILE_SIZE_1, TILE_SIZE_1);
+			}
+			else
+			{
+				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+					, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
+			}
 
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, m_pTiles[m_indexCamera].terrainFrameX, m_pTiles[m_indexCamera].terrainFrameY, TILE_SIZE_1, TILE_SIZE_1);
@@ -153,6 +147,9 @@ void mapManager::render(HDC hdc)
 					//m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left+ (m_pTiles[m_indexCamera].rc.right- m_pTiles[m_indexCamera].rc.left)/2, m_pTiles[m_indexCamera].rc.bottom);
 					m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
 
+				else if(m_pTiles[m_indexCamera].object == CROP)
+					m_pObjectCrop->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
+				
 				//else
 				//{
 				//	if (m_pTiles[m_indexCamera].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)

@@ -79,25 +79,14 @@ LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		switch (iMessage)
 		{
 		case WM_CREATE:
-			g_wndCount++;
 			break;
 
 		case WM_LBUTTONDOWN:
-
 			break;
 
 		case WM_MOUSEMOVE:
 			g_ptMouse.x = LOWORD(lParam);
-			g_ptMouse.y = HIWORD(lParam);
-
-			//if (click)
-			//{
-			//	GetWindowRect(g_hWnd, &rc);
-			//	rc.left += LOWORD(lParam) - g_ptMouse.x;
-			//	rc.top += HIWORD(lParam) - g_ptMouse.y;
-			//	g_ptMouse.x = LOWORD(lParam);
-			//	g_ptMouse.y = HIWORD(lParam);
-			//}				
+			g_ptMouse.y = HIWORD(lParam);	
 			break;
 
 		case WM_LBUTTONUP:
@@ -185,11 +174,7 @@ LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			//}
 
 		case WM_DESTROY:
-			g_wndCount--;
-			if (g_wndCount == 0)
-			{
-				PostQuitMessage(0);
-			}
+			PostQuitMessage(0);
 			return 0;
 		}
 		return DefWindowProc(hWnd, iMessage, wParam, lParam);
@@ -235,11 +220,12 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("objtree", "image/maptool/object/objtree.bmp", 176, 654,11,41, true, RGB(255, 255, 255));
 	IMAGEMANAGER->addImage("objtree2", "image/maptool/object/environment_003.bmp", 432, 560,9,7, true, RGB(255, 0, 255));
 	
-	
+	// Ãæµ¹¹üÀ§
+	IMAGEMANAGER->addImage("mapCollision", "image/maptool/collision.bmp", 16, 16, true, RGB(255, 0, 255));
 	
 	// background
 	IMAGEMANAGER->addImage("whitebackground", "image/background.bmp", WINSIZEX, WINSIZEY);
-	IMAGEMANAGER->addImage("dark", "image/dark.bmp", WINSIZEX, WINSIZEY);
+	IMAGEMANAGER->addImage("dark", "image/dark.bmp", WINSIZEX, WINSIZEY); //¹ã, ³×ÀÌºñ
 
 	// Å¸ÀÌÆ²
 	IMAGEMANAGER->addImage("title_001", "image/Stardew Valley/title/title_001.bmp", 400, 183, true, RGB(255, 0, 255));	// ½ºÅ¸µà¹ë¸®
@@ -328,6 +314,10 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("item_211", "image/Stardew Valley/item/item_211.bmp", 16, 16, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("item_212", "image/Stardew Valley/item/item_212.bmp", 16, 16, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("item_213", "image/Stardew Valley/item/item_213.bmp", 16, 16, true, RGB(255, 0, 255));
+
+	// crops
+	IMAGEMANAGER->addImage("crops", "image/Stardew Valley/crop/crops.bmp", 256, 669,16,20, true, RGB(255, 0, 255));
+
 
 }
 

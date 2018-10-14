@@ -16,6 +16,7 @@ private:
 	string m_mapName;
 
 	mapObject* m_pObjectMap;
+	mapObject* m_pObjectCrop;
 
 public:
 	mapManager();
