@@ -96,8 +96,8 @@ void mapManager::render(HDC hdc)
 			int cullX = CAMERA->getX() / TILE_SIZE_1;
 			int cullY = CAMERA->getY() / TILE_SIZE_1;
 
-	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
-	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
+			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 
 			if (m_pTiles[m_indexCamera].terrain == WETEREARTH)
 			{

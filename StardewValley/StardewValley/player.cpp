@@ -78,13 +78,7 @@ void player::release()
 }
 
 void player::update()
-{
-
-	if (KEYMANAGER->isStayKeyDown(VK_SPACE))
-	{
-		damaged(1);
-	}
-	
+{	
 	m_pTargetItem = m_pMenu->getQuickItem();	// 퀵바 아이템 정보 받아옴
 	m_pAni->frameUpdate(TIMEMANAGER->getElapsedTime());	// 에니매이션용
 
@@ -887,6 +881,7 @@ void player::useItem()
 			case CONITEM_RECOVERY:
 				m_nHp += m_pTargetItem->getHp();
 				m_pTargetItem->useItem();
+				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 			case CONITEM_SEED:
 				break;
 			}

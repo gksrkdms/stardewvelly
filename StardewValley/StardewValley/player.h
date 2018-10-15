@@ -121,7 +121,6 @@ private:
 	int i;
 	bool m_isMove =false;
 
-	void damaged(float c); //@@
 	void addSound();
 public:
 	HRESULT init();
