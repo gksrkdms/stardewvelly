@@ -2,6 +2,13 @@
 #include "mapTool.h"
 #include <vector>
 
+enum LOADINGSTATE
+{
+	LOAD_FALSE,
+	LOAD_START,
+	LOAD_END
+};
+
 class mapObject;
 
 class mapManager: public mapTool
@@ -18,6 +25,11 @@ private:
 	mapObject* m_pObjectMap;
 	mapObject* m_pObjectCrop;
 
+	const char* tempMapId;
+	image*	m_pBlack;			// 맵 이동시 사용되는 검은 이미지
+	int		m_nAlpha;			// 검은색 이미지 알파
+	LOADINGSTATE	m_Loading;	// 로딩여부 상태값
+
 public:
 	mapManager();
 	~mapManager();
@@ -26,7 +38,9 @@ public:
 	void release();
 	void update();
 	void render(HDC hdc);
+	void loadingRender(HDC hdc);
 
+	void loadingMap(const char * szfileName);
 	void loadMap(const char * szfileName);
 
 	// player에 타일정보 주기 위해서 인덱스의 주소값 반환

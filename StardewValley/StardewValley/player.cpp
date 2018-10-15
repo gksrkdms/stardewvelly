@@ -5,6 +5,7 @@
 #include "inven.h"
 #include "item.h"
 #include "fishing.h"
+#include "progressBarHp.h"
 
 #include "mapManager.h"
 
@@ -27,6 +28,11 @@ HRESULT player::init()
 	m_pFishing = new fishing;
 	m_pFishing->setPlayer(this);
 	m_pFishing->init();
+
+	m_pHpBar = new progressBarHp;
+	m_pHpBar->init(WINSIZEX - m_pHpEnergyUi->getWidth() + 8, WINSIZEY - 216, 24, 168);
+	m_pEnergyBar = new progressBarHp;
+	m_pEnergyBar->init(WINSIZEX - m_pHpEnergyUi->getWidth() + 60, WINSIZEY - 216, 24, 168);
 
 	m_nX = WINSIZEX / 2;
 	m_nY = WINSIZEY / 2;
@@ -62,8 +68,6 @@ HRESULT player::init()
 	m_playerCollision = COLL_FALSE;
 
 	m_nTempIndex = 0;
-
-	m_nHp = 50;
 
 	return S_OK;
 }
@@ -139,12 +143,14 @@ void player::update()
 void player::render(HDC hdc)
 {
 	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth(),WINSIZEY-260); // @Ã¼·Â,¿¡³ÊÁöÆ²
+	m_pHpBar->render(hdc);
+	m_pEnergyBar->render(hdc);
 	//MakeRect(hdc, m_HpRc);		// @Ã¼·Â·ºÆ®
 	//MakeRect(hdc, m_EnergyRc);  //@¿¡³ÊÁö·ºÆ®
-	HBRUSH brush = CreateSolidBrush(RGB(9, 255, 0)); //»ö±òºê·¯½¬
-	FillRect(hdc, &m_HpRc, brush);
-	FillRect(hdc, &m_EnergyRc, brush);
-	DeleteObject(brush);
+	//HBRUSH brush = CreateSolidBrush(RGB(9, 255, 0)); //»ö±òºê·¯½¬
+	//FillRect(hdc, &m_HpRc, brush);
+	//FillRect(hdc, &m_EnergyRc, brush);
+	//DeleteObject(brush);
 
 
 
@@ -170,7 +176,7 @@ void player::render(HDC hdc)
 					m_pTarget->render(hdc, m_nTargetX, m_nTargetY, TARGET_SIZE);
 				}
 			}
-			// ¾ÆÀÌÅÛÀÌ
+			// ¾ÆÀÌÅÛÀÌ ¾¾¾ÑÀÏ¶§
 			if (m_pTargetItem->getItemKind() == ITEM_SEED)
 			{
 				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, SCALAR);
@@ -178,10 +184,6 @@ void player::render(HDC hdc)
 		}
 	}
 
-	char str[128];
-
-	sprintf_s(str, 128, "%d", i);
-	TextOut(hdc, 500, 50, str, strlen(str));
 
 	//MakeRect(hdc, m_temprc);
 	//MakeRect(hdc, m_rc);
@@ -197,8 +199,11 @@ void player::render(HDC hdc)
 	}
 	m_pFishing->render(hdc);
 
-	sprintf_s(str, 128, "hp : %d", m_nHp);
-	TextOut(hdc, 0, 500, str, strlen(str));
+	char str[128];
+	sprintf_s(str, 128, "enegy : %d / %d", m_fCurrEnergy, m_fMaxEnergy);
+	TextOut(hdc, 0, 500, str, strlen(str));	
+	sprintf_s(str, 128, "¾¾¾ÑºÒ°ª : %d", isSeed);
+	TextOut(hdc, 0, 550, str, strlen(str));
 }
 
 void player::numRender(HDC hdc, int x, int y)
@@ -256,11 +261,8 @@ void player::setTargetXY()
 				{
 					if (PtInRect(&m_pMap->getTile(m_indexCamera)->rc, g_ptMouse))
 					{
-						//¹°ÀÏ¶§ È®ÀÎ
-						if (m_pMap->getTile(m_indexCamera)->object == TREE_SMALL)
-							i++;
-
-						if (m_pMap->getTile(m_indexCamera)->terrain == EARTH)
+						if (m_pMap->getTile(m_indexCamera)->terrain == FARMLAND || 
+							m_pMap->getTile(m_indexCamera)->terrain == WETFARMLAND)
 						{
 							isSeed = true;
 						}
@@ -672,7 +674,6 @@ void player::setItemMotion()
 				{
 				case ACTITEM_AXE:
 					m_playerMotion = MOTION_AXE;
-					SOUNDMANAGER->play("sound/effect/playerAct/¸Ç¶¥¿¡.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_axe", 4, 4);
 					switch (m_playerDir)
 					{
@@ -689,6 +690,7 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 4, false, false, 5);
 						break;
 					}
+					setAxeTile();	// »óÈ£ÀÛ¿ë ÇÔ¼ö
 					break;
 				case ACTITEM_SPADE:
 					m_playerMotion = MOTION_SPADE;
@@ -709,12 +711,10 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 4, false, false, 5);
 						break;
 					}
-					SOUNDMANAGER->play("sound/effect/playerAct/¹ç°¥´Ù.wav", g_soundVolume.effect);
-					setSpadeTile();
+					setSpadeTile();	// »óÈ£ÀÛ¿ë ÇÔ¼ö
 					break;
 				case ACTITEM_WATER:
 					m_playerMotion = MOTION_WATER;
-					SOUNDMANAGER->play("sound/effect/playerAct/¹°»Ñ¸®°³2.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_water", 2, 4);
 					switch (m_playerDir)
 					{
@@ -731,11 +731,10 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 2, false, false, 5);
 						break;
 					}
-					setWaterTile();
+					setWaterTile();	// »óÈ£ÀÛ¿ë ÇÔ¼ö
 					break;
 				case ACTITEM_PICKAX:
 					m_playerMotion = MOTION_PICKAX;
-					SOUNDMANAGER->play("sound/effect/playerAct/¸Ç¶¥¿¡.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_mine", 3, 4);
 					switch (m_playerDir)
 					{
@@ -752,10 +751,10 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 3, false, false, 5);
 						break;
 					}
+					setPickaxTile(); // »óÈ£ÀÛ¿ë ÇÔ¼ö
 					break;
 				case ACTITEM_NOT:
 					m_playerMotion = MOTION_NOT;
-					SOUNDMANAGER->play("sound/effect/playerAct/³´Áú.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_not", 3, 4);
 					switch (m_playerDir)
 					{
@@ -772,18 +771,17 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 3, false, false, 5);
 						break;
 					}
+					setNotTile();	// »óÈ£ÀÛ¿ë ÇÔ¼ö
 					break;
 				case ACTITEM_FISHINGROD:
 					m_pFishing->init();
-					//m_pFishing->setIsOne(true);
-					//m_pFishing->setIsMistake(false);
 					m_pFishing->setIsFishing(true);
 					m_playerState = PLAYER_FISHING;		
+					m_fCurrEnergy -= 8;
 					break;
 				case ACTITEM_SWORD:
 					m_playerMotion = MOTION_SWORD;
 					setMotion(m_pAni, &m_pPlayer, "player_sword", 3, 4);
-					SOUNDMANAGER->play("sound/effect/playerAct/³´Áú.wav", g_soundVolume.effect);
 					switch (m_playerDir)
 					{
 					case PLAYER_LEFT:
@@ -799,6 +797,7 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 3, false, false, 5);
 						break;
 					}
+					setSwordTile();	// »óÈ£ÀÛ¿ë ÇÔ¼ö
 					break;
 				}
 			}
@@ -879,7 +878,12 @@ void player::useItem()
 			switch (m_pTargetItem->getConsumItemKind())
 			{
 			case CONITEM_RECOVERY:
-				m_nHp += m_pTargetItem->getHp();
+				m_fCurrHp += m_pTargetItem->getHp();
+				if (m_fCurrHp >= m_fMaxHp)
+					m_fCurrHp = m_fMaxHp;
+				m_fCurrEnergy += m_pTargetItem->getEnergy();
+				if (m_fCurrEnergy >= m_fMaxEnergy)
+					m_fCurrEnergy = m_fMaxEnergy;
 				m_pTargetItem->useItem();
 				SOUNDMANAGER->play("sound/effect/¾Æ»è¼Ò¸®2.wav", g_soundVolume.effect);
 			case CONITEM_SEED:
@@ -889,6 +893,7 @@ void player::useItem()
 	}
 }
 
+// µµ±¸»ç¿ë½Ã ¹æÇâ Àâ´Â ÇÔ¼ö
 void player::setDir()
 {
 
@@ -917,11 +922,22 @@ void player::setDir()
 
 void player::setSpadeTile()
 {
-	//m_pMap->getTile(m_nTempIndex)->index = 129;
-	m_pMap->getTile(m_nTempIndex)->terrainFrameX = 9;
-	m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
-	m_pMap->getTile(m_nTempIndex)->terrain = FARMLAND;
-	m_nHp -= 2;
+	SOUNDMANAGER->play("sound/effect/playerAct/¹ç°¥´Ù.wav", g_soundVolume.effect);
+	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// Æ¯Á¤È®·ü·Î Ç® ¾ÆÀÌÅÛ È¹µæ
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(201);
+	}
+	if (m_pMap->getTile(m_nTempIndex)->terrain == EARTH)
+	{ 
+		m_pMap->getTile(m_nTempIndex)->terrainFrameX = 9;
+		m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
+		m_pMap->getTile(m_nTempIndex)->terrain = FARMLAND;
+	}
+	m_fCurrEnergy -= 2;
+	m_pEnergyBar->setGauge(m_fCurrEnergy, m_fMaxEnergy);
 }
 
 void player::setWaterTile()
@@ -931,12 +947,78 @@ void player::setWaterTile()
 		m_pTargetItem->setWaterDurability(m_pTargetItem->getWaterDurability() - 1);
 		if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND)
 		{
+			SOUNDMANAGER->play("sound/effect/playerAct/¹°»Ñ¸®°³2.wav", g_soundVolume.effect);
 			m_pMap->getTile(m_nTempIndex)->terrainFrameX = 13;
 			m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
 			m_pMap->getTile(m_nTempIndex)->terrain = WETFARMLAND;
 		}
 		m_pTargetItem->progressWaterDurability(1);
-		m_nHp -= 2;
+		m_fCurrEnergy -= 2;
+	}
+}
+
+void player::setAxeTile()
+{
+	SOUNDMANAGER->play("sound/effect/playerAct/¸Ç¶¥¿¡.wav", g_soundVolume.effect);
+	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// Æ¯Á¤È®·ü·Î Ç® ¾ÆÀÌÅÛ È¹µæ
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(201);
+	}
+	if (m_pMap->getTile(m_nTempIndex)->object == TREE_BIG)
+	{
+		// Æ¯Á¤È®·ü·Î ³ª¹« ¼ö¾× ¾ÆÀÌÅÛ È¹µæ
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(203);
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(204);
+	}
+	m_fCurrEnergy -= 2;
+}
+
+void player::setPickaxTile()
+{
+	SOUNDMANAGER->play("sound/effect/playerAct/¸Ç¶¥¿¡.wav", g_soundVolume.effect);
+	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// Æ¯Á¤È®·ü·Î Ç® ¾ÆÀÌÅÛ È¹µæ
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(201);
+	}
+	if (m_pMap->getTile(m_nTempIndex)->object == MINE_ROCK)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// Æ¯Á¤È®·ü·Î ±¤¼® ¾ÆÀÌÅÛ È¹µæ
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(202);
+	}
+	m_fCurrEnergy -= 2;
+}
+
+void player::setNotTile()
+{
+	SOUNDMANAGER->play("sound/effect/playerAct/³´Áú.wav", g_soundVolume.effect);
+	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// Æ¯Á¤È®·ü·Î Ç® ¾ÆÀÌÅÛ È¹µæ
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(201);
+	}
+}
+
+void player::setSwordTile()
+{
+	SOUNDMANAGER->play("sound/effect/playerAct/³´Áú.wav", g_soundVolume.effect);
+	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// Æ¯Á¤È®·ü·Î Ç® ¾ÆÀÌÅÛ È¹µæ
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(201);
 	}
 }
 

@@ -14,7 +14,7 @@ HRESULT gameScene::init()
 	m_pPlayer->init();
 	m_pMapManager = new mapManager;
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/1234.map");
+	m_pMapManager->loadMap("image/ddd.map");
 	m_pPlayer->getMap(m_pMapManager);
 
 	//게임시간
@@ -47,6 +47,11 @@ void gameScene::update()
 
 	PLAYTIMEMANAGER->update();
 
+	if (KEYMANAGER->isStayKeyDown('O'))
+	{
+		m_pMapManager->loadingMap("image/1234.map");
+	}
+
 }
 
 void gameScene::render(HDC hdc)
@@ -70,6 +75,7 @@ void gameScene::render(HDC hdc)
 	sprintf_s(str, 128, "카메라y : %d", CAMERA->getY());
 	TextOut(hdc, 50, 150, str, strlen(str));
 
+	m_pMapManager->loadingRender(hdc);
 	SelectObject(hdc, oldFont);
 	DeleteObject(myFont);
 }

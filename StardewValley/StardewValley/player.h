@@ -5,7 +5,7 @@ class playerMenu;
 class inven;
 class item;
 class fishing;
-
+class progressBarHp;
 class mapManager;
 
 #define TARGET_SIZE 2
@@ -74,13 +74,15 @@ private:
 	RECT	m_TargetRc;			// 빨간네모 렉트
 	RECT	m_temprc;			// 빨간네모 렉트
 	mapManager* m_pMap;			// 맵 포인터
+	progressBarHp*	m_pHpBar;
+	progressBarHp*	m_pEnergyBar;
 
 	PRIVATESYNTHESIZE(int, m_nMoney, Money);
 
-	float m_fMaxHp;				// @플레이어 최대 체력
-	float m_fMaxEnergy;			// @플레이어 최대 에너지
-	float m_fCurrHp;			// @플레이어 현재 체력
-	float m_fCurrEnergy;		// @플레이어 현재 에너지
+	int m_fMaxHp;				// @플레이어 최대 체력
+	int m_fMaxEnergy;			// @플레이어 최대 에너지
+	int m_fCurrHp;			// @플레이어 현재 체력
+	int m_fCurrEnergy;		// @플레이어 현재 에너지
 	float m_fGaugeBar;			//@@
 
 	int m_nX;					// 플레이어 좌표x
@@ -100,9 +102,6 @@ private:
 
 	int m_nTempIndex;			// 타일에 접근할 임시 인덱스
 
-	int m_nHp;	// 소모품 확인용 hp변수 (삭제해야함)
-
-
 	bool isFishingStart;
 	PLAYCOLLISION m_playerCollision;	// 플레이어 충돌 상태값
 
@@ -117,8 +116,11 @@ private:
 	void setDir();			// 도구 사용시 플레이어 방향잡는함수
 	void setSpadeTile();			// 괭이로 타일바꾸는 함수
 	void setWaterTile();			// 물뿌리개로 타일바꾸는 함수
+	void setAxeTile();				// 도끼 상호작용 함수
+	void setPickaxTile();			// 곡괭이 상호작용 함수
+	void setNotTile();				// 낫 상호작용 함수
+	void setSwordTile();			// 검 상호작용 함수
 
-	int i;
 	bool m_isMove =false;
 
 	void addSound();

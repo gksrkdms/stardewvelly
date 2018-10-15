@@ -18,6 +18,10 @@ HRESULT mapManager::init()
 	m_pObject = IMAGEMANAGER->findImage("town_Shop");
 	m_pObject2 = IMAGEMANAGER->findImage("town_Nomal");
 	m_pObject3 = IMAGEMANAGER->findImage("object3");
+	m_pBlack = IMAGEMANAGER->findImage("black");
+	m_nAlpha = 0;
+	m_Loading = LOAD_FALSE;
+	tempMapId = "";
 
 	m_pUibgsample = IMAGEMANAGER->findImage("maptoolui");
 
@@ -70,6 +74,20 @@ void mapManager::update()
 
 	m_pObjectMap->update();
 	m_pObjectCrop->update();
+	if (m_Loading == LOAD_START)
+	{
+		m_nAlpha += 10;
+		if (m_nAlpha >= 250)
+		{
+			m_nAlpha = 0;
+			m_Loading = LOAD_END;
+		}
+	}
+	if (m_Loading == LOAD_END)
+	{
+		m_Loading = LOAD_FALSE;
+		loadMap(tempMapId);
+	}
 }
 
 void mapManager::render(HDC hdc)
@@ -150,35 +168,35 @@ void mapManager::render(HDC hdc)
 				else if(m_pTiles[m_indexCamera].object == CROP)
 					m_pObjectCrop->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
 				
-				//else
-				//{
-				//	if (m_pTiles[m_indexCamera].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
-				//	{
-				//		m_pObject->frameRenderTile(hdc,
-				//			m_pTiles[m_indexCamera].rc.left,
-				//			m_pTiles[m_indexCamera].rc.top,
-				//			m_pTiles[m_indexCamera].objectFrameX,
-				//			m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-				//	}
+				else
+				{
+					if (m_pTiles[m_indexCamera].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
+					{
+						m_pObject->frameRenderTile(hdc,
+							m_pTiles[m_indexCamera].rc.left,
+							m_pTiles[m_indexCamera].rc.top,
+							m_pTiles[m_indexCamera].objectFrameX,
+							m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
+					}
 
-				//	if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
-				//	{
-				//		m_pObject2->frameRenderTile(hdc,
-				//			m_pTiles[m_indexCamera].rc.left,
-				//			m_pTiles[m_indexCamera].rc.top,
-				//			m_pTiles[m_indexCamera].objectFrameX,
-				//			m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-				//	}
+					if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
+					{
+						m_pObject2->frameRenderTile(hdc,
+							m_pTiles[m_indexCamera].rc.left,
+							m_pTiles[m_indexCamera].rc.top,
+							m_pTiles[m_indexCamera].objectFrameX,
+							m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
+					}
 
-				//	if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
-				//	{
-				//		m_pObject3->frameRenderTile(hdc,
-				//			m_pTiles[m_indexCamera].rc.left,
-				//			m_pTiles[m_indexCamera].rc.top,
-				//			m_pTiles[m_indexCamera].objectFrameX,
-				//			m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-				//	}
-				//}
+					if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
+					{
+						m_pObject3->frameRenderTile(hdc,
+							m_pTiles[m_indexCamera].rc.left,
+							m_pTiles[m_indexCamera].rc.top,
+							m_pTiles[m_indexCamera].objectFrameX,
+							m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
+					}
+				}
 			}
 
 		}
@@ -210,7 +228,21 @@ void mapManager::render(HDC hdc)
 	//		//TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
 	//	}
 	//}
+}
 
+void mapManager::loadingRender(HDC hdc)
+{
+	if (m_Loading == LOAD_START)
+	{
+		m_pBlack->alphaRender(hdc, m_nAlpha);
+	}
+
+}
+
+void mapManager::loadingMap(const char * szfileName)
+{
+	m_Loading = LOAD_START;
+	tempMapId = szfileName;
 }
 
 void mapManager::loadMap(const char* szfileName)

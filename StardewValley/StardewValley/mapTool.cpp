@@ -222,47 +222,47 @@ void mapTool::update()
 					//	m_nweight++;
 					//}
 
-					if (m_pTiles[index].terrain != FARMLAND)
-					{
-						switch (i)
-						{
-						case 0:
-							m_autoWeight->leftTop += 1;
-							m_autoWeight->leftBottom += 1;
-							break;
+					//if (m_pTiles[index].terrain != FARMLAND)
+					//{
+					//	switch (i)
+					//	{
+					//	case 0:
+					//		m_autoWeight->leftTop += 1;
+					//		m_autoWeight->leftBottom += 1;
+					//		break;
 
-						case 1:
-							m_autoWeight->rightTop += 1;
-							m_autoWeight->rightBottom += 1;
-							break;
+					//	case 1:
+					//		m_autoWeight->rightTop += 1;
+					//		m_autoWeight->rightBottom += 1;
+					//		break;
 
-						case 2:
-							m_autoWeight->leftTop += 1;
-							m_autoWeight->rightTop += 1;
-							break;
+					//	case 2:
+					//		m_autoWeight->leftTop += 1;
+					//		m_autoWeight->rightTop += 1;
+					//		break;
 
-						case 3:
-							m_autoWeight->leftBottom += 1;
-							m_autoWeight->rightBottom += 1;
-							break;
+					//	case 3:
+					//		m_autoWeight->leftBottom += 1;
+					//		m_autoWeight->rightBottom += 1;
+					//		break;
 
-						case 4:
-							m_autoWeight->leftTop += 1;
-							break;
+					//	case 4:
+					//		m_autoWeight->leftTop += 1;
+					//		break;
 
-						case 5:
-							m_autoWeight->leftBottom += 1;
-							break;
+					//	case 5:
+					//		m_autoWeight->leftBottom += 1;
+					//		break;
 
-						case 6:
-							m_autoWeight->rightTop += 1;
-							break;
+					//	case 6:
+					//		m_autoWeight->rightTop += 1;
+					//		break;
 
-						case 7:
-							m_autoWeight->rightBottom += 1;
-							break;
-						}
-					}
+					//	case 7:
+					//		m_autoWeight->rightBottom += 1;
+					//		break;
+					//	}
+					//}
 
 					/*if (m_pTiles[index].terrain != FARMLAND)
 					{
