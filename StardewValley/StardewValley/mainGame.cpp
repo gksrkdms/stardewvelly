@@ -255,7 +255,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("shop_textBox", "image/Stardew Valley/ui/shop_textBox.bmp", 209, 100, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("menu_textBox", "image/Stardew Valley/ui/menu_textBox.bmp", 73, 60, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("goldnumber", "image/Stardew Valley/ui/goldnumber.bmp", 200, 28, 10, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("hp_EnergyBar", "image/Stardew Valley/ui/hp_energy.bmp", 104, 224, true, RGB(255, 0, 255)); // @체력에너지 이미지
+	IMAGEMANAGER->addImage("hp_EnergyBar", "image/Stardew Valley/ui/hp_energy.bmp", 26, 56, true, RGB(255, 0, 255)); // @체력에너지 이미지
 
 	IMAGEMANAGER->addImage("sort", "image/Stardew Valley/ui/sort.bmp", 65, 65, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("trash_can", "image/Stardew Valley/ui/trash_can.bmp", 16, 26, true, RGB(255,0,255));

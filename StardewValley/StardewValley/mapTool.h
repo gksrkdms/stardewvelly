@@ -108,10 +108,11 @@ typedef struct tagTile
 	OBJECTIDNUM objectID;
 	
 	// 오토타일 상태값
-	autoState autoTileState;
-	autoWeight m_autoWeight;
-
-
+	autoState autoTileState; // 안젖은땅
+	autoState autoTileStateWet; // 젖은땅
+	autoWeight m_autoWeight; //마른땅
+	autoWeight autoWeightWet; // 젖은땅
+	
 	int terrainFrameX; // 타일이 가지고 있는 지형정보
 	int terrainFrameY;
 
@@ -147,10 +148,6 @@ struct tempSampleTile
 
 	bool isCollide; // 충돌 가능 여부 true 일 시 충돌 가능
 };
-
-
-
-
 
 class mapTool : public scene
 {
@@ -284,15 +281,10 @@ private:
 	//					// 왼쪽 오른쪽 위 아래 왼쪽대각선위 왼쪽대각선아래 오른쪽대각선위 왼쪽대각선아래		
 	//const int way[8][2] ={{-1,0},{ 1, 0 },{ 0, -1 },{ 0, 1 },{ -1, -1 },{ -1, 1 },{ 1, -1 },{ 1, 1 } };
 	
+	// 4방향 검사
 	const int ways = 4;
 	// 왼쪽 오른쪽 위 아래	
 	const int way[4][2] = { {-1,0},{ 1, 0 },{ 0, -1 },{ 0, 1 } };
-
-
-	int m_weight[2][2];
-	int m_nweight;
-
-	//autoWeight m_autoWeight;
 
 public:
 	mapTool();

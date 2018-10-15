@@ -40,14 +40,7 @@ HRESULT mapTool::init()
 
 	SAMPLE_TILE_X = 20;
 	SAMPLE_TILE_Y = 20;
-
-	//m_autoWeight.leftTop = 0;
-	//m_autoWeight.leftBottom = 0;
-	//m_autoWeight.rightTop = 0;
-	//m_autoWeight.rightBottom = 0;
-
-
-
+	
 	// 미니맵
 	m_minisize = 16; // 축적도, 높을수록 작아짐
 	m_minipositionX = 1000;
@@ -68,21 +61,39 @@ HRESULT mapTool::init()
 	m_ptempSampleObj3 = new tempSampleTile[SAMPLE_TILE_X*SAMPLE_TILE_Y];
 
 	//	기본 타일 정보 셋팅
-	for (int y = 0; y < TILE_Y; y++)
+	//for (int y = 0; y < TILE_Y; y++)
+	//{
+	//	for (int x = 0; x < TILE_X; x++)
+	//	{
+	//		m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1, y*TILE_SIZE_1, TILE_SIZE_1, TILE_SIZE_1);
+	//		m_pTiles[y * TILE_X + x].terrainFrameX = 0;
+	//		m_pTiles[y * TILE_X + x].terrainFrameY = 1;
+	//		m_pTiles[y * TILE_X + x].terrain = NOMALTILE;
+	//		m_pTiles[y * TILE_X + x].object = OBJ_NULL;
+	//		m_pTiles[y * TILE_X + x].objectID = OBID_NULL;
+	//		m_pTiles[y * TILE_X + x].index = y * TILE_X + x;		
+	//		m_pTiles[y * TILE_X + x].isCollide = false;
+	//		m_pTiles[y*TILE_X + x].autoTileState = STATE_NULL;
+	//		m_pTiles[y*TILE_X + x].autoTileStateWet = STATE_NULL;
+	//		m_pTiles[y*TILE_X + x].m_autoWeight = { 0,0,0,0 };
+	//		m_pTiles[y*TILE_X + x].autoWeightWet = { 0,0,0,0 };
+	//	}
+	//}
+
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
-		for (int x = 0; x < TILE_X; x++)
-		{
-			m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1, y*TILE_SIZE_1, TILE_SIZE_1, TILE_SIZE_1);
-			m_pTiles[y * TILE_X + x].terrainFrameX = 0;
-			m_pTiles[y * TILE_X + x].terrainFrameY = 1;
-			m_pTiles[y * TILE_X + x].terrain = NOMALTILE;
-			m_pTiles[y * TILE_X + x].object = OBJ_NULL;
-			m_pTiles[y * TILE_X + x].objectID = OBID_NULL;
-			m_pTiles[y * TILE_X + x].index = y * TILE_X + x;		
-			m_pTiles[y * TILE_X + x].isCollide = false;
-			m_pTiles[y*TILE_X + x].autoTileState = STATE_NULL;
-			m_pTiles[y*TILE_X + x].m_autoWeight = { 0,0,0,0 };
-		}
+		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1, (i / TILE_X)*TILE_SIZE_1, TILE_SIZE_1, TILE_SIZE_1);
+		m_pTiles[i].terrainFrameX = 0;
+		m_pTiles[i].terrainFrameY = 1;
+		m_pTiles[i].terrain = NOMALTILE;
+		m_pTiles[i].object = OBJ_NULL;
+		m_pTiles[i].objectID = OBID_NULL;
+		m_pTiles[i].index = i;
+		m_pTiles[i].isCollide = false;
+		m_pTiles[i].autoTileState = STATE_NULL;
+		m_pTiles[i].autoTileStateWet = STATE_NULL;
+		m_pTiles[i].m_autoWeight = { 0,0,0,0 };
+		m_pTiles[i].autoWeightWet = { 0,0,0,0 };		
 	}
 
 	// 샘플타일 기본 위치
@@ -216,12 +227,17 @@ void mapTool::update()
 
 	// camera 이동
 	CAMERAMANAGER->update();
-	for (int y = 0; y < TILE_Y; y++)
+	//for (int y = 0; y < TILE_Y; y++)
+	//{
+	//	for (int x = 0; x < TILE_X; x++)
+	//	{
+	//		m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1 - CAMERAMANAGER->getCameraX(), y*TILE_SIZE_1 - CAMERAMANAGER->getCameraY(), TILE_SIZE_1, TILE_SIZE_1);
+	//	}
+	//}
+
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
-		for (int x = 0; x < TILE_X; x++)
-		{
-			m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1 - CAMERAMANAGER->getCameraX(), y*TILE_SIZE_1 - CAMERAMANAGER->getCameraY(), TILE_SIZE_1, TILE_SIZE_1);
-		}
+		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1 - CAMERAMANAGER->getCameraX(), (i / TILE_X)*TILE_SIZE_1 - CAMERAMANAGER->getCameraY(), TILE_SIZE_1, TILE_SIZE_1);
 	}
 
 	// 씬전환
@@ -250,6 +266,7 @@ void mapTool::render(HDC hdc)
 				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 					, 19, 7, TILE_SIZE_1, TILE_SIZE_1);
 			}
+
 			else
 			{
 				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
@@ -311,50 +328,95 @@ void mapTool::render(HDC hdc)
 	//미니맵
 	if (m_isMiniMapOn)
 	{
-		for (int y = 0; y < TILE_Y; y++)
+		//for (int y = 0; y < TILE_Y; y++)
+		//{
+		//	for (int x = 0; x < TILE_X; x++)
+		//	{
+		//		m_pMini[y * TILE_X + x].rc.left = m_pTiles[y * TILE_X + x].rc.left / m_minisize;
+		//		m_pMini[y * TILE_X + x].rc.top = m_pTiles[y * TILE_X + x].rc.top / m_minisize;
+		//		m_pMini[y * TILE_X + x].terrainFrameX = m_pTiles[y * TILE_X + x].terrainFrameX;
+		//		m_pMini[y * TILE_X + x].terrainFrameY = m_pTiles[y * TILE_X + x].terrainFrameY;
+
+		//		// 맵 타일
+		//		m_pTileSet->frameRenderMini(hdc,
+		//			m_pMini[y*TILE_X + x].rc.left + m_minipositionX,
+		//			m_pMini[y*TILE_X + x].rc.top + m_minipositionY, m_pTiles[y*TILE_X + x].terrainFrameX,
+		//			m_pTiles[y*TILE_X + x].terrainFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
+
+		//		// 오브젝트
+		//		if (m_pTiles[y*TILE_X + x].object != OBJ_NULL)
+		//		{
+		//			if (m_pTiles[y*TILE_X + x].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
+		//			{
+		//				m_pObject->frameRenderMini(hdc,
+		//					m_pMini[y*TILE_X + x].rc.left + m_minipositionX,
+		//					m_pMini[y*TILE_X + x].rc.top + m_minipositionY,
+		//					m_pTiles[y*TILE_X + x].objectFrameX,
+		//					m_pTiles[y*TILE_X + x].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
+		//			}
+
+		//			if (m_pTiles[y*TILE_X + x].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
+		//			{
+		//				m_pObject2->frameRenderMini(hdc,
+		//					m_pMini[y*TILE_X + x].rc.left + m_minipositionX,
+		//					m_pMini[y*TILE_X + x].rc.top + m_minipositionY,
+		//					m_pTiles[y*TILE_X + x].objectFrameX,
+		//					m_pTiles[y*TILE_X + x].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
+		//			}
+
+		//			if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
+		//			{
+		//				m_pObject3->frameRenderMini(hdc,
+		//					m_pTiles[m_indexCamera].rc.left,
+		//					m_pTiles[m_indexCamera].rc.top,
+		//					m_pTiles[m_indexCamera].objectFrameX,
+		//					m_pTiles[m_indexCamera].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
+		//			}
+		//		}
+		//	}
+		//}
+
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			for (int x = 0; x < TILE_X; x++)
+			m_pMini[i].rc.left = m_pTiles[i].rc.left / m_minisize;
+			m_pMini[i].rc.top = m_pTiles[i].rc.top / m_minisize;
+			m_pMini[i].terrainFrameX = m_pTiles[i].terrainFrameX;
+			m_pMini[i].terrainFrameY = m_pTiles[i].terrainFrameY;
+
+			// 맵 타일
+			m_pTileSet->frameRenderMini(hdc,
+				m_pMini[i].rc.left + m_minipositionX,
+				m_pMini[i].rc.top + m_minipositionY, m_pTiles[i].terrainFrameX,
+				m_pTiles[i].terrainFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
+
+			// 오브젝트
+			if (m_pTiles[i].object != OBJ_NULL)
 			{
-				m_pMini[y * TILE_X + x].rc.left = m_pTiles[y * TILE_X + x].rc.left / m_minisize;
-				m_pMini[y * TILE_X + x].rc.top = m_pTiles[y * TILE_X + x].rc.top / m_minisize;
-				m_pMini[y * TILE_X + x].terrainFrameX = m_pTiles[y * TILE_X + x].terrainFrameX;
-				m_pMini[y * TILE_X + x].terrainFrameY = m_pTiles[y * TILE_X + x].terrainFrameY;
-
-				// 맵 타일
-				m_pTileSet->frameRenderMini(hdc,
-					m_pMini[y*TILE_X + x].rc.left + m_minipositionX,
-					m_pMini[y*TILE_X + x].rc.top + m_minipositionY, m_pTiles[y*TILE_X + x].terrainFrameX,
-					m_pTiles[y*TILE_X + x].terrainFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
-
-				// 오브젝트
-				if (m_pTiles[y*TILE_X + x].object != OBJ_NULL)
+				if (m_pTiles[m_indexCamera].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
 				{
-					if (m_pTiles[y*TILE_X + x].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
-					{
-						m_pObject->frameRenderMini(hdc,
-							m_pMini[y*TILE_X + x].rc.left + m_minipositionX,
-							m_pMini[y*TILE_X + x].rc.top + m_minipositionY,
-							m_pTiles[y*TILE_X + x].objectFrameX,
-							m_pTiles[y*TILE_X + x].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
-					}
+					m_pObject->frameRenderMini(hdc,
+						m_pMini[i].rc.left + m_minipositionX,
+						m_pMini[i].rc.top + m_minipositionY,
+						m_pTiles[i].objectFrameX,
+						m_pTiles[i].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
+				}
 
-					if (m_pTiles[y*TILE_X + x].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
-					{
-						m_pObject2->frameRenderMini(hdc,
-							m_pMini[y*TILE_X + x].rc.left + m_minipositionX,
-							m_pMini[y*TILE_X + x].rc.top + m_minipositionY,
-							m_pTiles[y*TILE_X + x].objectFrameX,
-							m_pTiles[y*TILE_X + x].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
-					}
+				if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
+				{
+					m_pObject2->frameRenderMini(hdc,
+						m_pMini[i].rc.left + m_minipositionX,
+						m_pMini[i].rc.top + m_minipositionY,
+						m_pTiles[i].objectFrameX,
+						m_pTiles[i].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
+				}
 
-					if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
-					{
-						m_pObject3->frameRenderMini(hdc,
-							m_pTiles[m_indexCamera].rc.left,
-							m_pTiles[m_indexCamera].rc.top,
-							m_pTiles[m_indexCamera].objectFrameX,
-							m_pTiles[m_indexCamera].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
-					}
+				if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
+				{
+					m_pObject3->frameRenderMini(hdc,
+						m_pTiles[i].rc.left,
+						m_pTiles[i].rc.top,
+						m_pTiles[i].objectFrameX,
+						m_pTiles[i].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
 				}
 			}
 		}
@@ -442,16 +504,24 @@ void mapTool::render(HDC hdc)
 	// 충돌체 확인
 	if (m_isObject)
 	{
-		for (int y = 0; y < SAMPLE_TILE_Y; ++y)
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			for (int x = 0; x < SAMPLE_TILE_X; x++)
+			if (m_pSampleTiles[i].isCollide)
 			{
-				if (m_pSampleTiles[y*SAMPLE_TILE_X + x].isCollide)
-				{
-					m_pDrag->render(hdc, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top);
-				}
+				m_pDrag->render(hdc, m_pSampleTiles[i].rc.left, m_pSampleTiles[i].rc.top);
 			}
 		}
+
+		//for (int y = 0; y < SAMPLE_TILE_Y; ++y)
+		//{
+		//	for (int x = 0; x < SAMPLE_TILE_X; x++)
+		//	{
+		//		if (m_pSampleTiles[y*SAMPLE_TILE_X + x].isCollide)
+		//		{
+		//			m_pDrag->render(hdc, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top);
+		//		}
+		//	}
+		//}
 	}
 	
 	//for (int y = 0; y < TILE_Y; y++)
@@ -1700,7 +1770,120 @@ void mapTool::reTileinit()
 
 void mapTool::autoTile()
 {
-	// 8방향 검사
+	//// 8방향 검사
+	//for (int y = 0; y < TILE_Y; y++)
+	//{
+	//	for (int x = 0; x < TILE_X; x++)
+	//	{
+	//		if (m_pTiles[y*TILE_X + x].terrain == FARMLAND || m_pTiles[y*TILE_X + x].terrain == WETFARMLAND)
+	//		{
+	//			for (int i = 0; i < ways; i++)
+	//			{
+	//				int nx = x + way[i][0], ny = y + way[i][1];
+	//				if (nx < 0 || nx >= TILE_X || ny < 0 || ny >= TILE_Y) continue;
+
+	//				// processing
+	//				int index = ny * TILE_X + nx;
+
+	//				if (m_pTiles[index].terrain == FARMLAND || m_pTiles[index].terrain == WETFARMLAND)
+	//				{
+	//					switch (i)
+	//					{
+	//					case 0:
+	//						m_pTiles[y*TILE_X + x].m_autoWeight.leftTop += 1;
+	//						m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom += 1;
+	//						break;
+
+	//					case 1:
+	//						m_pTiles[y*TILE_X + x].m_autoWeight.rightTop += 1;
+	//						m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom += 1;
+	//						break;
+
+	//					case 2:
+	//						m_pTiles[y*TILE_X + x].m_autoWeight.leftTop += 1;
+	//						m_pTiles[y*TILE_X + x].m_autoWeight.rightTop += 1;
+	//						break;
+
+	//					case 3:
+	//						m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom += 1;
+	//						m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom += 1;
+	//						break;
+	//					}
+	//				}
+	//			}
+
+	//			// 상태값
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 1)
+	//				m_pTiles[y*TILE_X + x].autoTileState = TOP_END;
+
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 1
+	//				&& (m_pTiles[(y - 1)*TILE_X + x].autoTileState == TOP_END || m_pTiles[(y + 1)*TILE_X + x].autoTileState == BOTTOM_END || m_pTiles[(y + 1)*TILE_X + x].autoTileState == BOTTOM_MIDDLE))
+	//				m_pTiles[y*TILE_X + x].autoTileState = BOTTOM_MIDDLE;
+	//			
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 0)
+	//				m_pTiles[y*TILE_X + x].autoTileState = BOTTOM_END;
+
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 1)
+	//				m_pTiles[y*TILE_X + x].autoTileState = LEFT_END;
+
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 1
+	//				&& (m_pTiles[y*TILE_X + (x - 1)].autoTileState == LEFT_END || m_pTiles[y*TILE_X + (x + 1)].autoTileState == RIGHT_END || m_pTiles[y*TILE_X + (x + 1)].autoTileState == LEFT_MIDDLE))
+	//				m_pTiles[y*TILE_X + x].autoTileState = LEFT_MIDDLE;
+
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 0)
+	//				m_pTiles[y*TILE_X + x].autoTileState = RIGHT_END;
+
+	//			// 사각형
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 2)
+	//				m_pTiles[y*TILE_X + x].autoTileState = SQUARE_TOP;
+	//			
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 2)
+	//				m_pTiles[y*TILE_X + x].autoTileState = SQUARE_LEFT;
+
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 1)
+	//				m_pTiles[y*TILE_X + x].autoTileState = SQUARE_RIGHT;
+
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 1)
+	//				m_pTiles[y*TILE_X + x].autoTileState = SQUARE_BOTTOM;
+
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 2)
+	//				m_pTiles[y*TILE_X + x].autoTileState = SQUARE_MIDDLE;
+
+	//			// 사각형 코너
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 2)
+	//				m_pTiles[y*TILE_X + x].autoTileState = LEFTCONER_T;
+
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 1)
+	//				m_pTiles[y*TILE_X + x].autoTileState = RIGHTCONER_T;
+
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 1)
+	//				m_pTiles[y*TILE_X + x].autoTileState = LEFTCONER_B;
+
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 0)
+	//				m_pTiles[y*TILE_X + x].autoTileState = RIGHTCONER_B;
+
+	//			if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 0)
+	//				m_pTiles[y*TILE_X + x].autoTileState = STATE_NULL;
+
+	//			// 초기화
+	//			m_pTiles[y*TILE_X + x].m_autoWeight.leftTop = 0;
+	//			m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom = 0;
+	//			m_pTiles[y*TILE_X + x].m_autoWeight.rightTop = 0;
+	//			m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom = 0;
+	//		}
+
+	//		if (m_pTiles[y*TILE_X + x].terrain != FARMLAND || m_pTiles[y*TILE_X + x].terrain != WETFARMLAND)
+	//		{
+	//			//m_pTiles[y*TILE_X + x].m_autoWeight.leftTop = 0;
+	//			//m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom = 0;
+	//			//m_pTiles[y*TILE_X + x].m_autoWeight.rightTop = 0;
+	//			//m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom = 0;
+	//			//m_pTiles[y*TILE_X + x].autoTileState = STATE_NULL;
+	//		}
+	//	}
+	//}
+
+	// 4방향 검사
 	for (int y = 0; y < TILE_Y; y++)
 	{
 		for (int x = 0; x < TILE_X; x++)
@@ -1715,49 +1898,7 @@ void mapTool::autoTile()
 					// processing
 					int index = ny * TILE_X + nx;
 
-					//if (m_pTiles[index].terrain != FARMLAND)
-					//{
-					//	switch (i)
-					//	{
-					//	case 0:
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.leftTop += 1;
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom += 1;
-					//		break;
-
-					//	case 1:
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.rightTop += 1;
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom += 1;
-					//		break;
-
-					//	case 2:
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.leftTop += 1;
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.rightTop += 1;
-					//		break;
-
-					//	case 3:
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom += 1;
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom += 1;
-					//		break;
-
-					//	case 4:
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.leftTop += 1;
-					//		break;
-
-					//	case 5:
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom += 1;
-					//		break;
-
-					//	case 6:
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.rightTop += 1;
-					//		break;
-
-					//	case 7:
-					//		m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom += 1;
-					//		break;
-					//	}
-					//}
-
-					if (m_pTiles[index].terrain == FARMLAND)
+					if (m_pTiles[index].terrain == FARMLAND || m_pTiles[index].terrain == WETFARMLAND)
 					{
 						switch (i)
 						{
@@ -1808,7 +1949,7 @@ void mapTool::autoTile()
 				// 사각형
 				if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 2)
 					m_pTiles[y*TILE_X + x].autoTileState = SQUARE_TOP;
-				
+
 				if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 2)
 					m_pTiles[y*TILE_X + x].autoTileState = SQUARE_LEFT;
 
@@ -1834,39 +1975,118 @@ void mapTool::autoTile()
 				if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 2 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 0)
 					m_pTiles[y*TILE_X + x].autoTileState = RIGHTCONER_B;
 
+				if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 0 && m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 0)
+					m_pTiles[y*TILE_X + x].autoTileState = STATE_NULL;
+
 				// 초기화
 				m_pTiles[y*TILE_X + x].m_autoWeight.leftTop = 0;
 				m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom = 0;
 				m_pTiles[y*TILE_X + x].m_autoWeight.rightTop = 0;
 				m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom = 0;
-
-				//if (m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 3 && (m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 2 || m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1) && (m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 2|| m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1) && (m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 0 || m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 1))
-				//	m_pTiles[y*TILE_X + x].autoTileState = LEFTCONER_T;
-				//	//m_autoState = LEFTCONER_T;
-
-				//else if(m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 2 && (m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 || m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 2) && (m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 2 || m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 3) && (m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom ==2|| m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 3))
-				//	m_pTiles[y*TILE_X + x].autoTileState = BOTTOM_END;
-
-				//else if ((m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 1 || m_pTiles[y*TILE_X + x].m_autoWeight.leftTop == 2) && (m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 1 || m_pTiles[y*TILE_X + x].m_autoWeight.rightTop == 2) && (m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 1 || m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom == 2) && (m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 1 || m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom == 2))
-				//	m_pTiles[y*TILE_X + x].autoTileState = BOTTOM_MIDDLE;
-
-				//else
-				//{
-				//	m_pTiles[y*TILE_X + x].m_autoWeight.leftTop = 0;
-				//	m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom = 0;
-				//	m_pTiles[y*TILE_X + x].m_autoWeight.rightTop = 0;
-				//	m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom = 0;
-				//	//m_pTiles[y*TILE_X + x].autoTileState = STATE_NULL;
-				//}
 			}
+		}
+	}
 
-			if (m_pTiles[y*TILE_X + x].terrain != FARMLAND)
+	//젖은땅
+	for (int y = 0; y < TILE_Y; y++)
+	{
+		for (int x = 0; x < TILE_X; x++)
+		{
+			if (m_pTiles[y*TILE_X + x].terrain == WETFARMLAND)
 			{
-				//m_pTiles[y*TILE_X + x].m_autoWeight.leftTop = 0;
-				//m_pTiles[y*TILE_X + x].m_autoWeight.leftBottom = 0;
-				//m_pTiles[y*TILE_X + x].m_autoWeight.rightTop = 0;
-				//m_pTiles[y*TILE_X + x].m_autoWeight.rightBottom = 0;
-				m_pTiles[y*TILE_X + x].autoTileState = STATE_NULL;
+				for (int i = 0; i < ways; i++)
+				{
+					int nx = x + way[i][0], ny = y + way[i][1];
+					if (nx < 0 || nx >= TILE_X || ny < 0 || ny >= TILE_Y) continue;
+
+					// processing
+					int index = ny * TILE_X + nx;
+
+					if (m_pTiles[index].terrain == WETFARMLAND)
+					{
+						switch (i)
+						{
+						case 0:
+							m_pTiles[y*TILE_X + x].autoWeightWet.leftTop += 1;
+							m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom += 1;
+							break;
+
+						case 1:
+							m_pTiles[y*TILE_X + x].autoWeightWet.rightTop += 1;
+							m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom += 1;
+							break;
+
+						case 2:
+							m_pTiles[y*TILE_X + x].autoWeightWet.leftTop += 1;
+							m_pTiles[y*TILE_X + x].autoWeightWet.rightTop += 1;
+							break;
+
+						case 3:
+							m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom += 1;
+							m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom += 1;
+							break;
+						}
+					}
+				}
+
+				// 상태값
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 0 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 0 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 1)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = TOP_END;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 1
+					&& (m_pTiles[(y - 1)*TILE_X + x].autoTileStateWet == TOP_END || m_pTiles[(y + 1)*TILE_X + x].autoTileStateWet == BOTTOM_END || m_pTiles[(y + 1)*TILE_X + x].autoTileStateWet == BOTTOM_MIDDLE))
+					m_pTiles[y*TILE_X + x].autoTileStateWet = BOTTOM_MIDDLE;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 0 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 0)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = BOTTOM_END;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 0 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 0 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 1)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = LEFT_END;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 1
+					&& (m_pTiles[y*TILE_X + (x - 1)].autoTileStateWet == LEFT_END || m_pTiles[y*TILE_X + (x + 1)].autoTileStateWet == RIGHT_END || m_pTiles[y*TILE_X + (x + 1)].autoTileStateWet == LEFT_MIDDLE))
+					m_pTiles[y*TILE_X + x].autoTileStateWet = LEFT_MIDDLE;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 0 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 0)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = RIGHT_END;
+
+				// 사각형
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 2)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = SQUARE_TOP;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 2)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = SQUARE_LEFT;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 1)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = SQUARE_RIGHT;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 1)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = SQUARE_BOTTOM;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 2)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = SQUARE_MIDDLE;
+
+				// 사각형 코너
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 2)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = LEFTCONER_T;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 0 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 1)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = RIGHTCONER_T;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 0 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 1)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = LEFTCONER_B;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 2 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 1 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 0)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = RIGHTCONER_B;
+
+				if (m_pTiles[y*TILE_X + x].autoWeightWet.leftTop == 0 && m_pTiles[y*TILE_X + x].autoWeightWet.rightTop == 0 && m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom == 0 && m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom == 0)
+					m_pTiles[y*TILE_X + x].autoTileStateWet = STATE_NULL;
+
+				// 초기화
+				m_pTiles[y*TILE_X + x].autoWeightWet.leftTop = 0;
+				m_pTiles[y*TILE_X + x].autoWeightWet.leftBottom = 0;
+				m_pTiles[y*TILE_X + x].autoWeightWet.rightTop = 0;
+				m_pTiles[y*TILE_X + x].autoWeightWet.rightBottom = 0;
 			}
 		}
 	}
@@ -1874,206 +2094,141 @@ void mapTool::autoTile()
 
 void mapTool::autoFarmRender(HDC hdc)
 {
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND)
+	// 마른땅
+	if (m_pTiles[m_indexCamera].terrain == FARMLAND || m_pTiles[m_indexCamera].terrain == WETFARMLAND)
 	{
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == STATE_NULL)
+		if (m_pTiles[m_indexCamera].autoTileState == STATE_NULL)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 9, 6, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == TOP_END)
+		if (m_pTiles[m_indexCamera].autoTileState == TOP_END)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 9, 7, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == BOTTOM_MIDDLE)
+		if (m_pTiles[m_indexCamera].autoTileState == BOTTOM_MIDDLE)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 9, 8, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == BOTTOM_END)
+		if (m_pTiles[m_indexCamera].autoTileState == BOTTOM_END)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 9, 9, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == LEFT_END)
+		if (m_pTiles[m_indexCamera].autoTileState == LEFT_END)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 10, 9, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == LEFT_MIDDLE)
+		if (m_pTiles[m_indexCamera].autoTileState == LEFT_MIDDLE)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 11, 9, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == RIGHT_END)
+		if (m_pTiles[m_indexCamera].autoTileState == RIGHT_END)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 12, 9, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == SQUARE_TOP)
+		if (m_pTiles[m_indexCamera].autoTileState == SQUARE_TOP)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 11, 6, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == SQUARE_LEFT)
+		if (m_pTiles[m_indexCamera].autoTileState == SQUARE_LEFT)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 10, 7, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == SQUARE_RIGHT)
+		if (m_pTiles[m_indexCamera].autoTileState == SQUARE_RIGHT)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 12, 7, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == SQUARE_BOTTOM)
+		if (m_pTiles[m_indexCamera].autoTileState == SQUARE_BOTTOM)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 11, 8, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == SQUARE_MIDDLE)
+		if (m_pTiles[m_indexCamera].autoTileState == SQUARE_MIDDLE)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 11, 7, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == LEFTCONER_T)
+		if (m_pTiles[m_indexCamera].autoTileState == LEFTCONER_T)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 10, 6, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == RIGHTCONER_T)
+		if (m_pTiles[m_indexCamera].autoTileState == RIGHTCONER_T)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 12, 6, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == LEFTCONER_B)
+		if (m_pTiles[m_indexCamera].autoTileState == LEFTCONER_B)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 10, 8, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == RIGHTCONER_B)
+		if (m_pTiles[m_indexCamera].autoTileState == RIGHTCONER_B)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 12, 8, TILE_SIZE_1, TILE_SIZE_1);
 	}
 
+	//젖은땅
 	if (m_pTiles[m_indexCamera].terrain == WETFARMLAND)
 	{
-		if (m_pTiles[m_indexCamera].autoTileState == STATE_NULL)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == STATE_NULL)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 13, 6, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == TOP_END)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == TOP_END)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 13, 7, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == BOTTOM_MIDDLE)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == BOTTOM_MIDDLE)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 13, 8, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == BOTTOM_END)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == BOTTOM_END)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 13, 9, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == LEFT_END)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == LEFT_END)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 14, 9, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == LEFT_MIDDLE)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == LEFT_MIDDLE)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 15, 9, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == RIGHT_END)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == RIGHT_END)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 16, 9, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == SQUARE_TOP)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == SQUARE_TOP)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 15, 6, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == SQUARE_LEFT)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == SQUARE_LEFT)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 14, 7, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == SQUARE_RIGHT)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == SQUARE_RIGHT)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 16, 7, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == SQUARE_BOTTOM)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == SQUARE_BOTTOM)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 15, 8, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == SQUARE_MIDDLE)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == SQUARE_MIDDLE)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 15, 7, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == LEFTCONER_T)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == LEFTCONER_T)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 14, 6, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == RIGHTCONER_T)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == RIGHTCONER_T)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 16, 6, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == LEFTCONER_B)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == LEFTCONER_B)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 14, 8, TILE_SIZE_1, TILE_SIZE_1);
 
-		if (m_pTiles[m_indexCamera].autoTileState == RIGHTCONER_B)
+		if (m_pTiles[m_indexCamera].autoTileStateWet == RIGHTCONER_B)
 			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 				, 16, 8, TILE_SIZE_1, TILE_SIZE_1);
-
 	}
-
-	/*if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == STATE_NULL)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 9, 6, TILE_SIZE_1, TILE_SIZE_1);
-	   
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == TOP_END)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 9, 7, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == BOTTOM_MIDDLE)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 9, 8, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == BOTTOM_END)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 9, 9, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == LEFT_END)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 10, 9, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == LEFT_MIDDLE)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 11, 9, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == RIGHT_END)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 12, 9, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == SQUARE_TOP)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 11, 6, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == SQUARE_LEFT)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 10, 7, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == SQUARE_RIGHT)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 12, 7, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == SQUARE_BOTTOM)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 11, 8, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == SQUARE_MIDDLE)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 11, 7, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == LEFTCONER_T)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 10, 6, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == RIGHTCONER_T)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 12, 6, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == LEFTCONER_B)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 10, 8, TILE_SIZE_1, TILE_SIZE_1);
-
-	if (m_pTiles[m_indexCamera].terrain == FARMLAND && m_pTiles[m_indexCamera].autoTileState == RIGHTCONER_B)
-		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-			, 12, 8, TILE_SIZE_1, TILE_SIZE_1);*/
-
-
 }
 
 
