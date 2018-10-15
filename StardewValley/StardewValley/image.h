@@ -105,8 +105,13 @@ public:
 	// 알파 블렌드 렌더
 	void alphaRender(HDC hdc, BYTE alpha);
 	void alphaRender(HDC hdc, int destX, int destY, BYTE alpha);
+	void alphaRender(HDC hdc, int destX, int destY,
+		int sourX, int sourY, int sourWidth, int sourHeight, BYTE alpha, int scalar = 1);
 	// 알파랜더 + 스칼라
-	void alphaRenderScala(HDC hdc, int destX, int destY, BYTE alpha, int scala = 1);
+	void alphaRenderScala(HDC hdc, int destX, int destY, BYTE alpha, int scalar = 1);
+	// 알파랜더 + 프레임랜더
+	void alphaFrameRender(HDC hdc, int destX, int destY,
+		int currFrameX, int currFrameY, BYTE alpha, int scalar = 1);
 
 	// 애니 렌더
 	void aniRender(HDC hdc, int destX, int destY, animation* ani, int scalar = 1);

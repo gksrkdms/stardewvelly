@@ -9,6 +9,7 @@ class fishing;
 class mapManager;
 
 #define TARGET_SIZE 2
+#define SCALAR 4
 
 enum PLAYERDIR
 {
@@ -54,7 +55,8 @@ class player
 private:
 	image*		m_pPlayer;		// 플레이어 이미지
 	image*		m_pTarget;		// 바닥타일 타겟 이미지(빨간색 네모)
-	image*		m_pNumber;
+	image*		m_pSeedTarget;	// 바닥타일 씨앗타겟 이미지
+	image*		m_pNumber;		// 상점에서 사용될 골드 ui
 	image*		m_pHpEnergyUi;  // @체력,에너지 이미지 
 	
 
@@ -64,7 +66,7 @@ private:
 	PLAYERMOTION m_playerMotion;// 플레이어 모션 상태
 	playerMenu*	m_pMenu;		// 인벤토리
 	item*		m_pTargetItem;	// 퀵슬롯 현재 아이템
-	fishing*	m_pFishing;
+	fishing*	m_pFishing;		// 낚시
 
 	RECT	m_HpRc;				// @체력 렉트
 	RECT	m_EnergyRc;			// @에너지 렉트
@@ -93,7 +95,12 @@ private:
 	int m_nPlayerSizeY;			// 플레이어 사이즈y
 	int	m_nMoveSpeed;			// 플레이어 이동스피드
 	bool isMove;				// 프레임렌더용 불값
-	bool isTargetRc;			// 빨간렉트 표시 불값
+	bool isStop;				// 멈춰있을때 타일타겟 보이게
+	bool isSeed;				// 씨앗을 뿌릴수 있는지 없는지 확인용
+
+	int m_nTempIndex;			// 타일에 접근할 임시 인덱스
+
+	int m_nHp;	// 소모품 확인용 hp변수 (삭제해야함)
 
 
 	bool isFishingStart;
@@ -107,18 +114,20 @@ private:
 	void setSyncMotion(PLAYERMOTION motion, int* x, int* y);	//모션 싱크로 맞추는 함수
 	void setItemMotion();	// 퀵바아이템에 따른 플레이어 모션
 	void useItem();			// 소모품 아이템사용
-	
+	void setDir();			// 도구 사용시 플레이어 방향잡는함수
+	void setSpadeTile();			// 괭이로 타일바꾸는 함수
+	void setWaterTile();			// 물뿌리개로 타일바꾸는 함수
+
 	int i;
 	bool m_isMove =false;
 
-	void damaged(float c); //@@
 	void addSound();
 public:
 	HRESULT init();
 	void release();
 	void update();
 	void render(HDC hdc);
-	void numRender(HDC hdc);
+	void numRender(HDC hdc, int x, int y);
 
 	int getX() { return m_nX; }					// 카메라 매니저에 쓰일 x,y겟터셋터들
 	void setX(int x) { m_nX = x; }

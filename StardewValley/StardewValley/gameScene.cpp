@@ -14,7 +14,7 @@ HRESULT gameScene::init()
 	m_pPlayer->init();
 	m_pMapManager = new mapManager;
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/fff.map");
+	m_pMapManager->loadMap("image/1234.map");
 	m_pPlayer->getMap(m_pMapManager);
 
 	//게임시간
@@ -62,7 +62,7 @@ void gameScene::render(HDC hdc)
 
 	TIMEMANAGER->render(hdc);
 
-	m_pPlayer->numRender(hdc);
+	m_pPlayer->numRender(hdc, 1122, 205);
 	
 	char str[128];
 	sprintf_s(str, 128, "카메라x : %d", CAMERA->getX());

@@ -11,6 +11,7 @@ HRESULT shop::init()
 	m_pList = IMAGEMANAGER->findImage("show_list");
 	m_pLeft = IMAGEMANAGER->findImage("leftarrow");
 	m_pRight = IMAGEMANAGER->findImage("rightarrow");
+	m_pGoldUi = IMAGEMANAGER->findImage("goldui");
 
 	m_nWinX = 20;
 	m_nWinY = 20;
@@ -99,6 +100,9 @@ void shop::render(HDC hdc)
 	{
 		m_pList->render(hdc, m_nListX, m_nArrayListY[i]);
 	}
+	// 골드 ui 랜더
+	m_pGoldUi->render(hdc, m_nWinX, m_pWindow->getHeight() + 20);
+	m_pPlayer->numRender(hdc, m_nWinX + m_pGoldUi->getWidth() / 2 - 18, m_pWindow->getHeight() + 44);
 
 	// 상점 화살표 랜더
 	if (isMouseIn[0] == true)
@@ -128,13 +132,10 @@ void shop::render(HDC hdc)
 			m_iterItem->second->render(hdc);
 			// 이름, 돈 랜더
 			m_iterItem->second->ShopRender(hdc, m_nListX + 100, m_nArrayListY[i] + 35, m_nListX + 950, m_nArrayListY[i] + 35);
-			// 툴팁랜더
+			// 상점 툴팁랜더
 			m_iterItem->second->ToolTiprender(hdc);
 		}
 	}
-	char str[128];
-	sprintf_s(str, 128, "플레이어Money : %d", m_pPlayer->getMoney());
-	TextOut(hdc, 50, 600, str, strlen(str));
 }
 
 shop::shop()

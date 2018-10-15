@@ -13,6 +13,7 @@ HRESULT player::init()
 	addSound(); //@ 사운드모음 
 	//m_pPlayer = IMAGEMANAGER->findImage("player_idle");
 	m_pTarget = IMAGEMANAGER->findImage("focustile_001");
+	m_pSeedTarget = IMAGEMANAGER->findImage("focustile_002");
 	m_pNumber = IMAGEMANAGER->findImage("goldnumber");
 	m_pHpEnergyUi = IMAGEMANAGER->findImage("hp_EnergyBar");
 
@@ -52,13 +53,17 @@ HRESULT player::init()
 	m_rc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX, m_nPlayerSizeY);
 	m_TargetRc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX * 3, m_nPlayerSizeY * 3);
 	isMove = false;
-	isTargetRc = true;
+	isStop = true;
+	isSeed = false;
 
 	setMotion(m_pAni, &m_pPlayer, "player_idle", 5, 5);
 	startMotion(m_pAni, 0, 1, false, false, 5);
 
 	m_playerCollision = COLL_FALSE;
 
+	m_nTempIndex = 0;
+
+	m_nHp = 50;
 
 	return S_OK;
 }
@@ -73,13 +78,7 @@ void player::release()
 }
 
 void player::update()
-{
-
-	if (KEYMANAGER->isStayKeyDown(VK_SPACE))
-	{
-		damaged(1);
-	}
-	
+{	
 	m_pTargetItem = m_pMenu->getQuickItem();	// 퀵바 아이템 정보 받아옴
 	m_pAni->frameUpdate(TIMEMANAGER->getElapsedTime());	// 에니매이션용
 
@@ -113,6 +112,7 @@ void player::update()
 	if (m_pTargetItem)
 	{
 		m_pTargetItem->setPlayXY(m_nX, m_nY);	// 도구아이템이 아닐때 플레이어 x,y받아오는 함수
+		// L버튼 가능을하기위해 낚시상태가 아닐떄, 인벤클래스의 L버튼불값이 false일떄
 		if (m_playerState != PLAYER_FISHING && m_pMenu->getInven()->getLbutton() == false)
 		{
 			setItemMotion();
@@ -159,17 +159,21 @@ void player::render(HDC hdc)
 	{
 		if (m_playerState == PLAYER_PLAY)
 		{
-			switch (m_pTargetItem->getItemKind())
+			if (isStop)
 			{
-				// 아이템종류가 도구일때 + 플레이어가 이동중이 아닐떄
-			case ITEM_ACT:
-				if (isTargetRc)
+				// 도구가 도끼,괭이,물뿌리개,곡괭이 일떄만 타겟이 보임
+				if (m_pTargetItem->getActItemKind() == ACTITEM_AXE ||
+					m_pTargetItem->getActItemKind() == ACTITEM_SPADE ||
+					m_pTargetItem->getActItemKind() == ACTITEM_WATER ||
+					m_pTargetItem->getActItemKind() == ACTITEM_PICKAX)
 				{
 					m_pTarget->render(hdc, m_nTargetX, m_nTargetY, TARGET_SIZE);
 				}
-				break;
-			case ITEM_SEED:
-				break;
+			}
+			// 아이템이
+			if (m_pTargetItem->getItemKind() == ITEM_SEED)
+			{
+				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, SCALAR);
 			}
 		}
 	}
@@ -180,7 +184,7 @@ void player::render(HDC hdc)
 	TextOut(hdc, 500, 50, str, strlen(str));
 
 	//MakeRect(hdc, m_temprc);
-	MakeRect(hdc, m_rc);
+	//MakeRect(hdc, m_rc);
 	//MakeRect(hdc, m_TargetRc);
 
 	m_pMenu->render(hdc);
@@ -191,25 +195,13 @@ void player::render(HDC hdc)
 		sprintf_s(str, 128, "%d", m_pTargetItem->getItemId());
 		TextOut(hdc, 200, 700, str, strlen(str));
 	}
-
-
-
 	m_pFishing->render(hdc);
-	//numRender(hdc);
+
+	sprintf_s(str, 128, "hp : %d", m_nHp);
+	TextOut(hdc, 0, 500, str, strlen(str));
 }
 
-
-
-//void player::damaged(float c)
-//{
-//	m_fCurrHp -= c;
-//
-//	m_fGaugeBar = (m_fCurrHp / m_fMaxHp) *  WINSIZEY - 208;
-//	m_HpRc.top = -m_fGaugeBar;
-//	//m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 12, WINSIZEY - 208, 24, m_fGaugeBar);
-//}
-
-void player::numRender(HDC hdc)
+void player::numRender(HDC hdc, int x, int y)
 {
 	int num = 0;
 	int digit = log10((double)m_nMoney);
@@ -230,7 +222,7 @@ void player::numRender(HDC hdc)
 		tempMoney = tempMoney - num * digit2;
 		if (digit2 != 10)
 			digit2 = digit2 / 10;
-		m_pNumber->frameRender(hdc, 1122 + i * 24, 205, num, 0);
+		m_pNumber->frameRender(hdc, x + i * 24, y, num, 0);
 	}
 }
 
@@ -260,7 +252,7 @@ void player::setTargetXY()
 
 			if (IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_TargetRc))
 			{
-				if (isTargetRc == true)
+				if (isStop == true)
 				{
 					if (PtInRect(&m_pMap->getTile(m_indexCamera)->rc, g_ptMouse))
 					{
@@ -268,8 +260,18 @@ void player::setTargetXY()
 						if (m_pMap->getTile(m_indexCamera)->object == TREE_SMALL)
 							i++;
 
+						if (m_pMap->getTile(m_indexCamera)->terrain == EARTH)
+						{
+							isSeed = true;
+						}
+						else
+						{
+							isSeed = false;
+						}
+
 						m_nTargetX = m_pMap->getTile(m_indexCamera)->rc.left;
 						m_nTargetY = m_pMap->getTile(m_indexCamera)->rc.top;
+						m_nTempIndex = m_indexCamera;
 					}
 				}
 				else
@@ -307,13 +309,13 @@ void player::setKey()
 			isMove = true;
 		}
 		m_playerDir = PLAYER_LEFT;
-		isTargetRc = false;
+		isStop = false;
 		move(m_playerDir);
 	}
 	if (KEYMANAGER->isOnceKeyUp('A'))
 	{
 		isMove = false;
-		isTargetRc = true;
+		isStop = true;
 		m_pAni->stop();
 		switch (m_playerMotion)
 		{
@@ -342,14 +344,14 @@ void player::setKey()
 			}
 			isMove = true;
 		}
-		isTargetRc = false;
+		isStop = false;
 		m_playerDir = PLAYER_RIGHT;
 		move(m_playerDir);
 	}
 	if (KEYMANAGER->isOnceKeyUp('D'))
 	{
 		isMove = false;
-		isTargetRc = true;
+		isStop = true;
 		m_pAni->stop();
 		switch (m_playerMotion)
 		{
@@ -379,14 +381,14 @@ void player::setKey()
 			}
 			isMove = true;
 		}
-		isTargetRc = false;
+		isStop = false;
 		m_playerDir = PLAYER_UP;
 		move(m_playerDir);
 	}
 	if (KEYMANAGER->isOnceKeyUp('W'))
 	{
 		isMove = false;
-		isTargetRc = true;
+		isStop = true;
 		m_pAni->stop();
 		switch (m_playerMotion)
 		{
@@ -419,14 +421,14 @@ void player::setKey()
 			}
 			isMove = true;
 		}
-		isTargetRc = false;
+		isStop = false;
 		m_playerDir = PLAYER_DOWN;
 		move(m_playerDir);
 	}
 	if (KEYMANAGER->isOnceKeyUp('S'))
 	{
 		isMove = false;
-		isTargetRc = true;
+		isStop = true;
 		m_pAni->stop();
 		switch (m_playerMotion)
 		{
@@ -547,16 +549,16 @@ void player::move(PLAYERDIR playerdir)
 		switch (playerdir)
 		{
 		case PLAYER_LEFT:
-			m_nX -= m_nMoveSpeed;
+			//m_nX -= m_nMoveSpeed;
 			break;
 		case PLAYER_RIGHT:
 			//m_nX += m_nMoveSpeed;
 			break;
 		case PLAYER_UP:
-			m_nY -= m_nMoveSpeed;
+			//m_nY -= m_nMoveSpeed;
 			break;
 		case PLAYER_DOWN:
-			m_nY += m_nMoveSpeed;
+			//m_nY += m_nMoveSpeed;
 			break;
 		}
 	}
@@ -661,8 +663,9 @@ void player::setItemMotion()
 {
 	if (m_playerState == PLAYER_PLAY)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && m_playerMotion == MOTION_IDLE)
 		{
+			setDir();	// 플레이어 방향 정하는 함수
 			if (m_pTargetItem->getActItemKind() != ACTITEM_NULL)
 			{
 				switch (m_pTargetItem->getActItemKind())
@@ -707,6 +710,7 @@ void player::setItemMotion()
 						break;
 					}
 					SOUNDMANAGER->play("sound/effect/playerAct/밭갈다.wav", g_soundVolume.effect);
+					setSpadeTile();
 					break;
 				case ACTITEM_WATER:
 					m_playerMotion = MOTION_WATER;
@@ -727,6 +731,7 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 2, false, false, 5);
 						break;
 					}
+					setWaterTile();
 					break;
 				case ACTITEM_PICKAX:
 					m_playerMotion = MOTION_PICKAX;
@@ -769,29 +774,9 @@ void player::setItemMotion()
 					}
 					break;
 				case ACTITEM_FISHINGROD:
-					
-					//m_playerMotion = MOTION_FISHINGROD;
-					//setMotion(m_pAni, &m_pPlayer, "player_fishing", 4, 4);
-					//switch (m_playerDir)
-					//{
-					//case PLAYER_LEFT:
-					//	startMotion(m_pAni, 4, 8, false, false, 5);
-					//	break;
-					//case PLAYER_RIGHT:
-					//	startMotion(m_pAni, 8, 12, false, false, 5);
-					//	break;
-					//case PLAYER_UP:
-					//	startMotion(m_pAni, 12, 16, false, false, 5);
-					//	break;
-					//case PLAYER_DOWN:
-					//	startMotion(m_pAni, 0, 4, false, false, 5);
-					//	break;
-					//}
-				
 					m_pFishing->init();
 					//m_pFishing->setIsOne(true);
 					//m_pFishing->setIsMistake(false);
-	
 					m_pFishing->setIsFishing(true);
 					m_playerState = PLAYER_FISHING;		
 					break;
@@ -894,19 +879,64 @@ void player::useItem()
 			switch (m_pTargetItem->getConsumItemKind())
 			{
 			case CONITEM_RECOVERY:
-				switch (m_pTargetItem->getItemId())
-				{
-				case 201:
-					SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
-					m_pTargetItem->useItem();
-					
-					break;
-				}
-				break;
+				m_nHp += m_pTargetItem->getHp();
+				m_pTargetItem->useItem();
+				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 			case CONITEM_SEED:
 				break;
 			}
 		}
+	}
+}
+
+void player::setDir()
+{
+
+	if (g_ptMouse.x > m_nX + 8 - CAMERA->getX() + m_nPlayerSizeX && 
+		g_ptMouse.y > m_nY + 63 - CAMERA->getY() && 
+		g_ptMouse.y < m_nY + 63 - CAMERA->getY() + m_nPlayerSizeY)
+	{
+		m_playerDir = PLAYER_RIGHT;
+	}
+	else if (g_ptMouse.x < m_nX + 8 - CAMERA->getX() &&
+		g_ptMouse.y > m_nY + 63 - CAMERA->getY() &&
+		g_ptMouse.y < m_nY + 63 - CAMERA->getY() + m_nPlayerSizeY)
+	{
+		m_playerDir = PLAYER_LEFT;
+	}
+	else if (g_ptMouse.y > m_nY + 63 - CAMERA->getY())
+	{
+		m_playerDir = PLAYER_DOWN;
+	}
+
+	else if (g_ptMouse.y <= m_nY + 63 - CAMERA->getY())
+	{
+		m_playerDir = PLAYER_UP;
+	}
+}
+
+void player::setSpadeTile()
+{
+	//m_pMap->getTile(m_nTempIndex)->index = 129;
+	m_pMap->getTile(m_nTempIndex)->terrainFrameX = 9;
+	m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
+	m_pMap->getTile(m_nTempIndex)->terrain = FARMLAND;
+	m_nHp -= 2;
+}
+
+void player::setWaterTile()
+{
+	if (m_pTargetItem->getWaterDurability() > 0)
+	{
+		m_pTargetItem->setWaterDurability(m_pTargetItem->getWaterDurability() - 1);
+		if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND)
+		{
+			m_pMap->getTile(m_nTempIndex)->terrainFrameX = 13;
+			m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
+			m_pMap->getTile(m_nTempIndex)->terrain = WETFARMLAND;
+		}
+		m_pTargetItem->progressWaterDurability(1);
+		m_nHp -= 2;
 	}
 }
 

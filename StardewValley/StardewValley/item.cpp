@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "item.h"
+#include "progressBar.h"
 
 HRESULT item::init(int x, int y, bool shop)
 {
@@ -9,6 +10,7 @@ HRESULT item::init(int x, int y, bool shop)
 	m_pEnergy = IMAGEMANAGER->findImage("recovery_energy");
 	m_pHp = IMAGEMANAGER->findImage("recovery_hp");
 	m_pShopToolTip = IMAGEMANAGER->findImage("shop_textBox");
+	m_pDmg = IMAGEMANAGER->findImage("dmg");
 	m_pImg = NULL;
 	m_ItemName = "";
 	m_ItemToolTip = "";
@@ -43,6 +45,9 @@ HRESULT item::init(int x, int y, bool shop)
 	m_nMaxWaterDurability = 0;
 	m_nEnergy = 0;
 	m_nHp = 0;
+	m_nMinDmg = 0;
+	m_nMaxDmg = 0;
+	waterBar = NULL;
 	return S_OK;
 }
 
@@ -86,6 +91,12 @@ void item::update()
 	m_NameRc = RectMake(m_nNameX, m_nNameY, 281, 200);
 	m_KindRc = RectMake(m_nKindX, m_nKindY, 281, 200);
 	m_ToolTipRc = RectMake(m_nToolTipX, m_nToolTipY, 281, 200);
+
+	if (waterBar)
+	{
+		waterBar->setX(m_nX);
+		waterBar->setY(m_nY + 40);
+	}
 }
 
 void item::render(HDC hdc)
@@ -98,6 +109,10 @@ void item::render(HDC hdc)
 		char str[128];
 		// 기본 아이템 이미지 랜더
 		m_pImg->render(hdc, m_nX + m_nIconX, m_nY + m_nIconY, 3);
+		if (waterBar)
+		{
+			waterBar->render(hdc);
+		}
 		// 필드에서 도구류 외의 아이템을 선택했을때
 		if (isPlayerHead == true && m_itemKind != ITEM_ACT && isPlayerPlaying == true)
 		{
@@ -116,7 +131,7 @@ void item::render(HDC hdc)
 	}
 }
 
-// 인벤토리메뉴, 상점인벤토리 툴팁용
+// 인벤토리메뉴, 상점인벤토리, 퀵바 툴팁용
 void item::ToolTiprender(HDC hdc)
 {
 	char str[128];
@@ -133,12 +148,16 @@ void item::ToolTiprender(HDC hdc)
 			{
 				m_pEnergy->render(hdc, m_nEnergyX, m_nEnergyY);
 				m_pHp->render(hdc, m_nHpX, m_nHpY);
-				sprintf_s(str, 128, "%d", m_nEnergy);
+				sprintf_s(str, 128, "%d 기력", m_nEnergy);
 				TextOut(hdc, m_nEnergyX + 60, m_nEnergyY + 10, str, strlen(str));
-				TextOut(hdc, m_nEnergyX + 80, m_nEnergyY + 10, "기력", strlen("기력"));
-				sprintf_s(str, 128, "%d", m_nHp);
+				sprintf_s(str, 128, "%d 체력", m_nHp);
 				TextOut(hdc, m_nHpX + 60, m_nHpY + 10, str, strlen(str));
-				TextOut(hdc, m_nHpX + 80, m_nHpY + 10, "체력", strlen("체력"));
+			}
+			if (m_actItemKind == ACTITEM_SWORD)
+			{
+				m_pDmg->render(hdc, m_nEnergyX, m_nEnergyY);
+				sprintf_s(str, 128, "%d-%d 피해", m_nMinDmg, m_nMaxDmg);
+				TextOut(hdc, m_nEnergyX + 60, m_nEnergyY + 10, str, strlen(str));
 			}
 		}
 	}
@@ -169,6 +188,10 @@ void item::ShopInvenRender(HDC hdc)
 		if (isSell == false)
 		{
 			m_pImg->alphaRenderScala(hdc, m_nX + m_nIconX, m_nY + m_nIconY, 150, 3);
+			if (waterBar)
+			{
+				waterBar->alphaRender(hdc);
+			}
 		}
 		else
 		{
@@ -178,6 +201,7 @@ void item::ShopInvenRender(HDC hdc)
 	}
 }
 
+// 상점용 인벤토리 툴팁
 void item::ShopInvenToolTip(HDC hdc)
 {
 	char str[128];
@@ -231,6 +255,9 @@ void item::deleteItem()
 	m_nMaxWaterDurability = 0;
 	m_nEnergy = 0;
 	m_nHp = 0;
+	m_nMinDmg = 0;
+	m_nMaxDmg = 0;
+	waterBar = NULL;
 
 	m_nItemNum = 0;
 	isItemOn = false;
@@ -254,6 +281,13 @@ void item::useItem()
 	{
 		deleteItem();
 	}
+}
+
+// 물뿌리개 내구도 깍이고 프로그래스바 함수호출하는 함수
+void item::progressWaterDurability(int durability)
+{
+	m_nWaterDurability -= durability;
+	waterBar->setGauge((float)m_nWaterDurability, (float)m_nMaxWaterDurability);
 }
 
 // 아이템 데이터 추가용 함수
@@ -367,6 +401,14 @@ void item::setItem(bool sameItem)
 		m_nWaterDurability = m_nMaxWaterDurability = atoi((*iterData2++).c_str());
 		m_nEnergy = atoi((*iterData2++).c_str());
 		m_nHp = atoi((*iterData2++).c_str());
+		m_nMinDmg = atoi((*iterData2++).c_str());
+		m_nMaxDmg = atoi((*iterData2++).c_str());
 		m_nItemNum++;
+
+		if (m_actItemKind == ACTITEM_WATER)
+		{
+			waterBar = new progressBar;
+			waterBar->init((float)m_nX, (float)m_nY + 40, 48, 20);
+		}
 	}
 }
