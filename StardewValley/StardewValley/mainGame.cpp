@@ -22,6 +22,7 @@ HRESULT mainGame::init()
 	TIMEMANAGER->init();
 	SCENEMANAGER->init();
 	SOUNDMANAGER->init();
+	EFFECTMANAGER->init();
 
 	setBackBuffer();
 
@@ -57,7 +58,8 @@ void mainGame::release()
 	SCENEMANAGER->release();
 	PLAYTIMEMANAGER->release();
 	SOUNDMANAGER->release();
-
+	EFFECTMANAGER->release();
+	
 	DATAMANAGER->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
 	IMAGEMANAGER->releaseSingleton();
@@ -65,6 +67,7 @@ void mainGame::release()
 	SCENEMANAGER->releaseSingleton();
 	PLAYTIMEMANAGER->releaseSingleton();
 	SOUNDMANAGER->releaseSingleton();
+	EFFECTMANAGER->releaseSingleton();
 }
 
 LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -190,17 +193,18 @@ LRESULT mainGame::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LP
 void mainGame::update()
 {
 	InvalidateRect(g_hWnd, NULL, false);
-
+	EFFECTMANAGER->update();
 	SCENEMANAGER->update();
+	
 }
 
 void mainGame::render()
 {
+
 	HDC backDC = m_pBackBuffer->getMemDC();
-
 	SCENEMANAGER->render(backDC);
-
 	m_pBackBuffer->render(hdc, 0, 0);
+	
 }
 
 void mainGame::imgload()
@@ -331,12 +335,12 @@ void mainGame::imgload()
 void mainGame::addsound()
 {
 	// start scene
-	//SOUNDMANAGER->addSound("sound/StardewValleyOverture.mp3", true, true);
-	//SOUNDMANAGER->addSound("sound/effect/Ã·Å¬¸¯.wav", false, false);
-	//SOUNDMANAGER->addSound("sound/effect/startbutton.wav", false, false);
+	SOUNDMANAGER->addSound("sound/StardewValleyOverture.mp3", true, true);
+	SOUNDMANAGER->addSound("sound/effect/Ã·Å¬¸¯.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/startbutton.wav", false, false);
 
 	//gameScene
-	//SOUNDMANAGER->addSound("sound/CloudCountry.mp3", true, true);
+	SOUNDMANAGER->addSound("sound/CloudCountry.mp3", true, true);
 
 
 }

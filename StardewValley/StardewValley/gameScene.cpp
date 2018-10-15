@@ -19,15 +19,16 @@ HRESULT gameScene::init()
 
 	//게임시간
 	PLAYTIMEMANAGER->init();
-
+	
 	//배경음
 	SOUNDMANAGER->play("sound/CloudCountry.mp3", g_soundVolume.bgm);
-
+	
 	return S_OK;
 }
 
 void gameScene::release()
 {
+	
 	CAMERA->release();
 	CAMERA->releaseSingleton();
 	m_pPlayer->release();
@@ -40,6 +41,7 @@ void gameScene::release()
 
 void gameScene::update()
 {
+	
 	m_pPlayer->update();
 	m_pMapManager->update();
 	CAMERA->setFocus(m_pPlayer);
@@ -69,7 +71,7 @@ void gameScene::render(HDC hdc)
 	TextOut(hdc, 50, 100, str, strlen(str));
 	sprintf_s(str, 128, "카메라y : %d", CAMERA->getY());
 	TextOut(hdc, 50, 150, str, strlen(str));
-
+	
 	SelectObject(hdc, oldFont);
 	DeleteObject(myFont);
 }

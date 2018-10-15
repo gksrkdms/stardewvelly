@@ -70,6 +70,7 @@ void playerMenu::update()
 		// 메뉴가 인벤토리,상점,제작,등등 체크해줌
 		if (m_menuDir == MENU_INVEN)
 		{
+
 			m_pInven->setInvenDir(INVEN_INVEN);	// 메뉴가 인벤토리일떄 인벤토리 랜더를위해 상태값변경
 		}
 		if (m_menuDir == MENU_SHOP)
@@ -81,13 +82,13 @@ void playerMenu::update()
 		if (m_pInven->getHandItem() == false)
 		{
 			if (KEYMANAGER->isOnceKeyDown('E'))
-			{
-				SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
+			{			
 				m_pInven->setInvenDir(INVEN_QUICKBAR);	// 인벤토리 상태를 퀵바로
 				m_menuDir = MENU_INVEN;					// 메뉴상태값을 인벤토리로 초기화
-				isMenu = false;							// 인벤토리 false
-			}
+				isMenu = false;							// 인벤토리 false		
+			}	
 		}
+		
 	}
 
 }
@@ -186,6 +187,8 @@ void playerMenu::menuUpdate()
 		{
 			if (KEYMANAGER->isOnceKeyDown('E'))
 			{
+				
+				SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
 				m_pInven->setInvenDir(INVEN_QUICKBAR);	// 인벤토리 상태를 퀵바로
 				m_menuDir = MENU_INVEN;					// 메뉴상태값을 인벤토리로 초기화
 				isMenu = false;							// 인벤토리 false
