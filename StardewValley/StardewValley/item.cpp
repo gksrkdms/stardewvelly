@@ -71,16 +71,8 @@ void item::update()
 	}
 
 	// 마우스정보 x,y
-	if (handitem == true)
-	{
-		m_nMouseX = g_ptMouse.x + 25;
-		m_nMouseY2 = g_ptMouse.y + 25;
-	}
-	else
-	{
-		m_nMouseX = g_ptMouse.x + 5;
-		m_nMouseY2 = g_ptMouse.y + 5;
-	}
+	m_nMouseX = g_ptMouse.x + 5;
+	m_nMouseY2 = g_ptMouse.y + 5;
 
 	// 툴팁에 들어가는 이름,종류,툴팁 x,y정보값
 	m_nNameX = m_nMouseX + 25;
