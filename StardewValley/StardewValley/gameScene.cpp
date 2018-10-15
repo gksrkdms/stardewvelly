@@ -92,10 +92,6 @@ void gameScene::addSound()
 	//상점 물건사고파는소리
 	SOUNDMANAGER->addSound("sound/effect/돈소리.wav", false, false);
 
-
-
-
-
 	//음식먹기
 	SOUNDMANAGER->addSound("sound/effect/아삭소리2.wav", false, false);
 
