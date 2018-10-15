@@ -329,6 +329,15 @@ void mainGame::imgload()
 	// crops
 	IMAGEMANAGER->addImage("crops", "image/Stardew Valley/crop/crops.bmp", 256, 669,16,20, true, RGB(255, 0, 255));
 
+	//추가아이템 나중에정리할것
+	IMAGEMANAGER->addImage("item_214", "image/Stardew Valley/item/item_214.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_215", "image/Stardew Valley/item/item_215.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_219", "image/Stardew Valley/item/item_219.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_220", "image/Stardew Valley/item/item_220.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_221", "image/Stardew Valley/item/item_221.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_301", "image/Stardew Valley/item/item_301.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_302", "image/Stardew Valley/item/item_302.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_303", "image/Stardew Valley/item/item_303.bmp", 16, 16, true, RGB(255, 0, 255));
 
 }
 
