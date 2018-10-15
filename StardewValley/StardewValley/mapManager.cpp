@@ -56,19 +56,16 @@ HRESULT mapManager::init()
 
 void mapManager::release()
 {
-	delete[] m_pTiles;
+	SAFE_DELETE_ARRAY(m_pTiles);
+	SAFE_DELETE_ARRAY(m_pObjectMap);
+	SAFE_DELETE_ARRAY(m_pObjectCrop);
+
+	m_vecTile.clear();
+	//delete[] m_pTiles;
 }
 
 void mapManager::update()
 {
-	//for (int y = 0; y < TILE_Y; y++)
-	//{
-	//	for (int x = 0; x < TILE_X; x++)
-	//	{
-	//		m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1 - CAMERA->getX(), y*TILE_SIZE_1 - CAMERA->getY(), TILE_SIZE_1, TILE_SIZE_1);
-	//	}
-	//}
-
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
 		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1 - CAMERA->getX(), (i / TILE_X)*TILE_SIZE_1 - CAMERA->getY(), TILE_SIZE_1, TILE_SIZE_1);
@@ -103,11 +100,16 @@ void mapManager::render(HDC hdc)
 					, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
 			}
 
-			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-				, m_pTiles[m_indexCamera].terrainFrameX, m_pTiles[m_indexCamera].terrainFrameY, TILE_SIZE_1, TILE_SIZE_1);
+			if (m_pTiles[m_indexCamera].terrain == FARMLAND || m_pTiles[m_indexCamera].terrain == WETFARMLAND)
+			{
+				autoFarmRender(hdc);
+			}
 
-			// 농장타일랜더
-			autoFarmRender(hdc);
+			else
+			{
+				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+					, m_pTiles[m_indexCamera].terrainFrameX, m_pTiles[m_indexCamera].terrainFrameY, TILE_SIZE_1, TILE_SIZE_1);
+			}
 
 			if (m_pTiles[m_indexCamera].object != OBJ_NULL)
 			{
