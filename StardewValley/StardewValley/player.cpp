@@ -10,10 +10,12 @@
 
 HRESULT player::init()
 {
-	addSound();
+	addSound(); //@ 사운드모음 
 	//m_pPlayer = IMAGEMANAGER->findImage("player_idle");
 	m_pTarget = IMAGEMANAGER->findImage("focustile_001");
 	m_pNumber = IMAGEMANAGER->findImage("goldnumber");
+	m_pHpEnergyUi = IMAGEMANAGER->findImage("hp_EnergyBar");
+
 	m_pAni = new animation;
 	m_playerDir = PLAYER_DOWN;
 	m_playerState = PLAYER_PLAY;
@@ -37,6 +39,16 @@ HRESULT player::init()
 	m_nMoveSpeed = 10;
 	m_nMoney = 54321;
 
+	m_fCurrHp = m_fMaxHp = 270;			// @플레이어 체력
+	m_fCurrEnergy = m_fMaxEnergy = 300;		// @플레이어 에너지 
+	m_fGaugeBar = 164; //@@
+	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, m_fGaugeBar);  //@플레이어 체력
+	//m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 44, 24, -164); // @플레이어 에너지
+	m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 208, 24, 164); // @플레이어 에너지
+	//m_HpRc.top = (m_fCurrHp / m_fMaxHp) / 164 + (WINSIZEY - 208);
+	
+
+	
 	m_rc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX, m_nPlayerSizeY);
 	m_TargetRc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX * 3, m_nPlayerSizeY * 3);
 	isMove = false;
@@ -62,6 +74,12 @@ void player::release()
 
 void player::update()
 {
+
+	if (KEYMANAGER->isStayKeyDown(VK_SPACE))
+	{
+		damaged(1);
+	}
+	
 	m_pTargetItem = m_pMenu->getQuickItem();	// 퀵바 아이템 정보 받아옴
 	m_pAni->frameUpdate(TIMEMANAGER->getElapsedTime());	// 에니매이션용
 
@@ -114,11 +132,22 @@ void player::update()
 	//낚시
 	m_pFishing->setPlayer(this);
 	m_pFishing->update();
+	
 
 }
 
 void player::render(HDC hdc)
 {
+	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth(),WINSIZEY-260); // @체력,에너지틀
+	//MakeRect(hdc, m_HpRc);		// @체력렉트
+	//MakeRect(hdc, m_EnergyRc);  //@에너지렉트
+	HBRUSH brush = CreateSolidBrush(RGB(9, 255, 0)); //색깔브러쉬
+	FillRect(hdc, &m_HpRc, brush);
+	FillRect(hdc, &m_EnergyRc, brush);
+	DeleteObject(brush);
+
+
+
 	// 플레이어 랜더
 	if (m_pFishing->getIsFishing() == false)
 	{
@@ -163,9 +192,22 @@ void player::render(HDC hdc)
 		TextOut(hdc, 200, 700, str, strlen(str));
 	}
 
+
+
 	m_pFishing->render(hdc);
 	//numRender(hdc);
 }
+
+
+
+//void player::damaged(float c)
+//{
+//	m_fCurrHp -= c;
+//
+//	m_fGaugeBar = (m_fCurrHp / m_fMaxHp) *  WINSIZEY - 208;
+//	m_HpRc.top = -m_fGaugeBar;
+//	//m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 12, WINSIZEY - 208, 24, m_fGaugeBar);
+//}
 
 void player::numRender(HDC hdc)
 {
@@ -867,6 +909,8 @@ void player::useItem()
 		}
 	}
 }
+
+
 
 void player::addSound()
 {

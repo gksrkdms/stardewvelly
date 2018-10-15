@@ -55,6 +55,9 @@ private:
 	image*		m_pPlayer;		// 플레이어 이미지
 	image*		m_pTarget;		// 바닥타일 타겟 이미지(빨간색 네모)
 	image*		m_pNumber;
+	image*		m_pHpEnergyUi;  // @체력,에너지 이미지 
+	
+
 	animation *	m_pAni;			// 플레이어 프래임랜더
 	PLAYERDIR	m_playerDir;	// 플래이어 방향 상태
 	PLAYERSTATE	m_playerState;	// 플레이어 행동 상태
@@ -63,13 +66,20 @@ private:
 	item*		m_pTargetItem;	// 퀵슬롯 현재 아이템
 	fishing*	m_pFishing;
 
-
+	RECT	m_HpRc;				// @체력 렉트
+	RECT	m_EnergyRc;			// @에너지 렉트
 	RECT	m_rc;				// 플래이어 렉트
 	RECT	m_TargetRc;			// 빨간네모 렉트
 	RECT	m_temprc;			// 빨간네모 렉트
 	mapManager* m_pMap;			// 맵 포인터
 
 	PRIVATESYNTHESIZE(int, m_nMoney, Money);
+
+	float m_fMaxHp;				// @플레이어 최대 체력
+	float m_fMaxEnergy;			// @플레이어 최대 에너지
+	float m_fCurrHp;			// @플레이어 현재 체력
+	float m_fCurrEnergy;		// @플레이어 현재 에너지
+	float m_fGaugeBar;			//@@
 
 	int m_nX;					// 플레이어 좌표x
 	int m_nY;					// 플레이어 좌표y
@@ -97,10 +107,11 @@ private:
 	void setSyncMotion(PLAYERMOTION motion, int* x, int* y);	//모션 싱크로 맞추는 함수
 	void setItemMotion();	// 퀵바아이템에 따른 플레이어 모션
 	void useItem();			// 소모품 아이템사용
-
+	
 	int i;
 	bool m_isMove =false;
 
+	void damaged(float c); //@@
 	void addSound();
 public:
 	HRESULT init();
