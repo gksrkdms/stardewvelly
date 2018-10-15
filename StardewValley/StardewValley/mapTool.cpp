@@ -61,25 +61,6 @@ HRESULT mapTool::init()
 	m_ptempSampleObj3 = new tempSampleTile[SAMPLE_TILE_X*SAMPLE_TILE_Y];
 
 	//	기본 타일 정보 셋팅
-	//for (int y = 0; y < TILE_Y; y++)
-	//{
-	//	for (int x = 0; x < TILE_X; x++)
-	//	{
-	//		m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1, y*TILE_SIZE_1, TILE_SIZE_1, TILE_SIZE_1);
-	//		m_pTiles[y * TILE_X + x].terrainFrameX = 0;
-	//		m_pTiles[y * TILE_X + x].terrainFrameY = 1;
-	//		m_pTiles[y * TILE_X + x].terrain = NOMALTILE;
-	//		m_pTiles[y * TILE_X + x].object = OBJ_NULL;
-	//		m_pTiles[y * TILE_X + x].objectID = OBID_NULL;
-	//		m_pTiles[y * TILE_X + x].index = y * TILE_X + x;		
-	//		m_pTiles[y * TILE_X + x].isCollide = false;
-	//		m_pTiles[y*TILE_X + x].autoTileState = STATE_NULL;
-	//		m_pTiles[y*TILE_X + x].autoTileStateWet = STATE_NULL;
-	//		m_pTiles[y*TILE_X + x].m_autoWeight = { 0,0,0,0 };
-	//		m_pTiles[y*TILE_X + x].autoWeightWet = { 0,0,0,0 };
-	//	}
-	//}
-
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
 		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1, (i / TILE_X)*TILE_SIZE_1, TILE_SIZE_1, TILE_SIZE_1);
@@ -227,14 +208,6 @@ void mapTool::update()
 
 	// camera 이동
 	CAMERAMANAGER->update();
-	//for (int y = 0; y < TILE_Y; y++)
-	//{
-	//	for (int x = 0; x < TILE_X; x++)
-	//	{
-	//		m_pTiles[y * TILE_X + x].rc = RectMake(x*TILE_SIZE_1 - CAMERAMANAGER->getCameraX(), y*TILE_SIZE_1 - CAMERAMANAGER->getCameraY(), TILE_SIZE_1, TILE_SIZE_1);
-	//	}
-	//}
-
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
 		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1 - CAMERAMANAGER->getCameraX(), (i / TILE_X)*TILE_SIZE_1 - CAMERAMANAGER->getCameraY(), TILE_SIZE_1, TILE_SIZE_1);
@@ -285,11 +258,18 @@ void mapTool::render(HDC hdc)
 			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
 			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 
-			m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-				, m_pTiles[m_indexCamera].terrainFrameX, m_pTiles[m_indexCamera].terrainFrameY, TILE_SIZE_1, TILE_SIZE_1);
 		
 			// 농장타일랜더
-			autoFarmRender(hdc);
+			if (m_pTiles[m_indexCamera].terrain == FARMLAND || m_pTiles[m_indexCamera].terrain == WETFARMLAND)
+			{
+				autoFarmRender(hdc);
+			}
+
+			else
+			{
+				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+					, m_pTiles[m_indexCamera].terrainFrameX, m_pTiles[m_indexCamera].terrainFrameY, TILE_SIZE_1, TILE_SIZE_1);
+			}
 
 			if (m_pTiles[m_indexCamera].object != OBJ_NULL)
 			{
@@ -319,70 +299,20 @@ void mapTool::render(HDC hdc)
 						m_pTiles[m_indexCamera].objectFrameX,
 						m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
 				}
-
-			}
-		
+			}		
 		}
 	}
 
 	//미니맵
 	if (m_isMiniMapOn)
 	{
-		//for (int y = 0; y < TILE_Y; y++)
-		//{
-		//	for (int x = 0; x < TILE_X; x++)
-		//	{
-		//		m_pMini[y * TILE_X + x].rc.left = m_pTiles[y * TILE_X + x].rc.left / m_minisize;
-		//		m_pMini[y * TILE_X + x].rc.top = m_pTiles[y * TILE_X + x].rc.top / m_minisize;
-		//		m_pMini[y * TILE_X + x].terrainFrameX = m_pTiles[y * TILE_X + x].terrainFrameX;
-		//		m_pMini[y * TILE_X + x].terrainFrameY = m_pTiles[y * TILE_X + x].terrainFrameY;
-
-		//		// 맵 타일
-		//		m_pTileSet->frameRenderMini(hdc,
-		//			m_pMini[y*TILE_X + x].rc.left + m_minipositionX,
-		//			m_pMini[y*TILE_X + x].rc.top + m_minipositionY, m_pTiles[y*TILE_X + x].terrainFrameX,
-		//			m_pTiles[y*TILE_X + x].terrainFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
-
-		//		// 오브젝트
-		//		if (m_pTiles[y*TILE_X + x].object != OBJ_NULL)
-		//		{
-		//			if (m_pTiles[y*TILE_X + x].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
-		//			{
-		//				m_pObject->frameRenderMini(hdc,
-		//					m_pMini[y*TILE_X + x].rc.left + m_minipositionX,
-		//					m_pMini[y*TILE_X + x].rc.top + m_minipositionY,
-		//					m_pTiles[y*TILE_X + x].objectFrameX,
-		//					m_pTiles[y*TILE_X + x].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
-		//			}
-
-		//			if (m_pTiles[y*TILE_X + x].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
-		//			{
-		//				m_pObject2->frameRenderMini(hdc,
-		//					m_pMini[y*TILE_X + x].rc.left + m_minipositionX,
-		//					m_pMini[y*TILE_X + x].rc.top + m_minipositionY,
-		//					m_pTiles[y*TILE_X + x].objectFrameX,
-		//					m_pTiles[y*TILE_X + x].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
-		//			}
-
-		//			if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
-		//			{
-		//				m_pObject3->frameRenderMini(hdc,
-		//					m_pTiles[m_indexCamera].rc.left,
-		//					m_pTiles[m_indexCamera].rc.top,
-		//					m_pTiles[m_indexCamera].objectFrameX,
-		//					m_pTiles[m_indexCamera].objectFrameY, m_minisize, TILE_SIZE_1, TILE_SIZE_1);
-		//			}
-		//		}
-		//	}
-		//}
-
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
 			m_pMini[i].rc.left = m_pTiles[i].rc.left / m_minisize;
 			m_pMini[i].rc.top = m_pTiles[i].rc.top / m_minisize;
 			m_pMini[i].terrainFrameX = m_pTiles[i].terrainFrameX;
 			m_pMini[i].terrainFrameY = m_pTiles[i].terrainFrameY;
-
+			
 			// 맵 타일
 			m_pTileSet->frameRenderMini(hdc,
 				m_pMini[i].rc.left + m_minipositionX,
@@ -504,24 +434,13 @@ void mapTool::render(HDC hdc)
 	// 충돌체 확인
 	if (m_isObject)
 	{
-		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		for (int i = 0; i < SAMPLE_TILE_X * SAMPLE_TILE_Y; i++)
 		{
 			if (m_pSampleTiles[i].isCollide)
 			{
 				m_pDrag->render(hdc, m_pSampleTiles[i].rc.left, m_pSampleTiles[i].rc.top);
 			}
 		}
-
-		//for (int y = 0; y < SAMPLE_TILE_Y; ++y)
-		//{
-		//	for (int x = 0; x < SAMPLE_TILE_X; x++)
-		//	{
-		//		if (m_pSampleTiles[y*SAMPLE_TILE_X + x].isCollide)
-		//		{
-		//			m_pDrag->render(hdc, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.left, m_pSampleTiles[y*SAMPLE_TILE_X + x].rc.top);
-		//		}
-		//	}
-		//}
 	}
 	
 	//for (int y = 0; y < TILE_Y; y++)
@@ -547,7 +466,7 @@ void mapTool::render(HDC hdc)
 	//}
 
 	//드래그 보기
-	if (m_isDrag)
+	if (m_isDrag && m_isDrawtype)
 	{
 		HBRUSH myBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
 		HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, myBrush);
@@ -557,8 +476,25 @@ void mapTool::render(HDC hdc)
 		SelectObject(hdc, oldBrush);
 		DeleteObject(myBrush);
 	}
+	
+	if (m_isDrag && !m_isDrawtype)
+	{
+		for (int i = 0; i < SAMPLE_TILE_X*SAMPLE_TILE_Y; ++i)
+		{
+			if (IntersectRect(&rcTemp, &m_pSampleTiles[i].rc, &m_Dragrc))
+			{
+				HBRUSH myBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
+				HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, myBrush);
 
+				Rectangle(hdc, m_Dragrc.left, m_Dragrc.top, m_Dragrc.right, m_Dragrc.bottom);
 
+				SelectObject(hdc, oldBrush);
+				DeleteObject(myBrush);
+			}
+		}
+	}
+
+	
 }
 
 // 메인
@@ -572,6 +508,7 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 	{
 	case WM_CREATE:
 		m_Dragrc = RectMakeCenter(0, 0, 0, 0);
+		m_rcSave = RectMakeCenter(0, 0, 0, 0);
 		return 0;
 
 	case WM_LBUTTONDOWN:
@@ -592,8 +529,6 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 			m_isDrag = true;
 			g_ptMouse.x = LOWORD(lParam);
 			g_ptMouse.y = HIWORD(lParam);	
-			//rc.right = LOWORD(lParam);
-			//rc.bottom = HIWORD(lParam);
 
 			// 맵타일 사이즈대로 그리기 위해 보정
 			/*rc.right = rc.left+((g_ptMouse.x - rc.left) / TILE_SIZE_1)*TILE_SIZE_1;
@@ -628,9 +563,43 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 			m_Dragrc.right = m_rcSwap;
 		}
 		m_rcSave = m_Dragrc;
+		m_Dragrc = RectMakeCenter(0, 0, 0, 0);
 		m_isAddvec = true;
-		m_Dragrc = RectMakeCenter(0, 0, 0,0);
 		m_rcSwap = -1;
+
+		//drag
+		if (m_isDrawtype)
+		{
+			for(int i=0 ; i< TILE_X*TILE_Y ; ++i)
+			{
+				if (m_isObject)
+				{
+					if (IntersectRect(&rcTemp, &m_pTiles[i].rc, &m_rcDragCheck))
+					{
+						if (!m_isSettingTile) // 충돌체 세팅 off일때만 그려줌
+						{
+							m_pTiles[i].objectFrameX = m_pSampleTiles[m_sampleTileIndex].frameX;
+							m_pTiles[i].objectFrameY = m_pSampleTiles[m_sampleTileIndex].frameY;
+							m_pTiles[i].object = m_pSampleTiles[m_sampleTileIndex].object;
+							m_pTiles[i].objectID = m_pSampleTiles[m_sampleTileIndex].objectID;
+							// 충돌체 정보 넘겨줌
+							m_pTiles[i].isCollide = m_pSampleTiles[m_sampleTileIndex].isCollide;
+						}
+						m_isMove = false;
+					}
+				}
+
+				else
+				{
+					if (IntersectRect(&rcTemp, &m_pTiles[i].rc, &m_rcDragCheck))
+					{
+						m_pTiles[i].terrainFrameX = m_pSampleTiles[m_sampleTileIndex].frameX;
+						m_pTiles[i].terrainFrameY = m_pSampleTiles[m_sampleTileIndex].frameY;
+						m_pTiles[i].terrain = m_pSampleTiles[m_sampleTileIndex].terrain;
+					}
+				}				
+			}
+		}
 		return 0;
 
 	case WM_RBUTTONDOWN:
@@ -688,10 +657,6 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 
 LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
-	//HDC hdc;
-	//PAINTSTRUCT ps;
-	//RECT crt;
-
 	switch (iMessage)
 	{
 	case WM_CREATE:
@@ -798,8 +763,6 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 		return 0;
 
 	case WM_PAINT:
-		//hdc = BeginPaint(hWnd, &ps);
-		//TextOut(hdc, 0, 0, "dddddd", 6);
 		break;
 
 	case WM_INITDIALOG:
@@ -977,11 +940,6 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 		return 0;
 
 	case WM_DESTROY:
-		//g_wndCount--;
-		//if (g_wndCount == 0)
-		//{
-		//	PostQuitMessage(0);
-		//}
 		return 0;
 	}
 	return DefWindowProc(hWnd, iMessage, wParam, lParam);
@@ -1118,7 +1076,8 @@ void mapTool::terrainTileSave()
 		for (int x = 0; x < SAMPLE_TILE_X; x++)
 		{
 			// 드래그 범위가 있으면
-			if (!(m_rcDragCheck.left == (g_ptMouse.x / TILE_SIZE_1)*TILE_SIZE_1 && m_rcDragCheck.top == (g_ptMouse.y / TILE_SIZE_1)*TILE_SIZE_1&& m_rcDragCheck.right == 0 && m_rcDragCheck.bottom == 0))
+			if (!(m_rcDragCheck.left == (g_ptMouse.x / TILE_SIZE_1)*TILE_SIZE_1 && m_rcDragCheck.top == (g_ptMouse.y / TILE_SIZE_1)*TILE_SIZE_1&& m_rcDragCheck.right == 0 && m_rcDragCheck.bottom == 0)
+				&& !m_isDrawtype)
 			{
 				if (IntersectRect(&rcTemp, &m_pSampleTiles[y* SAMPLE_TILE_X + x].rc, &m_rcSave))
 				{
@@ -1131,13 +1090,27 @@ void mapTool::terrainTileSave()
 
 			else
 			{
-				if (PtInRect(&m_pSampleTiles[y* SAMPLE_TILE_X + x].rc, g_ptMouse))
+				if (m_isDrawtype)
 				{
-					m_isClickSave = true;
-					m_sampleTileIndex = y * SAMPLE_TILE_X + x;
+					if (PtInRect(&m_pSampleTiles[y* SAMPLE_TILE_X + x].rc, g_ptMouse) && m_isClick)
+					{
+						m_isClickSave = true;
+						m_sampleTileIndex = y * SAMPLE_TILE_X + x;
+						m_pSampleTiles[m_sampleTileIndex].terrain = m_pSampleTiles[y* SAMPLE_TILE_X + x].terrain;
+						break;
+					}
+				}
 
-					m_pSampleTiles[m_sampleTileIndex].terrain = m_pSampleTiles[y* SAMPLE_TILE_X + x].terrain;
-					break;
+				else
+				{
+					if (PtInRect(&m_pSampleTiles[y* SAMPLE_TILE_X + x].rc, g_ptMouse))
+					{
+						m_isClickSave = true;
+						m_sampleTileIndex = y * SAMPLE_TILE_X + x;
+						m_pSampleTiles[m_sampleTileIndex].terrain = m_pSampleTiles[y* SAMPLE_TILE_X + x].terrain;
+						break;
+					}
+
 				}
 			}
 		}
@@ -1193,7 +1166,7 @@ void mapTool::TileSet()
 			{
 				for (int x = 0; x < TILE_X; ++x)
 				{
-					if (PtInRect(&m_pTiles[y* TILE_X + x].rc, g_ptMouse))
+					if (PtInRect(&m_pTiles[y* TILE_X + x].rc, g_ptMouse) && !m_isDrawtype)
 					{
 						m_pTiles[y* TILE_X + x].terrainFrameX = m_pSampleTiles[m_sampleTileIndex].frameX;
 						m_pTiles[y* TILE_X + x].terrainFrameY = m_pSampleTiles[m_sampleTileIndex].frameY;
@@ -1202,13 +1175,14 @@ void mapTool::TileSet()
 					}
 				}
 			}
+
 			//한번만 저장할 수 있게 해주는 것
 			// 쭉 누르고 그릴지 선택, 대신 클릭 떼면 안됨
-			if (!m_isDrawtype)
-				m_isClickSave = false;
-			else
-				m_isClickSave = true;
-		}
+			//if (!m_isDrawtype)
+			//	m_isClickSave = false;
+			//else
+			//	m_isClickSave = true;
+		}	
 	}
 }
 
@@ -1280,11 +1254,11 @@ void mapTool::TileObjSet()
 					}
 				}
 			}
-			// 쭉 누르고 그릴지 선택, 대신 클릭 떼면 안됨
-			if (!m_isDrawtype)
-				m_isClickSave = false;
-			else
-				m_isClickSave = true;
+			//// 쭉 누르고 그릴지 선택, 대신 클릭 떼면 안됨
+			//if (!m_isDrawtype)
+			//	m_isClickSave = false;
+			//else
+			//	m_isClickSave = true;
 		}
 	}
 

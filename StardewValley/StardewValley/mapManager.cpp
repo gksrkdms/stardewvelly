@@ -71,7 +71,7 @@ void mapManager::update()
 
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
-		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1 - CAMERAMANAGER->getCameraX(), (i / TILE_X)*TILE_SIZE_1 - CAMERAMANAGER->getCameraY(), TILE_SIZE_1, TILE_SIZE_1);
+		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1 - CAMERA->getX(), (i / TILE_X)*TILE_SIZE_1 - CAMERA->getY(), TILE_SIZE_1, TILE_SIZE_1);
 	}
 
 	autoTile();
@@ -82,9 +82,9 @@ void mapManager::update()
 
 void mapManager::render(HDC hdc)
 {
-	for (int y = 0; y < TILE_Y; y++)
+	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
 	{
-		for (int x = 0; x < TILE_X; x++)
+		for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
 		{
 			int cullX = CAMERA->getX() / TILE_SIZE_1;
 			int cullY = CAMERA->getY() / TILE_SIZE_1;
@@ -111,32 +111,32 @@ void mapManager::render(HDC hdc)
 
 			if (m_pTiles[m_indexCamera].object != OBJ_NULL)
 			{
-				//if (m_pTiles[m_indexCamera].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
-				//{
-				//	m_pObject->frameRenderTile(hdc,
-				//		m_pTiles[m_indexCamera].rc.left,
-				//		m_pTiles[m_indexCamera].rc.top,
-				//		m_pTiles[m_indexCamera].objectFrameX,
-				//		m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-				//}
+				if (m_pTiles[m_indexCamera].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
+				{
+					m_pObject->frameRenderTile(hdc,
+						m_pTiles[m_indexCamera].rc.left,
+						m_pTiles[m_indexCamera].rc.top,
+						m_pTiles[m_indexCamera].objectFrameX,
+						m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
+				}
 
-				//if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
-				//{
-				//	m_pObject2->frameRenderTile(hdc,
-				//		m_pTiles[m_indexCamera].rc.left,
-				//		m_pTiles[m_indexCamera].rc.top,
-				//		m_pTiles[m_indexCamera].objectFrameX,
-				//		m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-				//}
+				if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
+				{
+					m_pObject2->frameRenderTile(hdc,
+						m_pTiles[m_indexCamera].rc.left,
+						m_pTiles[m_indexCamera].rc.top,
+						m_pTiles[m_indexCamera].objectFrameX,
+						m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
+				}
 
-				//if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
-				//{
-				//	m_pObject3->frameRenderTile(hdc,
-				//		m_pTiles[m_indexCamera].rc.left,
-				//		m_pTiles[m_indexCamera].rc.top,
-				//		m_pTiles[m_indexCamera].objectFrameX,
-				//		m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-				//}
+				if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
+				{
+					m_pObject3->frameRenderTile(hdc,
+						m_pTiles[m_indexCamera].rc.left,
+						m_pTiles[m_indexCamera].rc.top,
+						m_pTiles[m_indexCamera].objectFrameX,
+						m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
+				}
 
 				//if (m_pTiles[m_indexCamera].object == TREE_BIG || m_pTiles[m_indexCamera].object == TREE_SMALL)
 				if (m_pTiles[m_indexCamera].object == TREE_SMALL)
