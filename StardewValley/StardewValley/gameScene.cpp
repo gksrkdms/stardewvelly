@@ -62,7 +62,7 @@ void gameScene::render(HDC hdc)
 
 	TIMEMANAGER->render(hdc);
 
-	m_pPlayer->numRender(hdc);
+	m_pPlayer->numRender(hdc, 1122, 205);
 	
 	char str[128];
 	sprintf_s(str, 128, "Ä«¸Ş¶óx : %d", CAMERA->getX());

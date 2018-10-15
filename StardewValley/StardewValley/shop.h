@@ -12,6 +12,7 @@ private:
 	image*	m_pList;	// 아이템 list창
 	image*	m_pLeft;	// 왼쪽방향키
 	image*	m_pRight;	// 오른쪽방향키
+	image*	m_pGoldUi;	// 골드ui용
 	RECT m_LeftRc;		// 체크용 레프트, 라이트rc
 	RECT m_RightRc;
 
@@ -53,6 +54,7 @@ public:
 	void release();
 	void update();
 	void render(HDC hdc);
+	void numRender(HDC hdc);
 
 	void setInven(inven* inven) { m_pInven = inven; }
 	void getPlayer(player* player) { m_pPlayer = player; }
