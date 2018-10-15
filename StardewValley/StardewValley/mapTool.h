@@ -84,12 +84,33 @@ enum OBJECTIMG
 	IMGOBJ_OBJNULL, IMGOBJ_1, IMGOBJ_2, IMGOBJ_3, IMGOBJ_OBJMAX
 };
 
+enum autoState
+{
+	STATE_NULL,LEFT, RIGHT, TOP, BOTTOM
+	, LEFTCONER_T, RIGHTCONER_T, LEFTCONER_B, RIGHTCONER_B
+	, SQUARE_LEFT, SQUARE_RIGHT, SQUARE_TOP, SQUARE_BOTTOM, SQUARE_MIDDLE
+	, TOP_END, BOTTOM_MIDDLE, BOTTOM_END , LEFT_END, LEFT_MIDDLE, RIGHT_END
+};
+
+struct autoWeight
+{
+	int leftTop;
+	int leftBottom;
+	int rightTop;
+	int rightBottom;
+};
+
 typedef struct tagTile
 {
 	TERRAIN terrain;
 	OBJECT object;
 
 	OBJECTIDNUM objectID;
+	
+	// 오토타일 상태값
+	autoState autoTileState;
+	autoWeight m_autoWeight;
+
 
 	int terrainFrameX; // 타일이 가지고 있는 지형정보
 	int terrainFrameY;
@@ -127,13 +148,9 @@ struct tempSampleTile
 	bool isCollide; // 충돌 가능 여부 true 일 시 충돌 가능
 };
 
-struct autoWeight
-{
-	int leftTop;
-	int leftBottom;
-	int rightTop;
-	int rightBottom;
-};
+
+
+
 
 class mapTool : public scene
 {
@@ -263,13 +280,19 @@ private:
 	tempSampleTile* m_ptempSampleObj2;
 	tempSampleTile* m_ptempSampleObj3;
 
-	const int ways = 8;
-						// 왼쪽 오른쪽 위 아래 왼쪽대각선위 왼쪽대각선아래 오른쪽대각선위 왼쪽대각선아래		
-	const int way[8][2] ={{-1,0},{ 1, 0 },{ 0, -1 },{ 0, 1 },{ -1, -1 },{ -1, 1 },{ 1, -1 },{ 1, 1 } };
+	//const int ways = 8;
+	//					// 왼쪽 오른쪽 위 아래 왼쪽대각선위 왼쪽대각선아래 오른쪽대각선위 왼쪽대각선아래		
+	//const int way[8][2] ={{-1,0},{ 1, 0 },{ 0, -1 },{ 0, 1 },{ -1, -1 },{ -1, 1 },{ 1, -1 },{ 1, 1 } };
+	
+	const int ways = 4;
+	// 왼쪽 오른쪽 위 아래	
+	const int way[4][2] = { {-1,0},{ 1, 0 },{ 0, -1 },{ 0, 1 } };
+
+
 	int m_weight[2][2];
 	int m_nweight;
 
-	autoWeight* m_autoWeight;
+	//autoWeight m_autoWeight;
 
 public:
 	mapTool();
@@ -301,6 +324,9 @@ public:
 
 	void sampleTileinit(); // 타일 이미지 바뀌면 초기화
 	void reTileinit(); // 타일사이즈 바뀌면 다시 초기화
+
+	void autoTile();
+	void autoFarmRender(HDC hdc);
 	
 	void saveMap(const char* szfileName);
 	void loadMap(const char* szfileName);
