@@ -108,7 +108,7 @@ void inven::update()
 	}
 
 	// 캐릭터 위치에 따른 퀵바 위치 불값
-	if (CAMERA->getY() >= MAPSIZEY - WINSIZEY)
+	if (CAMERA->getY() >= g_mapSize.mapSizeY - WINSIZEY)
 	{
 		isUiDown = false;
 	}

@@ -35,8 +35,8 @@ HRESULT mapTool::init()
 		TILE_SIZE_SAMPLE * 50, WINSIZEY - 470, WINSIZEX - TILE_SIZE_SAMPLE * 50, 450, g_hWnd, (HMENU)0, g_hInstance, NULL);
 	
 	TILE_SIZE_1 = 64;
-	TILE_X = MAPSIZEX / TILE_SIZE_1;
-	TILE_Y = MAPSIZEY / TILE_SIZE_1;
+	TILE_X = g_mapSize.mapSizeX / TILE_SIZE_1;
+	TILE_Y = g_mapSize.mapSizeY / TILE_SIZE_1;
 
 	SAMPLE_TILE_X = 20;
 	SAMPLE_TILE_Y = 20;
@@ -1779,8 +1779,8 @@ void mapTool::reTileinit()
 {
 	delete[] m_pTiles;
 	delete[] m_pMini;
-	TILE_X = MAPSIZEX / TILE_SIZE_1;
-	TILE_Y = MAPSIZEY / TILE_SIZE_1;
+	TILE_X = g_mapSize.mapSizeX / TILE_SIZE_1;
+	TILE_Y = g_mapSize.mapSizeY / TILE_SIZE_1;
 	m_pTiles = new tagTile[TILE_X*TILE_Y];
 	m_pMini = new tagTile[TILE_X*TILE_Y];
 
