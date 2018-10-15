@@ -331,12 +331,12 @@ void mainGame::imgload()
 void mainGame::addsound()
 {
 	// start scene
-	SOUNDMANAGER->addSound("sound/StardewValleyOverture.mp3", true, true);
-	SOUNDMANAGER->addSound("sound/effect/Ã·Å¬¸¯.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/startbutton.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/StardewValleyOverture.mp3", true, true);
+	//SOUNDMANAGER->addSound("sound/effect/Ã·Å¬¸¯.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/startbutton.wav", false, false);
 
 	//gameScene
-	SOUNDMANAGER->addSound("sound/CloudCountry.mp3", true, true);
+	//SOUNDMANAGER->addSound("sound/CloudCountry.mp3", true, true);
 
 
 }

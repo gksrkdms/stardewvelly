@@ -210,6 +210,7 @@ void playerMenu::menuUpdate()
 				{
 					if (isMouseIn[i] == true)
 					{
+						SOUNDMANAGER->play("sound/effect/º±≈√¿Ω1.wav", g_soundVolume.effect);
 						m_menuDir = (MENUDIR)i;
 					}
 				}

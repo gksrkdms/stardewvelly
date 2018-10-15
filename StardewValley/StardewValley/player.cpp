@@ -714,7 +714,7 @@ void player::setItemMotion()
 					break;
 				case ACTITEM_WATER:
 					m_playerMotion = MOTION_WATER;
-					SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개2.wav", g_soundVolume.effect);
+					
 					setMotion(m_pAni, &m_pPlayer, "player_water", 2, 4);
 					switch (m_playerDir)
 					{
@@ -928,6 +928,7 @@ void player::setWaterTile()
 {
 	if (m_pTargetItem->getWaterDurability() > 0)
 	{
+		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개2.wav", g_soundVolume.effect);
 		m_pTargetItem->setWaterDurability(m_pTargetItem->getWaterDurability() - 1);
 		if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND)
 		{
@@ -937,6 +938,10 @@ void player::setWaterTile()
 		}
 		m_pTargetItem->progressWaterDurability(1);
 		m_nHp -= 2;
+	}
+	else
+	{
+		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개물없을때.wav", g_soundVolume.effect);
 	}
 }
 
@@ -951,5 +956,5 @@ void player::addSound()
 	SOUNDMANAGER->addSound("sound/effect/playerAct/도끼질.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/playerAct/물뿌리개2.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/playerAct/밭갈다.wav", false, false);
-
+	SOUNDMANAGER->addSound("sound/effect/playerAct/물뿌리개물없을때.wav", false, false);
 }

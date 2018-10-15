@@ -1188,7 +1188,7 @@ void fishing::fishBring()
 void fishing::addSound()
 {
 	//超矫荤款靛
-	SOUNDMANAGER->addSound("sound/effect/fishing/副皑绰家府.wav", false, false);
+	/*SOUNDMANAGER->addSound("sound/effect/fishing/副皑绰家府.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/fishing/超矫滚瓢家府.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/fishing/超矫临带咙.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/fishing/蠢肠钎家府.wav", false, false);
@@ -1196,7 +1196,7 @@ void fishing::addSound()
 	SOUNDMANAGER->addSound("sound/effect/fishing/梅骸家府.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/fishing/拱家府.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/fishing/副皑绰家府2.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/fishing/鹅肺府.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/fishing/鹅肺府.wav", false, false);*/
 	SOUNDMANAGER->addSound("sound/effect/fishing/超酒盲绰家府.wav", false, false);
 }
 

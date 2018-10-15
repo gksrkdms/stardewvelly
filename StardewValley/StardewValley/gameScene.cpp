@@ -79,6 +79,12 @@ void gameScene::addSound()
 	SOUNDMANAGER->addSound("sound/effect/changeitem.wav", false, false);
 	// 인벤 열기 닫기
 	SOUNDMANAGER->addSound("sound/effect/인벤토리.wav", false, false);
+	// 인벤 쓰레기통
+	SOUNDMANAGER->addSound("sound/effect/쓰레기통버리기.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/쓰레기통여는소리.wav", false, false);
+	// 인벤 정리
+	SOUNDMANAGER->addSound("sound/effect/인벤정리.wav", false, false);
+	
 	//상점 페이지넘기기
 	SOUNDMANAGER->addSound("sound/effect/선택음1.wav", false, false);
 	//상점 물건사고파는소리

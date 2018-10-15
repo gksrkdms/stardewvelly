@@ -775,6 +775,8 @@ void inven::setUiUpdate()
 	}
 	if (PtInRect(&m_TrashRc, g_ptMouse))
 	{
+		if(SOUNDMANAGER->isPlaying("sound/effect/쓰레기통여는소리.wav")==false && isTrash ==false)
+		SOUNDMANAGER->play("sound/effect/쓰레기통여는소리.wav", g_soundVolume.effect);
 		isTrash = true;
 	}
 	else
@@ -786,6 +788,7 @@ void inven::setUiUpdate()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
+			SOUNDMANAGER->play("sound/effect/인벤정리.wav", g_soundVolume.effect);
 			sortInven();
 		}
 	}
@@ -796,8 +799,14 @@ void inven::setUiUpdate()
 		{
 			if (isHandItem && m_pHand->getItemSell() == true)
 			{
+				SOUNDMANAGER->play("sound/effect/쓰레기통버리기.wav", g_soundVolume.effect);
+				
 				m_pHand->deleteItem();
 				isHandItem = false;
+			}
+			else
+			{
+				SOUNDMANAGER->play("sound/effect/fishing/낚아채는소리.wav", g_soundVolume.effect);
 			}
 		}
 	}
