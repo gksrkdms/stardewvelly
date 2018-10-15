@@ -127,6 +127,14 @@ struct tempSampleTile
 	bool isCollide; // 충돌 가능 여부 true 일 시 충돌 가능
 };
 
+struct autoWeight
+{
+	int leftTop;
+	int leftBottom;
+	int rightTop;
+	int rightBottom;
+};
+
 class mapTool : public scene
 {
 private:
@@ -260,6 +268,8 @@ private:
 	const int way[8][2] ={{-1,0},{ 1, 0 },{ 0, -1 },{ 0, 1 },{ -1, -1 },{ -1, 1 },{ 1, -1 },{ 1, 1 } };
 	int m_weight[2][2];
 	int m_nweight;
+
+	autoWeight* m_autoWeight;
 
 public:
 	mapTool();
