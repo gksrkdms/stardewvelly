@@ -293,6 +293,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("player_spade", "image/Stardew Valley/player/player_spade.bmp", 600, 768, 4, 4, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("player_sword", "image/Stardew Valley/player/player_sword.bmp", 576, 768, 3, 4, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("player_water", "image/Stardew Valley/player/player_water.bmp", 340, 768, 2, 4, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("player_horse", "image/Stardew Valley/pet/말타기.bmp", 1344, 768, 7, 4, true, RGB(255, 0, 255)); //@@ 말이미지추가
 
 	// 아이템
 	// 도구류
