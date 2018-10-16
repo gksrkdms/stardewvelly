@@ -811,9 +811,11 @@ void image::alphaFrameRender(HDC hdc, int destX, int destY, int currFrameX, int 
 			m_pBlendImage->hMemDC,
 			0, 0,
 			m_pImageInfo->nWidth * scalar, m_pImageInfo->nHeight * scalar,
+			//m_pImageInfo->nFrameWidth, m_pImageInfo->nFrameHeight,
 
 			// 대상
-			hdc,
+			hdc,			
+			//m_pImageInfo->nFrameWidth, m_pImageInfo->nFrameHeight,
 			destX, destY,
 			SRCCOPY);
 
@@ -821,8 +823,9 @@ void image::alphaFrameRender(HDC hdc, int destX, int destY, int currFrameX, int 
 		GdiTransparentBlt(
 			// 목적지
 			m_pBlendImage->hMemDC,
-			0, 0,
-			m_pImageInfo->nFrameWidth * scalar, m_pImageInfo->nFrameHeight * scalar,
+			destX, destY,
+			m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
+			//m_pImageInfo->nFrameWidth * scalar, m_pImageInfo->nFrameHeight * scalar,
 
 			// 대상
 			m_pImageInfo->hMemDC,
@@ -835,12 +838,147 @@ void image::alphaFrameRender(HDC hdc, int destX, int destY, int currFrameX, int 
 			// 목적지
 			hdc,
 			destX, destY,
+			//m_pImageInfo->nWidth, m_pImageInfo->nHeight,
+			//m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
+
 			m_pImageInfo->nWidth * scalar, m_pImageInfo->nHeight * scalar,
 
 			// 대상
 			m_pBlendImage->hMemDC,
 			0, 0,
+			//m_pImageInfo->nFrameWidth, m_pImageInfo->nFrameHeight,
 			m_pImageInfo->nWidth * scalar, m_pImageInfo->nHeight * scalar,
+			m_blendFunc);
+	}
+	else
+	{
+		BitBlt(
+			hdc,
+			destX, destY,
+			m_pImageInfo->nWidth * scalar, m_pImageInfo->nHeight * scalar,
+			m_pImageInfo->hMemDC,
+			0, 0, SRCCOPY);
+	}
+}
+
+void image::alphaFrameRenderM(HDC hdc, int destX, int destY, int currFrameX, int currFrameY, BYTE alpha, int scalar)
+{
+	m_pImageInfo->nCurrFrameX = currFrameX;
+	m_pImageInfo->nCurrFrameY = currFrameY;
+
+	if (currFrameX > m_pImageInfo->nMaxFrameX)
+		m_pImageInfo->nCurrFrameX = m_pImageInfo->nMaxFrameX;
+	if (currFrameY > m_pImageInfo->nMaxFrameY)
+		m_pImageInfo->nCurrFrameY = m_pImageInfo->nMaxFrameY;
+
+	m_blendFunc.SourceConstantAlpha = alpha;
+
+	if (m_isTransparent)
+	{
+		// 1. 출력해야되는 DC에 그려져있는 내용을 blendImage에 복사
+		BitBlt(
+			// 목적지
+			m_pBlendImage->hMemDC,
+			0, 0,
+			m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
+
+			// 대상
+			hdc,
+			destX, destY,	
+			SRCCOPY);
+
+		// 2. 출력할 이미지를 blendImage에 복사
+		GdiTransparentBlt(
+			// 목적지
+			m_pBlendImage->hMemDC,
+			0,0,
+			m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
+
+			// 대상
+			m_pImageInfo->hMemDC,			
+			m_pImageInfo->nFrameWidth * m_pImageInfo->nCurrFrameX,
+			m_pImageInfo->nFrameHeight * m_pImageInfo->nCurrFrameY,
+			m_pImageInfo->nFrameWidth, m_pImageInfo->nFrameHeight,
+			m_transColor);
+		// 3. blendDC를 출력해야되는 DC에 복사
+		AlphaBlend(
+			// 목적지
+			hdc,
+			destX, destY,
+			m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
+
+			// 대상
+			m_pBlendImage->hMemDC,
+			0, 0,
+			m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
+			m_blendFunc);
+	}
+	else
+	{
+		AlphaBlend(
+			// 복사할 목표
+			hdc,
+			destX, destY,
+			m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
+
+			// 복사할 대상
+			m_pImageInfo->hMemDC,
+			0, 0,
+			m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
+			m_blendFunc);
+	}
+}
+
+void image::enlargementRender(HDC hdc, int destX, int destY, int currFrameX, int currFrameY, BYTE alpha, int scalar)
+{
+	m_pImageInfo->nCurrFrameX = currFrameX;
+	m_pImageInfo->nCurrFrameY = currFrameY;
+
+	if (currFrameX > m_pImageInfo->nMaxFrameX)
+		m_pImageInfo->nCurrFrameX = m_pImageInfo->nMaxFrameX;
+	if (currFrameY > m_pImageInfo->nMaxFrameY)
+		m_pImageInfo->nCurrFrameY = m_pImageInfo->nMaxFrameY;
+
+	m_blendFunc.SourceConstantAlpha = alpha;
+
+	if (m_isTransparent)
+	{
+		// 1. 출력해야되는 DC에 그려져있는 내용을 blendImage에 복사
+		BitBlt(
+			// 목적지
+			m_pBlendImage->hMemDC,
+			0, 0,
+			m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
+
+			// 대상
+			hdc,
+			destX, destY,
+			SRCCOPY);
+
+		// 2. 출력할 이미지를 blendImage에 복사
+		GdiTransparentBlt(
+			// 목적지
+			m_pBlendImage->hMemDC,
+			destX, destY,
+			m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
+
+			// 대상
+			m_pImageInfo->hMemDC,
+			m_pImageInfo->nFrameWidth * m_pImageInfo->nCurrFrameX,
+			m_pImageInfo->nFrameHeight * m_pImageInfo->nCurrFrameY,
+			m_pImageInfo->nFrameWidth, m_pImageInfo->nFrameHeight,
+			m_transColor);
+		// 3. blendDC를 출력해야되는 DC에 복사
+		AlphaBlend(
+			// 목적지
+			hdc,
+			destX, destY,
+			m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
+
+			// 대상
+			m_pBlendImage->hMemDC,
+			0, 0,
+			m_pImageInfo->nFrameWidth, m_pImageInfo->nFrameHeight,
 			m_blendFunc);
 	}
 	else

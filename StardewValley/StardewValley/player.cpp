@@ -189,7 +189,7 @@ void player::render(HDC hdc)
 			// ¾ÆÀÌÅÛÀÌ ¾¾¾ÑÀÏ¶§
 			if (m_pTargetItem->getItemKind() == ITEM_SEED)
 			{
-				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, SCALAR);
+				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, GAME_SCALAR);
 			}
 		}
 	}
@@ -1071,8 +1071,6 @@ void player::progressBarToolTip()
 		isProgressBar[1] = false;
 	}
 }
-
-
 
 void player::addSound()
 {

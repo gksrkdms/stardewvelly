@@ -23,7 +23,7 @@
     <ProjectGuid>{E3D72940-5761-40B6-A62F-280F64D66688}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>LostCastle</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -168,6 +168,7 @@
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapTool.h" />
     <ClInclude Include="objCrop.h" />
+    <ClInclude Include="objNpc.h" />
     <ClInclude Include="objTree.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerMenu.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapTool.cpp" />
     <ClCompile Include="objCrop.cpp" />
+    <ClCompile Include="objNpc.cpp" />
     <ClCompile Include="objTree.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerMenu.cpp" />

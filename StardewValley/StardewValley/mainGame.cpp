@@ -15,7 +15,7 @@ HRESULT mainGame::init()
 	hdc = GetDC(g_hWnd);
 
 	g_soundVolume.bgm = 0.4f;
-	g_soundVolume.effect = 1.f;
+	g_soundVolume.effect = 1.0f;
 
 	KEYMANAGER->init();
 	IMAGEMANAGER->init();
@@ -48,9 +48,10 @@ HRESULT mainGame::init()
 void mainGame::release()
 {
 	SAFE_DELETE(m_pBackBuffer);
-
+	
 	ReleaseDC(g_hWnd, hdc);
 
+	SOUNDMANAGER->release();
 	DATAMANAGER->release();
 	KEYMANAGER->release();
 	IMAGEMANAGER->release();
@@ -109,73 +110,6 @@ LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 
 		case WM_PRINT:
 			break;
-
-			//case WM_COMMAND:
-			//{
-			//	switch (LOWORD(wParam))
-			//	{
-			//		//save
-			//	case 0:
-			//		OPENFILENAME ofn;
-
-			//		ZeroMemory(&ofn, sizeof(OPENFILENAME));
-			//		ofn.lStructSize = sizeof(OPENFILENAME);
-			//		ofn.hwndOwner = hWnd;
-			//		ofn.lpstrFilter = _T("Map Files(*.map)\0*.map\0All Files (*.*)\0*.*\0");
-			//		ofn.lpstrFile = szFileName;
-			//		ofn.nMaxFile = nFileNameMaxLen;
-			//		ofn.lpstrDefExt = "map";
-			//		//ofn.nFilterIndex = 1;
-			//		//ofn.lpstrFileTitle = szFileName;
-			//		//ofn.nMaxFileTitle = 0;
-			//		//ofn.lpstrInitialDir = NULL;
-			//		ofn.Flags = OFN_OVERWRITEPROMPT;
-			//		GetSaveFileName(&ofn);
-
-			//		//if (0 != GetOpenFileName(&OFN))
-			//		//{
-			//		//}
-			//		
-			//		m_pTileMap->saveMap(szFileName);
-			//		//MessageBox(g_hWnd, TEXT("dd"), TEXT("ddkkk"), MB_OK);
-			//		break;
-
-			//		// load
-			//	case 1:
-
-			//		memset(&OFN, 0, sizeof(OPENFILENAME));
-			//		OFN.lStructSize = sizeof(OPENFILENAME);
-			//		OFN.hwndOwner = hWnd;
-			//		OFN.lpstrFilter = "Map Files(*.map)\0*.map\0All Files (*.*)\0*.*\0";
-			//		OFN.lpstrFile = szFileName;
-			//		OFN.nMaxFile = nFileNameMaxLen;
-
-			//		if (0 != GetOpenFileName(&OFN))
-			//		{
-			//			SetWindowText(hEditFileToBeOpened, OFN.lpstrFile);
-			//			m_pTileMap->loadMap(OFN.lpstrFile);
-			//		}
-			//		return TRUE;
-
-			//		break;
-
-			//		// terrain
-			//	case 2:
-			//		m_pTileMap->setObject(false);
-			//		break;
-
-			//		// object
-			//	case 3:
-			//		m_pTileMap->setObject(true);
-			//		break;
-
-			//		// eraser
-			//	case 4:
-			//		m_pTileMap->objectEraser();
-			//		break;
-			//	}
-			//	break;
-			//}
 
 		case WM_DESTROY:
 			PostQuitMessage(0);
