@@ -14,7 +14,7 @@ HRESULT gameScene::init()
 	m_pPlayer->init();
 	m_pMapManager = new mapManager;
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/goldBeach1.map");
+	m_pMapManager->loadMap("image/test.map");
 	m_pPlayer->getMap(m_pMapManager);
 
 	//게임시간
