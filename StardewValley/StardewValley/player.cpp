@@ -186,7 +186,8 @@ void player::render(HDC hdc)
 			// 아이템이 씨앗일때
 			if (m_pTargetItem->getItemKind() == ITEM_SEED)
 			{
-				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, GAME_SCALAR);
+				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, 0, 0, 150, 4);
+				int a = 9;
 			}
 		}
 	}
@@ -891,6 +892,10 @@ void player::useItem()
 				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 				m_pTargetItem->useItem();
 			case CONITEM_SEED:
+				if (m_pMap->getTile(m_nTempIndex)->terrain == WETFARMLAND && m_pMap->getTile(m_nTempIndex)->object != CROP)
+				{
+					m_pTargetItem->useItem();
+				}
 				break;
 			}
 		}
