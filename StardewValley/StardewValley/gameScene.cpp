@@ -8,13 +8,13 @@
 HRESULT gameScene::init()
 {
 	addSound();
-	m_pBG = IMAGEMANAGER->addImage("background", "image/background.bmp", MAPSIZEX, MAPSIZEY, true, RGB(255, 0, 255));
+	m_pBG = IMAGEMANAGER->addImage("background", "image/background.bmp", g_mapSize.mapSizeX, g_mapSize.mapSizeY, true, RGB(255, 0, 255));
 	CAMERA->init();
 	m_pPlayer = new player;
 	m_pPlayer->init();
 	m_pMapManager = new mapManager;
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/1234.map");
+	m_pMapManager->loadMap("image/ddd.map");
 	m_pPlayer->getMap(m_pMapManager);
 
 	//게임시간
@@ -47,6 +47,15 @@ void gameScene::update()
 
 	PLAYTIMEMANAGER->update();
 
+	if (KEYMANAGER->isStayKeyDown('O'))
+	{
+		m_pMapManager->loadingMap("image/1280.map", 20, 15);
+	}
+	if (KEYMANAGER->isStayKeyDown('P'))
+	{
+		m_pMapManager->loadingMap("image/ddd.map", 50, 50);
+	}
+
 }
 
 void gameScene::render(HDC hdc)
@@ -70,6 +79,7 @@ void gameScene::render(HDC hdc)
 	sprintf_s(str, 128, "카메라y : %d", CAMERA->getY());
 	TextOut(hdc, 50, 150, str, strlen(str));
 
+	m_pMapManager->loadingRender(hdc);
 	SelectObject(hdc, oldFont);
 	DeleteObject(myFont);
 }

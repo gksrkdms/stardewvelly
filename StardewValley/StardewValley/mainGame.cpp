@@ -96,6 +96,7 @@ LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			switch (wParam)
 			{
 			case VK_ESCAPE:
+				PostQuitMessage(0);
 				break;
 			}
 			return 0;
@@ -226,6 +227,7 @@ void mainGame::imgload()
 	// background
 	IMAGEMANAGER->addImage("whitebackground", "image/background.bmp", WINSIZEX, WINSIZEY);
 	IMAGEMANAGER->addImage("dark", "image/dark.bmp", WINSIZEX, WINSIZEY); //밤, 네이비
+	IMAGEMANAGER->addImage("black", "image/black.bmp", WINSIZEX, WINSIZEY); // 블랙
 
 	// 타이틀
 	IMAGEMANAGER->addImage("title_001", "image/Stardew Valley/title/title_001.bmp", 400, 183, true, RGB(255, 0, 255));	// 스타듀밸리
@@ -256,6 +258,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("menu_textBox", "image/Stardew Valley/ui/menu_textBox.bmp", 73, 60, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("goldnumber", "image/Stardew Valley/ui/goldnumber.bmp", 200, 28, 10, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("hp_EnergyBar", "image/Stardew Valley/ui/hp_energy.bmp", 104, 224, true, RGB(255, 0, 255)); // @체력에너지 이미지
+	IMAGEMANAGER->addImage("hp_energy_top", "image/Stardew Valley/ui/hp_energy_top.bmp", 24, 168, true, RGB(255, 0, 255)); // @체력에너지 이미지
 
 	IMAGEMANAGER->addImage("sort", "image/Stardew Valley/ui/sort.bmp", 65, 65, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("trash_can", "image/Stardew Valley/ui/trash_can.bmp", 16, 26, true, RGB(255,0,255));
