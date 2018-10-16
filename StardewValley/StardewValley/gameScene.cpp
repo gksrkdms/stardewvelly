@@ -7,8 +7,6 @@
 
 HRESULT gameScene::init()
 {
-	g_mapSize.mapSizeX = 3200;
-	g_mapSize.mapSizeY = 3200;
 	addSound();
 	m_pBG = IMAGEMANAGER->addImage("background", "image/background.bmp", g_mapSize.mapSizeX, g_mapSize.mapSizeY, true, RGB(255, 0, 255));
 	CAMERA->init();
@@ -54,11 +52,11 @@ void gameScene::update()
 
 	if (KEYMANAGER->isStayKeyDown('O'))
 	{
-		m_pMapManager->loadingMap("image/1280.map", 20, 15);
+		m_pMapManager->loadingMap("image/1280.map", 20, 20);
 	}
 	if (KEYMANAGER->isStayKeyDown('P'))
 	{
-		m_pMapManager->loadingMap("image/ddd.map", 50, 50);
+		m_pMapManager->loadingMap("image/1111.map", 50, 50);
 	}
 
 }

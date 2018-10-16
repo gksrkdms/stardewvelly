@@ -17,10 +17,6 @@ HRESULT player::init()
 	m_pSeedTarget = IMAGEMANAGER->findImage("focustile_002");
 	m_pNumber = IMAGEMANAGER->findImage("goldnumber");
 	m_pHpEnergyUi = IMAGEMANAGER->findImage("hp_EnergyBar");
-	EFFECTMANAGER->addEffect("water_drop", "image/Stardew Valley/물뿌바닥이펙트.bmp",640,64,64,64,8,5);
-	EFFECTMANAGER->addEffect("water_drop2", "image/Stardew Valley/물뿌윗부분이펙트.bmp",192,64,64,64,5,5);
-	EFFECTMANAGER->addEffect("recovery", "image/Stardew Valley/회복이펙트.bmp",448,64,64,64,10,5);
-	EFFECTMANAGER->addEffect("need_water", "image/Stardew Valley/물부족.bmp",256,64,64,64,4,5);
 
 	m_pAni = new animation;
 	m_playerDir = PLAYER_DOWN;
@@ -53,10 +49,6 @@ HRESULT player::init()
 	m_fCurrHp = m_fMaxHp = 100;			// @플레이어 체력
 	m_fCurrEnergy = m_fMaxEnergy = 270;		// @플레이어 에너지 
 	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, 164);  //@플레이어 체력
-
-	m_fCurrHp = m_fMaxHp = 270;			// @플레이어 체력
-	m_fCurrEnergy = m_fMaxEnergy = 300;		// @플레이어 에너지 
-	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, 164);  //@플레이어 체력
 	m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 208, 24, 164); // @플레이어 에너지
 	
 
@@ -75,6 +67,9 @@ HRESULT player::init()
 	m_playerCollision = COLL_FALSE;
 
 	m_nTempIndex = 0;
+
+	m_pRight.x = 0;
+	m_pRight.y = 0;
 
 	return S_OK;
 }
@@ -104,6 +99,7 @@ void player::update()
 	{
 		setKey();	// 키입력함수 wasd이동키
 		useItem();	// 소모품 아이템 사용
+		Collide();
 	}
 	// 플레이어 상태가 메뉴면 메뉴 true로
 	if (m_playerState == PLAYER_MENU)
@@ -146,8 +142,9 @@ void player::update()
 	//낚시
 	m_pFishing->setPlayer(this);
 	m_pFishing->update();
-	
 
+	// 충돌 값 구하는 함수
+	PointCollide();
 }
 
 void player::render(HDC hdc)
@@ -196,7 +193,7 @@ void player::render(HDC hdc)
 
 
 	//MakeRect(hdc, m_temprc);
-	//MakeRect(hdc, m_rc);
+	MakeRect(hdc, m_rc);
 	//MakeRect(hdc, m_TargetRc);
 
 	m_pMenu->render(hdc);
@@ -210,8 +207,11 @@ void player::render(HDC hdc)
 	m_pFishing->render(hdc);
 
 	char str[128];
-	sprintf_s(str, 128, "씨앗불값 : %d", isSeed);
-	TextOut(hdc, 0, 550, str, strlen(str));
+
+	sprintf_s(str, 128, "충돌상태 : %d", m_playerCollision);
+	TextOut(hdc, 0, 600, str, strlen(str));
+
+
 	if (isProgressBar[1] == true)
 	{
 		sprintf_s(str, 128, "%d / %d", m_fCurrEnergy, m_fMaxEnergy);
@@ -480,24 +480,44 @@ void player::setKey()
 // 이동함수 (수정해야함)
 void player::move(PLAYERDIR playerdir)
 {
-	/*switch (playerdir)
+	switch (playerdir)
 	{
 	case PLAYER_LEFT:
+		if(m_playerCollision != COLL_LEFT)
 		m_nX -= m_nMoveSpeed;
 		break;
 	case PLAYER_RIGHT:
+		if(m_playerCollision != COLL_RIGHT)
 		m_nX += m_nMoveSpeed;
 		break;
 	case PLAYER_UP:
+		if (m_playerCollision != COLL_UP)
 		m_nY -= m_nMoveSpeed;
 		break;
 	case PLAYER_DOWN:
+		if (m_playerCollision != COLL_DOWN)
 		m_nY += m_nMoveSpeed;
 		break;
-	}*/
+	}
+}
 
+void player::PointCollide()
+{
+	m_pRight.x = m_rc.right + 5;
+	m_pRight.y = (m_rc.bottom + m_rc.top) / 2;
 
+	m_pLeft.x = m_rc.left - 5;
+	m_pLeft.y = (m_rc.bottom + m_rc.top) / 2;
 
+	m_pUp.x = (m_rc.left + m_rc.right) / 2;
+	m_pUp.y = m_rc.top - 5;
+
+	m_pDown.x = (m_rc.left + m_rc.right) / 2;
+	m_pDown.y = m_rc.bottom + 5;
+}
+
+void player::Collide()
+{
 	// 맵정보 받아와야함
 	for (int y = 0; y < WINSIZEY / m_pMap->getTileSize() + 1; y++)
 	{
@@ -508,80 +528,41 @@ void player::move(PLAYERDIR playerdir)
 
 			int m_indexCamera;
 			m_indexCamera = (y + cullY)*m_pMap->getTileX() + (x + cullX);
-			
+
 			if (m_indexCamera >= (m_pMap->getTileX() * m_pMap->getTileY())) continue;
 
 			//충돌x
-			if (!(m_pMap->getTile(m_indexCamera)->isCollide) && IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
-			{
-				m_isMove = true;
-			}
+			//if (!(m_pMap->getTile(m_indexCamera)->isCollide) && IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
+			//{
+			//	m_isMove = true;
+			//	if (m_isMove)
+			//		m_playerCollision = COLL_FALSE;
+			//}
 
-			//충돌시
+			if ((m_pMap->getTile(m_indexCamera)->isCollide) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pRight))
+			{
+				m_playerCollision = COLL_RIGHT;
+				return;
+			}
+			else if ((m_pMap->getTile(m_indexCamera)->isCollide) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pLeft))
+			{
+				m_playerCollision = COLL_LEFT;
+				return;
+			}
+			else if ((m_pMap->getTile(m_indexCamera)->isCollide) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pUp))
+			{
+				m_playerCollision = COLL_UP;
+				return;
+			}
+			else if ((m_pMap->getTile(m_indexCamera)->isCollide) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pDown))
+			{
+				m_playerCollision = COLL_DOWN;
+				return;
+			}
 			else
 			{
-				if ((m_pMap->getTile(m_indexCamera)->isCollide) && IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
-				{
-					m_isMove = false;
-
-					switch (playerdir)
-					{
-					case PLAYER_LEFT:
-						m_playerCollision = COLL_LEFT;
-						break;
-					case PLAYER_RIGHT:
-						m_playerCollision = COLL_RIGHT;
-						break;
-					case PLAYER_UP:
-						m_playerCollision = COLL_UP;
-						break;
-					case PLAYER_DOWN:
-						m_playerCollision = COLL_DOWN;
-						break;
-					}
-					//m_playerCollision = COLL_LEFT;
-				}
+				m_playerCollision = COLL_FALSE;
 			}
-		}
-	}
-
-	// 충돌x
-	if (m_isMove)
-	{
-		switch (playerdir)
-		{
-		case PLAYER_LEFT:
-			m_nX -= m_nMoveSpeed;
-			break;
-		case PLAYER_RIGHT:
-			m_nX += m_nMoveSpeed;
-			break;
-		case PLAYER_UP:
-			m_nY -= m_nMoveSpeed;
-			break;
-		case PLAYER_DOWN:
-			m_nY += m_nMoveSpeed;
-			break;
-		}
-	}
-
-	// 충돌o
-	else
-	{
-		switch (playerdir)
-		{
-		case PLAYER_LEFT:
-			//m_nX -= m_nMoveSpeed;
-			break;
-		case PLAYER_RIGHT:
-			//m_nX += m_nMoveSpeed;
-			break;
-		case PLAYER_UP:
-			//m_nY -= m_nMoveSpeed;
-			break;
-		case PLAYER_DOWN:
-			//m_nY += m_nMoveSpeed;
-			break;
 		}
 	}
 }
@@ -685,7 +666,8 @@ void player::setItemMotion()
 {
 	if (m_playerState == PLAYER_PLAY)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && m_playerMotion == MOTION_IDLE)
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && m_playerMotion == MOTION_IDLE &&
+			m_pTargetItem->getItemKind() == ITEM_ACT)
 		{
 			setDir();	// 플레이어 방향 정하는 함수
 			if (m_pTargetItem->getActItemKind() != ACTITEM_NULL)

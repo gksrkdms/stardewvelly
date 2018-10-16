@@ -100,6 +100,10 @@ private:
 	bool isProgressBar[2];		// 체력,기력바 출력용 불값
 
 	int m_nTempIndex;			// 타일에 접근할 임시 인덱스
+	POINT m_pRight;
+	POINT m_pLeft;
+	POINT m_pUp;
+	POINT m_pDown;
 
 	bool isFishingStart;
 	PLAYCOLLISION m_playerCollision;	// 플레이어 충돌 상태값
@@ -107,6 +111,8 @@ private:
 	void setTargetXY();					// 타겟렉트 좌표
 	void setKey();						// 키 묶어둔 함수
 	void move(PLAYERDIR playerdir);		// 플레이어 이동 함수
+	void PointCollide();				// 충돌값 구하는 함수
+	void Collide();						// 플레이어 충돌함수
 	void setMotion(animation * ani, image** image, const char * szName, int framex, int framey);
 	void startMotion(animation* ani, int start, int end, bool reverse, bool loop, int fps);
 	void setSyncMotion(PLAYERMOTION motion, int* x, int* y);	//모션 싱크로 맞추는 함수

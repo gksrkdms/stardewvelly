@@ -202,7 +202,8 @@ void mapManager::render(HDC hdc)
 				//	}
 				//}
 			}
-
+			if (m_pTiles[m_indexCamera].isCollide == true)
+				MakeRect(hdc, m_pTiles[m_indexCamera].rc);
 		}
 	}
 

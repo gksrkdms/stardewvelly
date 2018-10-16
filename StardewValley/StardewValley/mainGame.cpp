@@ -26,6 +26,12 @@ HRESULT mainGame::init()
 
 	setBackBuffer();
 
+
+	EFFECTMANAGER->addEffect("water_drop", "image/Stardew Valley/water_bottom.bmp", 640, 64, 64, 64, 8, 3);
+	EFFECTMANAGER->addEffect("water_drop2", "image/Stardew Valley/water_top.bmp", 192, 64, 64, 64, 5, 3);
+	EFFECTMANAGER->addEffect("recovery", "image/Stardew Valley/recovery.bmp", 448, 64, 64, 64, 10, 3);
+	EFFECTMANAGER->addEffect("need_water", "image/Stardew Valley/water_zero.bmp", 256, 64, 64, 64, 4, 3);
+
 	// 필요한 리소스 미리 로드
 	imgload();
 	addsound();
@@ -128,8 +134,8 @@ LRESULT mainGame::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LP
 void mainGame::update()
 {
 	InvalidateRect(g_hWnd, NULL, false);
-	EFFECTMANAGER->update();
 	SCENEMANAGER->update();
+	EFFECTMANAGER->update();
 	
 }
 
