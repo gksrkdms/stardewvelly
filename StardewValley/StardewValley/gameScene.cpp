@@ -49,11 +49,11 @@ void gameScene::update()
 
 	if (KEYMANAGER->isStayKeyDown('O'))
 	{
-		m_pMapManager->loadingMap("image/1280.map", 1280, 960);
+		m_pMapManager->loadingMap("image/1280.map", 20, 15);
 	}
 	if (KEYMANAGER->isStayKeyDown('P'))
 	{
-		m_pMapManager->loadingMap("image/ddd.map", 3200, 3200);
+		m_pMapManager->loadingMap("image/ddd.map", 50, 50);
 	}
 
 }

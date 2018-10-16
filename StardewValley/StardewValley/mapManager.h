@@ -34,6 +34,7 @@ private:
 
 	int		m_ntempX;			// 맵교체시 담아줄 맵크기 x,y
 	int		m_ntempY;
+	void loadingProcess();		// 로딩 데이터처리
 
 public:
 	mapManager();
@@ -46,7 +47,7 @@ public:
 	void loadingRender(HDC hdc);
 
 	void saveMap(const char* szfileName);
-	void loadingMap(const char * szfileName, int x, int y);
+	void loadingMap(const char * szfileName, int mapSizex, int mapSizey);
 	void loadMap(const char * szfileName);
 
 	// player에 타일정보 주기 위해서 인덱스의 주소값 반환

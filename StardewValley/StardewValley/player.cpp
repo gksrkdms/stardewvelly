@@ -46,13 +46,10 @@ HRESULT player::init()
 	m_nMoveSpeed = 10;
 	m_nMoney = 54321;
 
-	m_fCurrHp = m_fMaxHp = 270;			// @플레이어 체력
-	m_fCurrEnergy = m_fMaxEnergy = 300;		// @플레이어 에너지 
-	m_fGaugeBar = 164; //@@
-	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, m_fGaugeBar);  //@플레이어 체력
-	//m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 44, 24, -164); // @플레이어 에너지
+	m_fCurrHp = m_fMaxHp = 100;			// @플레이어 체력
+	m_fCurrEnergy = m_fMaxEnergy = 270;		// @플레이어 에너지 
+	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, 164);  //@플레이어 체력
 	m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 208, 24, 164); // @플레이어 에너지
-	//m_HpRc.top = (m_fCurrHp / m_fMaxHp) / 164 + (WINSIZEY - 208);
 	
 
 	
@@ -61,6 +58,8 @@ HRESULT player::init()
 	isMove = false;
 	isStop = true;
 	isSeed = false;
+	isProgressBar[0] = false;
+	isProgressBar[1] = false;
 
 	setMotion(m_pAni, &m_pPlayer, "player_idle", 5, 5);
 	startMotion(m_pAni, 0, 1, false, false, 5);
@@ -132,6 +131,8 @@ void player::update()
 			m_pTargetItem->setPlayerPlaying(false);
 		}
 	}
+	// 체력,에너지바 
+	progressBarToolTip();
 
 	//낚시
 	m_pFishing->setPlayer(this);
@@ -145,14 +146,6 @@ void player::render(HDC hdc)
 	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth(),WINSIZEY-260); // @체력,에너지틀
 	m_pHpBar->render(hdc);
 	m_pEnergyBar->render(hdc);
-	//MakeRect(hdc, m_HpRc);		// @체력렉트
-	//MakeRect(hdc, m_EnergyRc);  //@에너지렉트
-	//HBRUSH brush = CreateSolidBrush(RGB(9, 255, 0)); //색깔브러쉬
-	//FillRect(hdc, &m_HpRc, brush);
-	//FillRect(hdc, &m_EnergyRc, brush);
-	//DeleteObject(brush);
-
-
 
 	// 플레이어 랜더
 	if (m_pFishing->getIsFishing() == false)
@@ -200,10 +193,18 @@ void player::render(HDC hdc)
 	m_pFishing->render(hdc);
 
 	char str[128];
-	sprintf_s(str, 128, "enegy : %d / %d", m_fCurrEnergy, m_fMaxEnergy);
-	TextOut(hdc, 0, 500, str, strlen(str));	
 	sprintf_s(str, 128, "씨앗불값 : %d", isSeed);
 	TextOut(hdc, 0, 550, str, strlen(str));
+	if (isProgressBar[1] == true)
+	{
+		sprintf_s(str, 128, "%d / %d", m_fCurrEnergy, m_fMaxEnergy);
+		TextOut(hdc, WINSIZEX - m_pHpEnergyUi->getWidth() - 100, WINSIZEY - 196, str, strlen(str));
+	}
+	if (isProgressBar[0] == true)
+	{
+		sprintf_s(str, 128, "%d / %d", m_fCurrHp, m_fMaxHp);
+		TextOut(hdc, WINSIZEX - m_pHpEnergyUi->getWidth() - 100, WINSIZEY - 196, str, strlen(str));
+	}
 }
 
 void player::numRender(HDC hdc, int x, int y)
@@ -1019,6 +1020,26 @@ void player::setSwordTile()
 		// 특정확률로 풀 아이템 획득
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(201);
+	}
+}
+
+void player::progressBarToolTip()
+{
+	if (PtInRect(&m_HpRc, g_ptMouse))
+	{
+		isProgressBar[0] = true;
+	}
+	else
+	{
+		isProgressBar[0] = false;
+	}
+	if (PtInRect(&m_EnergyRc, g_ptMouse))
+	{
+		isProgressBar[1] = true;
+	}
+	else
+	{
+		isProgressBar[1] = false;
 	}
 }
 

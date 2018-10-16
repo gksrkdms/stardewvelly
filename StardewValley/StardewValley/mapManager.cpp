@@ -76,23 +76,7 @@ void mapManager::update()
 
 	m_pObjectMap->update();
 	m_pObjectCrop->update();
-	if (m_Loading == LOAD_START)
-	{
-		m_nAlpha += 10;
-		if (m_nAlpha >= 250)
-		{
-			m_nAlpha = 0;
-			m_Loading = LOAD_END;
-		}
-	}
-	if (m_Loading == LOAD_END)
-	{
-		m_Loading = LOAD_FALSE;
-		saveMap(tempCurrMapId);
-		g_mapSize.mapSizeX = m_ntempX;
-		g_mapSize.mapSizeY = m_ntempY;
-		loadMap(tempLoadMapId);
-	}
+	loadingProcess();
 }
 
 void mapManager::render(HDC hdc)
@@ -270,12 +254,33 @@ void mapManager::saveMap(const char * szfileName)
 	CloseHandle(hFile);
 }
 
-void mapManager::loadingMap(const char * szfileName, int x, int y)
+void mapManager::loadingProcess()
+{
+	if (m_Loading == LOAD_START)
+	{
+		m_nAlpha += 10;
+		if (m_nAlpha >= 250)
+		{
+			m_nAlpha = 0;
+			m_Loading = LOAD_END;
+		}
+	}
+	if (m_Loading == LOAD_END)
+	{
+		m_Loading = LOAD_FALSE;
+		saveMap(tempCurrMapId);
+		g_mapSize.mapSizeX = m_ntempX;
+		g_mapSize.mapSizeY = m_ntempY;
+		loadMap(tempLoadMapId);
+	}
+}
+
+void mapManager::loadingMap(const char * szfileName, int mapSizex, int mapSizey)
 {
 	m_Loading = LOAD_START;
 	tempLoadMapId = szfileName;
-	m_ntempX = x;
-	m_ntempY = y;
+	m_ntempX = mapSizex * 64;
+	m_ntempY = mapSizey * 64;
 }
 
 void mapManager::loadMap(const char* szfileName)
