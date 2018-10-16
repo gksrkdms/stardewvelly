@@ -20,7 +20,7 @@ public:
 	~objCrop();
 
 	virtual HRESULT init();
-	virtual HRESULT init(int x, int y);
+	virtual HRESULT init(int x, int y, int id);
 	virtual void release();
 	virtual void update();
 	virtual void render(HDC hdc);

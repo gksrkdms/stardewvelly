@@ -199,7 +199,7 @@ void player::render(HDC hdc)
 	//MakeRect(hdc, m_TargetRc);
 
 	m_pMenu->render(hdc);
-
+	
 	if (m_pTargetItem)
 	{
 		char str[128];
@@ -211,6 +211,7 @@ void player::render(HDC hdc)
 	char str[128];
 	sprintf_s(str, 128, "¾¾¾ÑºÒ°ª : %d", isSeed);
 	TextOut(hdc, 0, 550, str, strlen(str));
+
 	if (isProgressBar[1] == true)
 	{
 		sprintf_s(str, 128, "%d / %d", m_fCurrEnergy, m_fMaxEnergy);

@@ -50,6 +50,7 @@ public:
 	void release();
 	void update();
 	void render(HDC hdc);
+	void objRender(HDC hdc);
 	void loadingRender(HDC hdc);
 
 	void saveMap(const char* szfileName);

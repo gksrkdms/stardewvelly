@@ -322,7 +322,5 @@ public:
 	
 	void saveMap(const char* szfileName);
 	void loadMap(const char* szfileName);
-
-
 };
 

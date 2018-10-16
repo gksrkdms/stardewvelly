@@ -3,24 +3,23 @@
 
 class animation;
 
+enum TREE_TYPE {
+	TREE_1, TREE_2
+};
+
 class objTree : public mapObject
 {
 private:
 	image* m_ptree;
-
-	RECT m_pPlayer;
-	RECT m_pTree;
-	RECT m_rcTemp;
-
-	bool m_isOverlap;
 	
-
+	bool m_isOverlap;
+	TREE_TYPE m_treeType;
 public:
 	objTree();
 	~objTree();
 
 	virtual HRESULT init();
-	virtual HRESULT init(int x, int y);
+	virtual HRESULT init(int x, int y, int id);
 	virtual void release();
 	virtual void update();
 	virtual void render(HDC hdc);

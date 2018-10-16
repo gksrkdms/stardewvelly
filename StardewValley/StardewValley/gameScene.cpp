@@ -74,13 +74,26 @@ void gameScene::render(HDC hdc)
 	HFONT myFont = CreateFont(21, 0, 0, 0, 800, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "모리스9");
 	HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 
-	//플레이어가 위
-	//m_pBG->render(hdc, 0, 0, CAMERA->getX(), CAMERA->getY(), WINSIZEX, WINSIZEY);
-	m_pMapManager->render(hdc);
-	m_pPlayer->render(hdc);
-	PLAYTIMEMANAGER->render(hdc);
-
 	//플레이어가 아래
+	//m_pBG->render(hdc, 0, 0, CAMERA->getX(), CAMERA->getY(), WINSIZEX, WINSIZEY);
+	//if (CAMERA->getY()>WINSIZEY / 2)
+	//{
+	//	m_pMapManager->render(hdc);
+	//	m_pPlayer->render(hdc);
+	//	PLAYTIMEMANAGER->render(hdc);
+	//	m_pMapManager->objRender(hdc);
+	//}
+
+	//else
+	{
+		m_pMapManager->render(hdc);
+		m_pMapManager->objRender(hdc);
+		m_pPlayer->render(hdc);
+		PLAYTIMEMANAGER->render(hdc);
+	}
+
+
+	//플레이어가 위
 
 	TIMEMANAGER->render(hdc);
 

@@ -43,12 +43,20 @@ void objectManager::render(HDC hdc)
 	}
 }
 
-void objectManager::setTree(int x, int y)
+void objectManager::setTree(int x, int y, int id)
 {
 	mapObject* m_pObjTree;
 	m_pObjTree = new objTree;
-	m_pObjTree->init(x,y);
+	m_pObjTree->init(x,y, id);
 	m_listObjTree.push_back(m_pObjTree);
+}
+
+void objectManager::setCrop(int x, int y, int id)
+{
+}
+
+void objectManager::setNpc(int x, int y, int id)
+{
 }
 
 void objectManager::getPlayer(player * player)

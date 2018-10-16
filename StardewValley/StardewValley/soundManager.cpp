@@ -42,7 +42,6 @@ void soundManager::release()
 void soundManager::update()
 {
 	m_system->update();
-
 }
 
 void soundManager::addSound(string soundName, bool isBGM, bool isLoop)

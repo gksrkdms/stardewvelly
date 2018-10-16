@@ -15,7 +15,7 @@ HRESULT mapObject::init()
 	return S_OK;
 }
 
-HRESULT mapObject::init(int x, int y)
+HRESULT mapObject::init(int x, int y, int id)
 {
 	return S_OK;
 }
