@@ -37,7 +37,6 @@ HRESULT soundManager::init()
 void soundManager::release()
 {
 	m_system->release();
-	
 }
 
 void soundManager::update()

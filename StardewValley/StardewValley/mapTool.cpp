@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "mapTool.h"
 
-//LPTSTR	g_lpszClass2 = (LPTSTR)TEXT("MapTool");
 HWND hButtonOpenFileDialog;
 HWND hEditFileToBeOpened;
 OPENFILENAME OFN;
@@ -154,13 +153,23 @@ HRESULT mapTool::init()
 
 void mapTool::release()
 {
-	delete[] m_pTiles;
-	delete[] m_pSampleTiles;
-	delete[] m_pMini;
+	SAFE_DELETE_ARRAY(m_pTiles);
+	SAFE_DELETE_ARRAY(m_pSampleTiles);
+	SAFE_DELETE_ARRAY(m_pMini);
 
-	delete[] m_ptempSampleObj1;
-	delete[] m_ptempSampleObj2;
-	delete[] m_ptempSampleObj3;
+	SAFE_DELETE_ARRAY(m_ptempSampleObj1);
+	SAFE_DELETE_ARRAY(m_ptempSampleObj2);
+	SAFE_DELETE_ARRAY(m_ptempSampleObj3);
+
+	m_vecSelectedTile.clear();
+
+	//delete[] m_pTiles;
+	//delete[] m_pSampleTiles;
+	//delete[] m_pMini;
+
+	//delete[] m_ptempSampleObj1;
+	//delete[] m_ptempSampleObj2;
+	//delete[] m_ptempSampleObj3;
 }
 
 void mapTool::update()
@@ -349,7 +358,7 @@ void mapTool::render(HDC hdc)
 				}
 			}
 		}
-	}	
+	}
 	
 	// 샘플보기
 	if (m_isSampleOn)
@@ -372,10 +381,26 @@ void mapTool::render(HDC hdc)
 			case IMGOBJ_3:
 				m_pObject3->render(hdc, m_nImageX, 0);
 				break;
-			}			
-			//// 확인
-			//if (m_isMove)
-			//	m_pObject->frameRender(hdc, g_ptMouse.x, g_ptMouse.y, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY);		
+			}
+
+			// 확인
+			if (m_isMove)
+			{
+				switch (m_sampleObjChoice)
+				{
+				case IMGOBJ_1:
+					m_pObject->alphaFrameRenderM(hdc, g_ptMouse.x - 32, g_ptMouse.y - 32, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY, 200, 4);
+					break;
+
+				case IMGOBJ_2:
+					m_pObject2->alphaFrameRenderM(hdc, g_ptMouse.x - 32, g_ptMouse.y - 32, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY, 200, 4);
+					break;
+
+				case IMGOBJ_3:
+					m_pObject3->alphaFrameRenderM(hdc, g_ptMouse.x - 32, g_ptMouse.y - 32, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY, 200, 4);
+					break;
+				}
+			}
 		}
 
 		else
@@ -383,6 +408,12 @@ void mapTool::render(HDC hdc)
 			// 타일
 			if (m_pTileSet)
 				m_pTileSet->render(hdc, m_nImageX, 5);
+
+			// 확인
+			if (m_isMove)
+			{
+				m_pTileSet->alphaFrameRenderM(hdc, g_ptMouse.x - 32, g_ptMouse.y - 32, m_pSampleTiles[m_sampleTileIndex].frameX, m_pSampleTiles[m_sampleTileIndex].frameY, 200, 4);
+			}
 		}
 	}
 
@@ -530,9 +561,6 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 			g_ptMouse.y = HIWORD(lParam);	
 
 			// 맵타일 사이즈대로 그리기 위해 보정
-			/*rc.right = rc.left+((g_ptMouse.x - rc.left) / TILE_SIZE_1)*TILE_SIZE_1;
-			rc.bottom = rc.top + ((g_ptMouse.y - rc.top) / TILE_SIZE_1)*TILE_SIZE_1;*/			
-
 			m_Dragrc.right = m_Dragrc.left + ((g_ptMouse.x - m_Dragrc.left) / TILE_SIZE_SAMPLE)*TILE_SIZE_SAMPLE;
 			m_Dragrc.bottom = m_Dragrc.top + ((g_ptMouse.y - m_Dragrc.top) / TILE_SIZE_SAMPLE)*TILE_SIZE_SAMPLE;
 		}
@@ -595,6 +623,7 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 						m_pTiles[i].terrainFrameX = m_pSampleTiles[m_sampleTileIndex].frameX;
 						m_pTiles[i].terrainFrameY = m_pSampleTiles[m_sampleTileIndex].frameY;
 						m_pTiles[i].terrain = m_pSampleTiles[m_sampleTileIndex].terrain;
+						m_isMove = false;
 					}
 				}				
 			}
@@ -609,7 +638,6 @@ LRESULT mapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 		switch (wParam)
 		{
 		case VK_LEFT:
-			//m_moveX+= m_moveX;
 			break;
 
 		case VK_RIGHT:
@@ -1094,6 +1122,7 @@ void mapTool::terrainTileSave()
 					if (PtInRect(&m_pSampleTiles[y* SAMPLE_TILE_X + x].rc, g_ptMouse) && m_isClick)
 					{
 						m_isClickSave = true;
+						m_isMove = true;
 						m_sampleTileIndex = y * SAMPLE_TILE_X + x;
 						m_pSampleTiles[m_sampleTileIndex].terrain = m_pSampleTiles[y* SAMPLE_TILE_X + x].terrain;
 						break;
@@ -1105,6 +1134,7 @@ void mapTool::terrainTileSave()
 					if (PtInRect(&m_pSampleTiles[y* SAMPLE_TILE_X + x].rc, g_ptMouse))
 					{
 						m_isClickSave = true;
+						m_isMove = true;
 						m_sampleTileIndex = y * SAMPLE_TILE_X + x;
 						m_pSampleTiles[m_sampleTileIndex].terrain = m_pSampleTiles[y* SAMPLE_TILE_X + x].terrain;
 						break;
@@ -1127,6 +1157,7 @@ void mapTool::terrainTileSave()
 		m_startY = m_vecSelectedTile.front() / SAMPLE_TILE_Y;
 		m_isAddvec = false;
 	}
+
 }
 
 void mapTool::TileSet()
@@ -1150,6 +1181,7 @@ void mapTool::TileSet()
 								m_pTiles[(y + y2)* TILE_X + (x + x2)].terrainFrameX = m_pSampleTiles[(m_startY + y2)* SAMPLE_TILE_X + (m_startX + x2)].frameX;
 								m_pTiles[(y + y2)* TILE_X + (x + x2)].terrainFrameY = m_pSampleTiles[(m_startY + y2)* SAMPLE_TILE_X + (m_startX + x2)].frameY;
 								m_pTiles[(y + y2)* TILE_X + (x + x2)].terrain = m_pSampleTiles[(m_startY + y2)* SAMPLE_TILE_X + (m_startX + x2)].terrain;
+								m_isMove = false;
 							}
 						}
 					}
@@ -1170,6 +1202,7 @@ void mapTool::TileSet()
 						m_pTiles[y* TILE_X + x].terrainFrameX = m_pSampleTiles[m_sampleTileIndex].frameX;
 						m_pTiles[y* TILE_X + x].terrainFrameY = m_pSampleTiles[m_sampleTileIndex].frameY;
 						m_pTiles[y* TILE_X + x].terrain = m_pSampleTiles[m_sampleTileIndex].terrain;
+						m_isMove = false;
 						break;
 					}
 				}
