@@ -29,6 +29,8 @@ private:
 	PRIVATESYNTHESIZE(bool, isMenu, Menu);			// 플레이어가 메뉴 호출할떄 불값
 	image* m_pIcon[8];		// 메뉴 아이콘 이미지
 	image* m_ptextBox;		// 텍스트 박스 이미지
+	image*		m_pWordMap;		// @@ 월드맵 이미지 추가
+
 	string m_Tooltip[8];	// 메뉴 아이콘 툴팁
 	int m_nIconX[8];	// 메뉴 아이콘 x좌표 8개
 	int m_nIconY[8];	// 메뉴 아이콘 y좌표 8개

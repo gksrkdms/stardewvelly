@@ -1187,17 +1187,18 @@ void fishing::fishBring()
 
 void fishing::addSound()
 {
-	//낚시사운드
-	SOUNDMANAGER->addSound("sound/effect/fishing/릴감는소리.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/fishing/낚시버튼소리.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/fishing/낚시줄던짐.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/fishing/느낌표소리.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/fishing/낚시히트.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/fishing/첨벙소리.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/fishing/물소리.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/fishing/릴감는소리2.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/fishing/띠로리.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/fishing/낚아채는소리.wav", false, false);
+	//터져서 주석걸어놓음
+	//낚시사운드 
+	//SOUNDMANAGER->addSound("sound/effect/fishing/릴감는소리.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/fishing/낚시버튼소리.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/fishing/낚시줄던짐.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/fishing/느낌표소리.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/fishing/낚시히트.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/fishing/첨벙소리.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/fishing/물소리.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/fishing/릴감는소리2.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/fishing/띠로리.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/fishing/낚아채는소리.wav", false, false);
 }
 
 void fishing::addImage()

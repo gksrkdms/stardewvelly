@@ -43,7 +43,7 @@ HRESULT player::init()
 	m_nPlayerSizeY = 64;
 	m_nMoveSpeed = 10;
 	m_nMoney = 54321;
-
+	
 
 
 	m_fCurrHp = m_fMaxHp = 270;			// @플레이어 체력
@@ -159,6 +159,8 @@ void player::update()
 
 void player::render(HDC hdc)
 {
+	
+
 	if (m_pTargetItem && m_pTargetItem->getActItemKind()==ACTITEM_WATER)
 	{
 		EFFECTMANAGER->render(hdc);
@@ -218,6 +220,7 @@ void player::render(HDC hdc)
 
 	m_pMenu->render(hdc);
 
+	
 	if (m_pTargetItem)
 	{
 		char str[128];
@@ -228,6 +231,10 @@ void player::render(HDC hdc)
 
 	sprintf_s(str, 128, "hp : %d", m_nHp);
 	TextOut(hdc, 0, 500, str, strlen(str));
+
+	
+		
+	
 }
 
 void player::numRender(HDC hdc, int x, int y)

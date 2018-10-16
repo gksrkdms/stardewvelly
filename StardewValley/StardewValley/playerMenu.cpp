@@ -27,6 +27,7 @@ HRESULT playerMenu::init()
 	m_pIcon[7] = IMAGEMANAGER->findImage("icon8");
 
 	m_ptextBox = IMAGEMANAGER->findImage("menu_textBox");
+	m_pWordMap = IMAGEMANAGER->findImage("world_map"); //@@ 월드맵이미지
 
 	m_Tooltip[0] = "가방";
 	m_Tooltip[1] = "기술";
@@ -58,6 +59,7 @@ void playerMenu::release()
 
 void playerMenu::update()
 {
+	
 	m_pInven->update();
 
 	m_mapItem = m_pInven->getInvenMap(); // 인벤토리 map정보 받아옴
@@ -138,9 +140,13 @@ void playerMenu::render(HDC hdc)
 				char str[128];
 				sprintf_s(str, 128, "%s", m_Tooltip[i].c_str());
 				TextOut(hdc, g_ptMouse.x + 30, g_ptMouse.y + 35, str, strlen(str));
+
+				if(i== MENU_MAP && (KEYMANAGER->isStayKeyDown(VK_LBUTTON))) //@@ 월드맵 추가 이건아닌거같음
+				m_pWordMap->render(hdc, 270, 30); //@@ 월드맵 추가 이건아닌거같음
 			}
 		}
 	}
+	
 }
 
 // 플레이어의 소지금 상태를 알기위해서
@@ -214,8 +220,9 @@ void playerMenu::menuUpdate()
 					if (isMouseIn[i] == true)
 					{
 						SOUNDMANAGER->play("sound/effect/선택음1.wav", g_soundVolume.effect);
-						m_menuDir = (MENUDIR)i;
+						m_menuDir = (MENUDIR)i;						
 					}
+					
 				}
 			}
 

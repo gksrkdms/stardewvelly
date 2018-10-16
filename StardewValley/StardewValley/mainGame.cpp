@@ -267,6 +267,8 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("dmg", "image/Stardew Valley/ui/dmg.bmp", 44, 44, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("goldui", "image/Stardew Valley/ui/goldui.bmp", 260, 68, true, RGB(255,0,255));
 	
+	IMAGEMANAGER->addImage("world_map", "image/Stardew Valley/ui/worldMap.bmp", 730, 630, true, RGB(255, 0, 255)); //@ 월드맵이미지
+
 	// 시계
 	IMAGEMANAGER->addImage("minutehand", "image/Stardew Valley/ui/clock.bmp", 48, 64, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("clock", "image/Stardew Valley/ui/clock1.bmp", 72, 57, true, RGB(255, 0, 255));
@@ -345,13 +347,14 @@ void mainGame::imgload()
 
 void mainGame::addsound()
 {
-	// start scene
-	SOUNDMANAGER->addSound("sound/StardewValleyOverture.mp3", true, true);
-	SOUNDMANAGER->addSound("sound/effect/첨클릭.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/startbutton.wav", false, false);
+	//터져서 주석걸어놓음
+	//// start scene
+	//SOUNDMANAGER->addSound("sound/StardewValleyOverture.mp3", true, true);
+	//SOUNDMANAGER->addSound("sound/effect/첨클릭.wav", false, false);
+	//SOUNDMANAGER->addSound("sound/effect/startbutton.wav", false, false);
 
-	//gameScene
-	SOUNDMANAGER->addSound("sound/CloudCountry.mp3", true, true);
+	////gameScene
+	//SOUNDMANAGER->addSound("sound/CloudCountry.mp3", true, true);
 
 
 }
