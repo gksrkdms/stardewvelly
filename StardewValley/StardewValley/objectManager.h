@@ -20,10 +20,7 @@ public:
 	HRESULT init();
 	void release();
 	void update();
-	void updateTree(int x, int y);
 	void render(HDC hdc);
-
-	void render(HDC hdc, int x, int y);
 
 	void setTree(int x, int y);
 

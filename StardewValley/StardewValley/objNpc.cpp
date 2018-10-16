@@ -17,6 +17,11 @@ HRESULT objNpc::init()
 	return S_OK;
 }
 
+HRESULT objNpc::init(int x, int y)
+{
+	return S_OK;
+}
+
 void objNpc::release()
 {
 }
@@ -52,9 +57,5 @@ void objNpc::update()
 }
 
 void objNpc::render(HDC hdc)
-{
-}
-
-void objNpc::render(HDC hdc, int x, int y)
 {
 }

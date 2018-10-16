@@ -89,23 +89,8 @@ void mapManager::update()
 	   	 
 	autoTile();
 
-	//m_pObjMgr->update();
+	m_pObjMgr->update();
 	
-	//for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
-	//{
-	//	for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
-	//	{
-	//		int cullX = CAMERA->getX() / TILE_SIZE_1;
-	//		int cullY = CAMERA->getY() / TILE_SIZE_1;
-
-	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
-	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
-
-	//		if (m_pTiles[m_indexCamera].object == TREE_SMALL)
-	//			m_pObjMgr->updateTree(m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top);
-	//	}
-	//}
-
 	
 	//m_pObjectMap->update();
 
@@ -156,8 +141,7 @@ void mapManager::render(HDC hdc)
 
 			//if (m_pTiles[m_indexCamera].object == TREE_BIG || m_pTiles[m_indexCamera].object == TREE_SMALL)
 			if (m_pTiles[m_indexCamera].object == TREE_SMALL)
-				m_pObjMgr->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top);
-				//m_pObjMgr->render(hdc);			
+				m_pObjMgr->render(hdc);			
 				//m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top);
 
 			//else if (m_pTiles[m_indexCamera].object == CROP)

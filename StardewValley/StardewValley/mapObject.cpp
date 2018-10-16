@@ -15,6 +15,11 @@ HRESULT mapObject::init()
 	return S_OK;
 }
 
+HRESULT mapObject::init(int x, int y)
+{
+	return S_OK;
+}
+
 void mapObject::release()
 {
 }
@@ -24,13 +29,5 @@ void mapObject::update()
 }
 
 void mapObject::render(HDC hdc)
-{
-}
-
-void mapObject::render(HDC hdc, int x, int y)
-{
-}
-
-void mapObject::objectPosition(int x, int y)
 {
 }

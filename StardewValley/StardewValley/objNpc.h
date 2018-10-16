@@ -29,10 +29,10 @@ public:
 	~objNpc();
 
 	virtual HRESULT init();
+	virtual HRESULT init(int x, int y);
 	virtual void release();
 	virtual void update();
 	virtual void render(HDC hdc);
-	virtual void render(HDC hdc, int x, int y);
 
 	virtual void getPlayer(player* player) { m_player = player; }
 
