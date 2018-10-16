@@ -735,6 +735,7 @@ void image::alphaRender(HDC hdc, int destX, int destY, int sourX, int sourY, int
 
 void image::alphaRenderScala(HDC hdc, int destX, int destY, BYTE alpha, int scalar)
 {
+
 	m_blendFunc.SourceConstantAlpha = alpha;
 
 	if (m_isTransparent)
