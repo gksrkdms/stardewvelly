@@ -373,6 +373,40 @@ void item::setItem(bool sameItem)
 		case 209:
 			itemName = "item_209";
 			break;
+		case 210:
+			itemName = "item_210";
+			break;
+		case 213:
+			itemName = "item_213";
+			break;
+		case 214:
+			itemName = "item_214";
+			break;
+		case 215:
+			itemName = "item_215";
+			break;
+		case 219:
+			itemName = "item_219";
+			break;
+		case 220:
+			itemName = "item_220";
+			break;
+		case 221:
+			itemName = "item_221";
+			break;
+		case 301:
+			itemName = "item_301";
+			break;
+		case 302:
+			itemName = "item_302";
+			break;
+		case 303:
+			itemName = "item_303";
+			break;
+		case 501:
+			itemName = "item_501";
+			break;
+
 		default:
 			return;
 			break;
@@ -408,7 +442,7 @@ void item::setItem(bool sameItem)
 		if (m_actItemKind == ACTITEM_WATER)
 		{
 			waterBar = new progressBar;
-			waterBar->init((float)m_nX, (float)m_nY + 40, 48, 20);
+			waterBar->init((float)m_nX, (float)m_nY + 40, 48, 8);
 		}
 	}
 }

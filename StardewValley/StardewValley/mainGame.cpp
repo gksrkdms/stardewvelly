@@ -22,6 +22,7 @@ HRESULT mainGame::init()
 	TIMEMANAGER->init();
 	SCENEMANAGER->init();
 	SOUNDMANAGER->init();
+	EFFECTMANAGER->init();
 
 	setBackBuffer();
 
@@ -57,14 +58,17 @@ void mainGame::release()
 	TIMEMANAGER->release();
 	SCENEMANAGER->release();
 	PLAYTIMEMANAGER->release();
-
-	SOUNDMANAGER->releaseSingleton();
+	SOUNDMANAGER->release();
+	EFFECTMANAGER->release();
+	
 	DATAMANAGER->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
 	IMAGEMANAGER->releaseSingleton();
 	TIMEMANAGER->releaseSingleton();
 	SCENEMANAGER->releaseSingleton();
 	PLAYTIMEMANAGER->releaseSingleton();
+	SOUNDMANAGER->releaseSingleton();
+	EFFECTMANAGER->releaseSingleton();
 }
 
 LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -96,6 +100,7 @@ LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			switch (wParam)
 			{
 			case VK_ESCAPE:
+				PostQuitMessage(0);
 				break;
 			}
 			return 0;
@@ -123,17 +128,18 @@ LRESULT mainGame::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LP
 void mainGame::update()
 {
 	InvalidateRect(g_hWnd, NULL, false);
-
+	EFFECTMANAGER->update();
 	SCENEMANAGER->update();
+	
 }
 
 void mainGame::render()
 {
+
 	HDC backDC = m_pBackBuffer->getMemDC();
-
 	SCENEMANAGER->render(backDC);
-
 	m_pBackBuffer->render(hdc, 0, 0);
+	
 }
 
 void mainGame::imgload()
@@ -159,6 +165,7 @@ void mainGame::imgload()
 	// background
 	IMAGEMANAGER->addImage("whitebackground", "image/background.bmp", WINSIZEX, WINSIZEY);
 	IMAGEMANAGER->addImage("dark", "image/dark.bmp", WINSIZEX, WINSIZEY); //밤, 네이비
+	IMAGEMANAGER->addImage("black", "image/black.bmp", WINSIZEX, WINSIZEY); // 블랙
 
 	// 타이틀
 	IMAGEMANAGER->addImage("title_001", "image/Stardew Valley/title/title_001.bmp", 400, 183, true, RGB(255, 0, 255));	// 스타듀밸리
@@ -188,7 +195,8 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("shop_textBox", "image/Stardew Valley/ui/shop_textBox.bmp", 209, 100, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("menu_textBox", "image/Stardew Valley/ui/menu_textBox.bmp", 73, 60, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("goldnumber", "image/Stardew Valley/ui/goldnumber.bmp", 200, 28, 10, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("hp_EnergyBar", "image/Stardew Valley/ui/hp_energy.bmp", 26, 56, true, RGB(255, 0, 255)); // @체력에너지 이미지
+	IMAGEMANAGER->addImage("hp_EnergyBar", "image/Stardew Valley/ui/hp_energy.bmp", 104, 224, true, RGB(255, 0, 255)); // @체력에너지 이미지
+	IMAGEMANAGER->addImage("hp_energy_top", "image/Stardew Valley/ui/hp_energy_top.bmp", 24, 168, true, RGB(255, 0, 255)); // @체력에너지 이미지
 
 	IMAGEMANAGER->addImage("sort", "image/Stardew Valley/ui/sort.bmp", 65, 65, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("trash_can", "image/Stardew Valley/ui/trash_can.bmp", 16, 26, true, RGB(255,0,255));
@@ -258,6 +266,16 @@ void mainGame::imgload()
 	// crops
 	IMAGEMANAGER->addImage("crops", "image/Stardew Valley/crop/crops.bmp", 256, 669,16,20, true, RGB(255, 0, 255));
 
+	//추가아이템 나중에정리할것
+	IMAGEMANAGER->addImage("item_214", "image/Stardew Valley/item/item_214.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_215", "image/Stardew Valley/item/item_215.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_219", "image/Stardew Valley/item/item_219.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_220", "image/Stardew Valley/item/item_220.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_221", "image/Stardew Valley/item/item_221.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_301", "image/Stardew Valley/item/item_301.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_302", "image/Stardew Valley/item/item_302.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_303", "image/Stardew Valley/item/item_303.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_501", "image/Stardew Valley/item/item_501.bmp", 16, 16, true, RGB(255, 0, 255));
 
 }
 

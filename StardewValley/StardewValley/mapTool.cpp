@@ -34,8 +34,8 @@ HRESULT mapTool::init()
 		TILE_SIZE_SAMPLE * 50, WINSIZEY - 470, WINSIZEX - TILE_SIZE_SAMPLE * 50, 450, g_hWnd, (HMENU)0, g_hInstance, NULL);
 	
 	TILE_SIZE_1 = 64;
-	TILE_X = MAPSIZEX / TILE_SIZE_1;
-	TILE_Y = MAPSIZEY / TILE_SIZE_1;
+	TILE_X = g_mapSize.mapSizeX / TILE_SIZE_1;
+	TILE_Y = g_mapSize.mapSizeY / TILE_SIZE_1;
 
 	SAMPLE_TILE_X = 20;
 	SAMPLE_TILE_Y = 20;
@@ -213,7 +213,122 @@ void mapTool::update()
 		}
 	}
 
-	autoTile();
+	// 8방향 검사
+	for (int y = 0; y < TILE_Y; y++)
+	{
+		for (int x = 0; x < TILE_X; x++)
+		{
+			if (m_pTiles[y*TILE_X + x].terrain == FARMLAND)
+			{
+				for (int i = 0; i < ways; i++)
+				{
+					int nx = x + way[i][0], ny = y + way[i][1];
+					if (nx < 0 || nx >= TILE_X || ny < 0 || ny >= TILE_Y) continue;
+					
+					// processing
+					int index = ny * TILE_X + nx;
+					//if (m_pTiles[index].terrain == FARMLAND)
+					//{
+					//	m_nweight++;
+					//}
+
+					//if (m_pTiles[index].terrain != FARMLAND)
+					//{
+					//	switch (i)
+					//	{
+					//	case 0:
+					//		m_autoWeight->leftTop += 1;
+					//		m_autoWeight->leftBottom += 1;
+					//		break;
+
+					//	case 1:
+					//		m_autoWeight->rightTop += 1;
+					//		m_autoWeight->rightBottom += 1;
+					//		break;
+
+					//	case 2:
+					//		m_autoWeight->leftTop += 1;
+					//		m_autoWeight->rightTop += 1;
+					//		break;
+
+					//	case 3:
+					//		m_autoWeight->leftBottom += 1;
+					//		m_autoWeight->rightBottom += 1;
+					//		break;
+
+					//	case 4:
+					//		m_autoWeight->leftTop += 1;
+					//		break;
+
+					//	case 5:
+					//		m_autoWeight->leftBottom += 1;
+					//		break;
+
+					//	case 6:
+					//		m_autoWeight->rightTop += 1;
+					//		break;
+
+					//	case 7:
+					//		m_autoWeight->rightBottom += 1;
+					//		break;
+					//	}
+					//}
+
+					/*if (m_pTiles[index].terrain != FARMLAND)
+					{
+						switch (i)
+						{
+						case 0:
+							m_weight[0][0] += 1;
+							m_weight[0][1] += 1;
+							break;
+
+						case 1:
+							m_weight[0][1] += 1;
+							m_weight[1][1] += 1;
+							break;
+
+						case 2:
+							m_weight[0][0] += 1;
+							m_weight[1][0] += 1;
+							break;
+
+						case 3:
+							m_weight[0][1] += 1;
+							m_weight[1][1] += 1;
+							break;
+
+						case 4:
+							m_weight[0][0] += 1;
+							break;
+
+						case 5:
+							m_weight[0][1] += 1;
+							break;
+
+						case 6:
+							m_weight[1][0] += 1;
+							break;
+
+						case 7:
+							m_weight[1][1] += 1;
+							break;
+						}
+					}*/
+				}
+				//m_weight[2][2] = { 0 };
+			}
+
+		}
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			m_weight[i][j];
+		}
+	}
 
 	// camera 이동
 	CAMERAMANAGER->update();
@@ -1753,8 +1868,8 @@ void mapTool::reTileinit()
 {
 	delete[] m_pTiles;
 	delete[] m_pMini;
-	TILE_X = MAPSIZEX / TILE_SIZE_1;
-	TILE_Y = MAPSIZEY / TILE_SIZE_1;
+	TILE_X = g_mapSize.mapSizeX / TILE_SIZE_1;
+	TILE_Y = g_mapSize.mapSizeY / TILE_SIZE_1;
 	m_pTiles = new tagTile[TILE_X*TILE_Y];
 	m_pMini = new tagTile[TILE_X*TILE_Y];
 

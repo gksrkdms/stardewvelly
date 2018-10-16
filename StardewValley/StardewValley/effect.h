@@ -24,6 +24,9 @@ public:
 	void startEffect(int x, int y);
 	void endEffect();
 
+	inline int getX() { return m_nX; }
+	inline int getY() { return m_nY; }
+	inline bool getIsAlive() { return m_isAlive; }
 	effect();
 	~effect();
 };
