@@ -61,7 +61,7 @@ HRESULT player::init()
 	isMove = false;
 	isStop = true;
 	isSeed = false;
-
+	isRideHorse = false; //@@ 말타기 불값초기화
 	setMotion(m_pAni, &m_pPlayer, "player_idle", 5, 5);
 	startMotion(m_pAni, 0, 1, false, false, 5);
 
@@ -85,7 +85,19 @@ void player::release()
 
 void player::update()
 {	
-	
+	if ((KEYMANAGER->isOnceKeyDown('K')))  //@@ 말 타기 테스트용
+	{
+		m_playerMotion = MOTION_RIDE;
+		m_nMoveSpeed = 50;
+		isRideHorse = true;
+	}
+	if ((KEYMANAGER->isOnceKeyDown('L')))  //@@ 말 타기 테스트용
+	{	
+		m_playerMotion = MOTION_IDLE;
+		m_nMoveSpeed = 10;
+		isRideHorse = false;
+	}
+
 	m_pTargetItem = m_pMenu->getQuickItem();	// 퀵바 아이템 정보 받아옴
 	m_pAni->frameUpdate(TIMEMANAGER->getElapsedTime());	// 에니매이션용
 	
@@ -95,11 +107,13 @@ void player::update()
 		m_playerState = PLAYER_PLAY;
 	}
 	// 플레이상태와 플레이어 모션이 idle, handup상태일떄 다음 함수 실행
-	if (m_playerState == PLAYER_PLAY && (m_playerMotion == MOTION_IDLE || m_playerMotion == MOTION_HANDUP))
+	if (m_playerState == PLAYER_PLAY && (m_playerMotion == MOTION_IDLE || m_playerMotion == MOTION_HANDUP || m_playerMotion == MOTION_RIDE)) //@@ 말타기추가
 	{
-		setKey();	// 키입력함수 wasd이동키
-		useItem();	// 소모품 아이템 사용
+		setKey();// 키입력함수 wasd이동키
+		if(m_playerMotion == MOTION_IDLE || m_playerMotion == MOTION_HANDUP)	
+			useItem();	// 소모품 아이템 사용
 	}
+
 	// 플레이어 상태가 메뉴면 메뉴 true로
 	if (m_playerState == PLAYER_MENU)
 	{
@@ -126,7 +140,7 @@ void player::update()
 		}						// 도구아이템 모션 상태
 		setSyncMotion(m_playerMotion, &m_nSyncX, &m_nSyncY);	// 모션 랜더 x,y보정값
 		// 플레이어가 플레이(필드)상태일떄 도구아이템 제외 아이템 그려줄지 여부(만세자세)
-		if (m_playerState == PLAYER_PLAY)
+		if (m_playerState == PLAYER_PLAY && m_playerMotion != MOTION_RIDE)
 		{
 			m_pTargetItem->setPlayerPlaying(true);
 		}
@@ -320,6 +334,9 @@ void player::setKey()
 			case MOTION_HANDUP:
 				startMotion(m_pAni, 15, 20, false, true, 8);
 				break;
+			case MOTION_RIDE:
+				startMotion(m_pAni, 15, 21, false, true, 8); //@@ 말 추가					
+				break;
 			}
 
 			isMove = true;
@@ -341,6 +358,9 @@ void player::setKey()
 		case MOTION_HANDUP:
 			m_pAni->setPlayFrame(17, 18, false, false);
 			break;
+		case MOTION_RIDE:
+			m_pAni->setPlayFrame(15, 16, false, false);
+			break;
 		}
 	}
 	if (KEYMANAGER->isStayKeyDown('D'))
@@ -356,6 +376,9 @@ void player::setKey()
 				break;
 			case MOTION_HANDUP:
 				startMotion(m_pAni, 10, 15, false, true, 8);
+				break;
+			case MOTION_RIDE:
+				startMotion(m_pAni, 8, 14, false, true, 8); //@@ 말 추가					
 				break;
 			}
 			isMove = true;
@@ -377,6 +400,9 @@ void player::setKey()
 		case MOTION_HANDUP:
 			m_pAni->setPlayFrame(12, 13, false, false);
 			break;
+		case MOTION_RIDE:
+			m_pAni->setPlayFrame(8, 9, false, false);
+			break;
 		}
 	}
 	if (KEYMANAGER->isStayKeyDown('W'))
@@ -394,6 +420,10 @@ void player::setKey()
 			case MOTION_HANDUP:
 				startMotion(m_pAni, 5, 10, false, true, 8);
 				break;
+			case MOTION_RIDE:
+				startMotion(m_pAni, 22, 28, false, true, 8); //@@ 말 추가					
+				break;
+
 			}
 			isMove = true;
 		}
@@ -414,6 +444,9 @@ void player::setKey()
 		case MOTION_HANDUP:
 			m_pAni->setPlayFrame(7, 8, false, false);
 			break;
+		case MOTION_RIDE:
+			m_pAni->setPlayFrame(22, 23, false, false);
+			break;
 		}
 	}
 	if (KEYMANAGER->isStayKeyDown('S'))
@@ -431,6 +464,9 @@ void player::setKey()
 					break;
 				case MOTION_HANDUP:
 					startMotion(m_pAni, 0, 5, false, true, 8);
+					break;
+				case MOTION_RIDE:
+					startMotion(m_pAni, 1, 7, false, true, 8); //@@ 말 추가					
 					break;
 				}
 				isMove = true;
@@ -453,6 +489,9 @@ void player::setKey()
 			break;
 		case MOTION_HANDUP:
 			m_pAni->setPlayFrame(2, 3, false, false);
+			break;
+		case MOTION_RIDE:
+			m_pAni->setPlayFrame(1, 2, false, false);
 			break;
 		}
 	}
@@ -671,7 +710,10 @@ void player::setSyncMotion(PLAYERMOTION motion, int * x, int * y)
 		*x = 50;
 		*y = 30;
 		break;
-
+	case MOTION_RIDE:
+		*x = 0;
+		*y = 10;
+		break;
 	}
 }
 
@@ -793,8 +835,6 @@ void player::setItemMotion()
 					break;
 				case ACTITEM_FISHINGROD:
 					m_pFishing->init();
-					//m_pFishing->setIsOne(true);
-					//m_pFishing->setIsMistake(false);
 					m_pFishing->setIsFishing(true);
 					m_playerState = PLAYER_FISHING;		
 					break;
@@ -821,11 +861,11 @@ void player::setItemMotion()
 				}
 			}
 		}
-
-		if (m_pTargetItem->getItemOn() == true && m_pTargetItem->getActItemKind() == ACTITEM_NULL && m_pAni->getIsPlaying() == false)
+		//@@ 소모품 들고있을때 핸드업
+		if (m_pTargetItem->getItemOn() == true && m_pTargetItem->getActItemKind() == ACTITEM_NULL && m_pAni->getIsPlaying() == false && isRideHorse ==false) //@@ 불값조건추가
 		{
 			m_playerMotion = MOTION_HANDUP;
-			setMotion(m_pAni, &m_pPlayer, "player_handup", 5, 4);
+			setMotion(m_pAni, &m_pPlayer, "player_handup", 5, 4);			
 			switch (m_playerDir)
 			{
 			case PLAYER_LEFT:
@@ -841,11 +881,32 @@ void player::setItemMotion()
 				startMotion(m_pAni, 2, 3, false, false, 5);
 				break;
 			}
-		}
-		if ((m_pTargetItem->getActItemKind() != ACTITEM_NULL && m_pAni->getIsPlaying() == false))
+		}  //@@ 액팅아이템 들고있을때 그냥 아이들 상태
+		if ((m_pTargetItem->getActItemKind() != ACTITEM_NULL && m_pAni->getIsPlaying() == false) && isRideHorse== false) //@@ 불값조건추가
 		{
 			m_playerMotion = MOTION_IDLE;
-			setMotion(m_pAni, &m_pPlayer, "player_idle", 5, 5);
+			setMotion(m_pAni, &m_pPlayer, "player_idle", 5, 5); 
+			switch (m_playerDir)
+			{
+			case PLAYER_LEFT:
+				startMotion(m_pAni, 3, 4, false, false, 5);
+				break;
+			case PLAYER_RIGHT:
+				startMotion(m_pAni, 1, 2, false, false, 5);
+				break;
+			case PLAYER_UP:
+				startMotion(m_pAni, 2, 3, false, false, 5);
+				break;
+			case PLAYER_DOWN:
+				startMotion(m_pAni, 0, 1, false, false, 5);
+				break;
+			}
+		} //@@ 평소에
+		if ((m_pTargetItem->getItemOn() == false && m_pAni->getIsPlaying() == false) && isRideHorse==false)//@@ 불값조건추가
+		{
+			
+			m_playerMotion = MOTION_IDLE;
+			setMotion(m_pAni, &m_pPlayer, "player_idle", 5, 5); 
 			switch (m_playerDir)
 			{
 			case PLAYER_LEFT:
@@ -862,20 +923,23 @@ void player::setItemMotion()
 				break;
 			}
 		}
-		if ((m_pTargetItem->getItemOn() == false && m_pAni->getIsPlaying() == false))
+		
+		if (m_pAni->getIsPlaying() == false && isRideHorse)//@@ 말탈경우 추가
 		{
-			m_playerMotion = MOTION_IDLE;
-			setMotion(m_pAni, &m_pPlayer, "player_idle", 5, 5);
+			
+			m_playerMotion = MOTION_RIDE;
+			setMotion(m_pAni, &m_pPlayer, "player_horse", 7, 4);
+			
 			switch (m_playerDir)
 			{
 			case PLAYER_LEFT:
-				startMotion(m_pAni, 3, 4, false, false, 5);
+				startMotion(m_pAni, 14, 15, false, false, 5);
 				break;
 			case PLAYER_RIGHT:
-				startMotion(m_pAni, 1, 2, false, false, 5);
+				startMotion(m_pAni, 7, 8, false, false, 5);
 				break;
 			case PLAYER_UP:
-				startMotion(m_pAni, 2, 3, false, false, 5);
+				startMotion(m_pAni, 21, 22, false, false, 5);
 				break;
 			case PLAYER_DOWN:
 				startMotion(m_pAni, 0, 1, false, false, 5);

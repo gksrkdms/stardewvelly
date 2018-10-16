@@ -24,8 +24,7 @@ enum PLAYERSTATE
 	PLAYER_PLAY,
 	PLAYER_MENU,
 	PLAYER_FISHING,
-	PLAYER_ACTITEM
-	//@@여기에 라이딩추가
+	PLAYER_ACTITEM,
 };
 
 enum PLAYCOLLISION
@@ -47,9 +46,8 @@ enum PLAYERMOTION
 	MOTION_NOT,
 	MOTION_FISHINGROD,
 	MOTION_SWORD,
-	MOTION_HANDUP
-	//@@ 여기에도 라이딩 추가
-
+	MOTION_HANDUP,
+	MOTION_RIDE 	//@@ 여기에도 라이딩 추가
 };
 
 class player
@@ -104,8 +102,7 @@ private:
 
 	int m_nHp;	// 소모품 확인용 hp변수 (삭제해야함)
 
-
-	bool isFishingStart;
+	bool isRideHorse; //@@ 말타기 불값 추가
 	PLAYCOLLISION m_playerCollision;	// 플레이어 충돌 상태값
 
 	void setTargetXY();					// 타겟렉트 좌표

@@ -304,7 +304,7 @@ void fishing::render(HDC hdc)
 			}
 			if (m_pPlayer->getPlayerDir() == PLAYER_RIGHT || m_pPlayer->getPlayerDir() == PLAYER_DOWN)
 			{
-				m_pIwhiteUiRb->alphaRender(hdc, m_fWhiteUiX, m_fWhiteUiY, 170);
+			m_pIwhiteUiRb->alphaRender(hdc, m_fWhiteUiX, m_fWhiteUiY, 170);
 				m_pIseroBar->render(hdc, m_fSeroBarX, m_fSeroBarY);
 			}
 			m_pIgreenBar->render(hdc, m_fGreenBarX, m_fGreenCurrY);
@@ -1055,13 +1055,13 @@ void fishing::fishBring()
 {
 		if (m_pPlayer->getPlayerDir() == PLAYER_UP)//뒤
 		{
-			m_fZziX += cosf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY, m_fPlayerX, m_fPlayerY - 30)) * 10;
-			m_fZziY += -sinf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY, m_fPlayerX, m_fPlayerY - 30)) * 10;
+			m_fZziX += cosf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY, m_fPlayerX, m_fPlayerY - 30)) * 20;
+			m_fZziY += -sinf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY, m_fPlayerX, m_fPlayerY - 30)) * 20;
 		}
 		else
 		{
-			m_fZziX += cosf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY - 70, m_fPlayerX, m_fPlayerY)) * 10;
-			m_fZziY += -sinf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY - 70, m_fPlayerX, m_fPlayerY)) * 10;
+			m_fZziX += cosf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY - 70, m_fPlayerX, m_fPlayerY)) * 20;
+			m_fZziY += -sinf(MY_UTIL::getAngle(m_fZziX - 7, m_fZziY - 70, m_fPlayerX, m_fPlayerY)) * 20;
 		}
 
 
@@ -1212,8 +1212,8 @@ void fishing::addImage()
 	IMAGEMANAGER->addImage("i_Feel", "image/Stardew Valley/fishing/느낌표.bmp", 30, 45, true, RGB(255, 0, 255)); //원사이즈 10,15 
 	IMAGEMANAGER->addImage("i_Hit", "image/Stardew Valley/fishing/히트.bmp", 148, 64, true, RGB(255, 0, 255)); //원사이즈 74,32 
 	IMAGEMANAGER->addImage("i_SeroBar", "image/Stardew Valley/fishing/세로바.bmp", 160, 500, true, RGB(255, 0, 255)); //원사이즈 39,150  
-	IMAGEMANAGER->addImage("i_WhitebarL", "image/Stardew Valley/fishing/흰풍선왼위.bmp", 210, 550, true, RGB(255, 0, 255)); //원사이즈 52,185 
-	IMAGEMANAGER->addImage("i_WhitebarR", "image/Stardew Valley/fishing/흰풍선오아.bmp", 210, 550, true, RGB(255, 0, 255)); //원사이즈 52,185  
+	IMAGEMANAGER->addImage("i_WhitebarL", "image/Stardew Valley/fishing/흰풍선왼위.bmp", 210, 550, true, RGB(255, 0, 255)); //원사이즈 52,158 
+	IMAGEMANAGER->addImage("i_WhitebarR", "image/Stardew Valley/fishing/흰풍선오아.bmp", 210, 550, true, RGB(255, 0, 255)); //원사이즈 52,158  
 	IMAGEMANAGER->addImage("i_GreenBar", "image/Stardew Valley/fishing/초록바만든거.bmp", 37, 77, true, RGB(255, 0, 255)); // 9,9 
 	IMAGEMANAGER->addImage("i_moveFish", "image/Stardew Valley/fishing/물고기.bmp", 37, 37, true, RGB(255, 0, 255)); // 19 19
 	IMAGEMANAGER->addImage("i_moveChoo", "image/Stardew Valley/fishing/추감기.bmp", 168, 55, 4, 1, true, RGB(255, 0, 255));// 72 21 
