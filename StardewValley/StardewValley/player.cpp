@@ -53,6 +53,10 @@ HRESULT player::init()
 	m_fCurrHp = m_fMaxHp = 100;			// @플레이어 체력
 	m_fCurrEnergy = m_fMaxEnergy = 270;		// @플레이어 에너지 
 	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, 164);  //@플레이어 체력
+
+	m_fCurrHp = m_fMaxHp = 270;			// @플레이어 체력
+	m_fCurrEnergy = m_fMaxEnergy = 300;		// @플레이어 에너지 
+	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, 164);  //@플레이어 체력
 	m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 208, 24, 164); // @플레이어 에너지
 	
 
@@ -731,7 +735,6 @@ void player::setItemMotion()
 					break;
 				case ACTITEM_WATER:
 					m_playerMotion = MOTION_WATER;
-					
 					setMotion(m_pAni, &m_pPlayer, "player_water", 2, 4);
 					
 					switch (m_playerDir)
@@ -896,15 +899,14 @@ void player::useItem()
 			switch (m_pTargetItem->getConsumItemKind())
 			{
 			case CONITEM_RECOVERY:
-				EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
-				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
-				m_nHp += m_pTargetItem->getHp();
 				m_fCurrHp += m_pTargetItem->getHp();
 				if (m_fCurrHp >= m_fMaxHp)
 					m_fCurrHp = m_fMaxHp;
 				m_fCurrEnergy += m_pTargetItem->getEnergy();
 				if (m_fCurrEnergy >= m_fMaxEnergy)
 					m_fCurrEnergy = m_fMaxEnergy;
+				EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
+				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 				m_pTargetItem->useItem();
 			case CONITEM_SEED:
 				break;
@@ -977,6 +979,11 @@ void player::setWaterTile()
 		}
 		m_pTargetItem->progressWaterDurability(1);
 		m_fCurrEnergy -= 2;
+	}
+	else
+	{
+		EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
+		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개물없을때.wav", g_soundVolume.effect);
 	}
 }
 
@@ -1062,11 +1069,6 @@ void player::progressBarToolTip()
 	else
 	{
 		isProgressBar[1] = false;
-	}
-	else
-	{
-		EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
-		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개물없을때.wav", g_soundVolume.effect);
 	}
 }
 

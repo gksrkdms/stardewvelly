@@ -14,6 +14,7 @@ HRESULT gameScene::init()
 	m_pPlayer->init();
 	m_pMapManager = new mapManager;
 	m_pMapManager->init();
+	m_pMapManager->loadMap("image/ddd.map");
 	m_pMapManager->loadMap("image/goldBeach1.map");
 	m_pPlayer->getMap(m_pMapManager);
 
@@ -82,6 +83,7 @@ void gameScene::render(HDC hdc)
 	TextOut(hdc, 50, 150, str, strlen(str));
 
 	m_pMapManager->loadingRender(hdc);
+	
 	SelectObject(hdc, oldFont);
 	DeleteObject(myFont);
 }
