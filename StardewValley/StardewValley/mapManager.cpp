@@ -3,6 +3,7 @@
 
 #include "objTree.h"
 #include "objCrop.h"
+#include "objectManager.h"
 
 mapManager::mapManager()
 {
@@ -49,11 +50,19 @@ HRESULT mapManager::init()
 		m_pTiles[i].autoWeightWet = { 0,0,0,0 };
 	}
 	
-	m_pObjectMap = new objTree;
-	m_pObjectMap->init();
+	m_pObjMgr = new objectManager;
+	//m_pObjMgr->setTree(m_pTiles[4].rc.left, m_pTiles[5].rc.top);
+	//m_pObjMgr->setTree(m_pTiles[8].rc.left, m_pTiles[15].rc.top);
+	//m_pObjMgr->setTree(m_pTiles[20].rc.left, m_pTiles[15].rc.top);
+	//m_pObjMgr->getPlayer(m_player);
+	   
+	//m_pObjectMap = new objTree;
+	//m_pObjectMap->init();
+	//m_pObjectMap->getPlayer(m_player);
 
-	m_pObjectCrop = new objCrop;
-	m_pObjectCrop->init();
+	//m_pObjectCrop = new objCrop;
+	//m_pObjectCrop->init();
+	//m_pObjectCrop->getPlayer(m_player);
 
 	m_vecTile.resize(TILE_Y*TILE_X);
 	
@@ -77,18 +86,14 @@ void mapManager::update()
 		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1 - CAMERA->getX(), (i / TILE_X)*TILE_SIZE_1 - CAMERA->getY(), TILE_SIZE_1, TILE_SIZE_1);
 	}
 
+	   	 
 	autoTile();
 
-	m_pObjectMap->update();
-	m_pObjectCrop->update();
-	loadingProcess();
-}
-
-void mapManager::render(HDC hdc)
-{
-	//for (int y = 0; y < TILE_Y; y++)
+	//m_pObjMgr->update();
+	
+	//for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
 	//{
-	//	for (int x = 0; x < TILE_X; x++)
+	//	for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
 	//	{
 	//		int cullX = CAMERA->getX() / TILE_SIZE_1;
 	//		int cullY = CAMERA->getY() / TILE_SIZE_1;
@@ -96,11 +101,20 @@ void mapManager::render(HDC hdc)
 	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
 	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 
-	//		m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
-	//			, 0, 1, TILE_SIZE_1, TILE_SIZE_1);
+	//		if (m_pTiles[m_indexCamera].object == TREE_SMALL)
+	//			m_pObjMgr->updateTree(m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top);
 	//	}
 	//}
 
+	
+	//m_pObjectMap->update();
+
+	//m_pObjectCrop->update();
+	loadingProcess();
+}
+
+void mapManager::render(HDC hdc)
+{
 	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
 	{
 		for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
@@ -116,6 +130,13 @@ void mapManager::render(HDC hdc)
 				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 					, 19, 7, TILE_SIZE_1, TILE_SIZE_1);
 			}
+
+			else if (m_pTiles[m_indexCamera].terrain == FARMLAND || m_pTiles[m_indexCamera].terrain == WETFARMLAND)
+			{
+				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
+					, 0, 0, TILE_SIZE_1, TILE_SIZE_1);
+			}
+
 			else
 			{
 				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
@@ -135,11 +156,12 @@ void mapManager::render(HDC hdc)
 
 			//if (m_pTiles[m_indexCamera].object == TREE_BIG || m_pTiles[m_indexCamera].object == TREE_SMALL)
 			if (m_pTiles[m_indexCamera].object == TREE_SMALL)
-				//m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left+ (m_pTiles[m_indexCamera].rc.right- m_pTiles[m_indexCamera].rc.left)/2, m_pTiles[m_indexCamera].rc.bottom);
-				m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
+				m_pObjMgr->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top);
+				//m_pObjMgr->render(hdc);			
+				//m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top);
 
-			else if (m_pTiles[m_indexCamera].object == CROP)
-				m_pObjectCrop->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
+			//else if (m_pTiles[m_indexCamera].object == CROP)
+			//	m_pObjectCrop->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
 
 
 			else if (m_pTiles[m_indexCamera].object != OBJ_NULL)
@@ -170,37 +192,6 @@ void mapManager::render(HDC hdc)
 						m_pTiles[m_indexCamera].objectFrameX,
 						m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
 				}
-
-				
-				//else
-				//{
-				//	if (m_pTiles[m_indexCamera].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
-				//	{
-				//		m_pObject->frameRenderTile(hdc,
-				//			m_pTiles[m_indexCamera].rc.left,
-				//			m_pTiles[m_indexCamera].rc.top,
-				//			m_pTiles[m_indexCamera].objectFrameX,
-				//			m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-				//	}
-
-				//	if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
-				//	{
-				//		m_pObject2->frameRenderTile(hdc,
-				//			m_pTiles[m_indexCamera].rc.left,
-				//			m_pTiles[m_indexCamera].rc.top,
-				//			m_pTiles[m_indexCamera].objectFrameX,
-				//			m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-				//	}
-
-				//	if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
-				//	{
-				//		m_pObject3->frameRenderTile(hdc,
-				//			m_pTiles[m_indexCamera].rc.left,
-				//			m_pTiles[m_indexCamera].rc.top,
-				//			m_pTiles[m_indexCamera].objectFrameX,
-				//			m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-				//	}
-				//}
 			}
 
 		}
@@ -321,5 +312,24 @@ void mapManager::loadMap(const char* szfileName)
 	CloseHandle(hFile);
 
 	tempCurrMapId = szfileName;
+}
 
+void mapManager::SetTree()
+{
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	{
+		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1 - CAMERA->getX(), (i / TILE_X)*TILE_SIZE_1 - CAMERA->getY(), TILE_SIZE_1, TILE_SIZE_1);
+	}
+
+	for (int y = 0; y < TILE_Y; y++)
+	{
+		for (int x = 0; x < TILE_X; x++)
+		{			
+			if (m_pTiles[y*TILE_X + x].object == TREE_SMALL)
+			{
+				m_pObjMgr->setTree(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.top);
+			}
+		}
+	}
+	m_pObjMgr->getPlayer(m_player);
 }

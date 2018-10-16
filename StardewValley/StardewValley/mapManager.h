@@ -2,6 +2,8 @@
 #include "mapTool.h"
 #include <vector>
 
+class player;
+
 enum LOADINGSTATE
 {
 	LOAD_FALSE,
@@ -10,6 +12,7 @@ enum LOADINGSTATE
 };
 
 class mapObject;
+class objectManager;
 
 class mapManager: public mapTool
 {
@@ -24,6 +27,7 @@ private:
 
 	mapObject* m_pObjectMap;
 	mapObject* m_pObjectCrop;
+	objectManager* m_pObjMgr;
 
 	const char* tempCurrMapId;	// 맵 로드전 저장할 현재맵
 	const char* tempLoadMapId;	// 맵 로드시 담아줄 맵 키값
@@ -35,6 +39,8 @@ private:
 	int		m_ntempX;			// 맵교체시 담아줄 맵크기 x,y
 	int		m_ntempY;
 	void loadingProcess();		// 로딩 데이터처리
+
+	player* m_player;
 
 public:
 	mapManager();
@@ -58,6 +64,8 @@ public:
 	inline int getTileX() { return TILE_X; }
 	inline int getTileY() { return TILE_Y; }
 
+	void getPlayer(player* player) { m_player = player; }
 
+	void SetTree();
 };
 

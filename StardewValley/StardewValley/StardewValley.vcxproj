@@ -168,6 +168,7 @@
     <ClInclude Include="mapObject.h" />
     <ClInclude Include="mapTool.h" />
     <ClInclude Include="objCrop.h" />
+    <ClInclude Include="objectManager.h" />
     <ClInclude Include="objNpc.h" />
     <ClInclude Include="objTree.h" />
     <ClInclude Include="player.h" />
@@ -210,6 +211,7 @@
     <ClCompile Include="mapObject.cpp" />
     <ClCompile Include="mapTool.cpp" />
     <ClCompile Include="objCrop.cpp" />
+    <ClCompile Include="objectManager.cpp" />
     <ClCompile Include="objNpc.cpp" />
     <ClCompile Include="objTree.cpp" />
     <ClCompile Include="player.cpp" />

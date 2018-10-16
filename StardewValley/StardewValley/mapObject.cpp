@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "mapObject.h"
 
-
 mapObject::mapObject()
 {
 }
@@ -29,5 +28,9 @@ void mapObject::render(HDC hdc)
 }
 
 void mapObject::render(HDC hdc, int x, int y)
+{
+}
+
+void mapObject::objectPosition(int x, int y)
 {
 }

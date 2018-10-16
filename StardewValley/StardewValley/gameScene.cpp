@@ -15,8 +15,11 @@ HRESULT gameScene::init()
 	m_pPlayer = new player;
 	m_pPlayer->init();
 	m_pMapManager = new mapManager;
+	m_pMapManager->getPlayer(m_pPlayer);
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/1111.map");
+	m_pMapManager->loadMap("image/test.map");
+	m_pMapManager->SetTree();
+
 	//m_pMapManager->loadMap("image/goldBeach1.map");
 	m_pPlayer->getMap(m_pMapManager);
 
@@ -26,12 +29,12 @@ HRESULT gameScene::init()
 	//배경음
 	SOUNDMANAGER->play("sound/CloudCountry.mp3", g_soundVolume.bgm);
 	
+
 	return S_OK;
 }
 
 void gameScene::release()
-{
-	
+{	
 	CAMERA->release();
 	CAMERA->releaseSingleton();
 	m_pPlayer->release();
@@ -43,8 +46,7 @@ void gameScene::release()
 }
 
 void gameScene::update()
-{
-	
+{	
 	m_pPlayer->update();
 	m_pMapManager->update();
 	CAMERA->setFocus(m_pPlayer);
@@ -61,6 +63,9 @@ void gameScene::update()
 		m_pMapManager->loadingMap("image/ddd.map", 50, 50);
 	}
 
+	//m_rcPlayer = m_pPlayer->getPlayerRc();
+	//m_rcPlayer.left / 64;
+
 }
 
 void gameScene::render(HDC hdc)
@@ -69,10 +74,13 @@ void gameScene::render(HDC hdc)
 	HFONT myFont = CreateFont(21, 0, 0, 0, 800, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "모리스9");
 	HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 
+	//플레이어가 위
 	//m_pBG->render(hdc, 0, 0, CAMERA->getX(), CAMERA->getY(), WINSIZEX, WINSIZEY);
 	m_pMapManager->render(hdc);
-	PLAYTIMEMANAGER->render(hdc);
 	m_pPlayer->render(hdc);
+	PLAYTIMEMANAGER->render(hdc);
+
+	//플레이어가 아래
 
 	TIMEMANAGER->render(hdc);
 

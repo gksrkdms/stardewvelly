@@ -144,6 +144,7 @@ public:
 	playerMenu* getPlayerMenu() { return m_pMenu; }
 	void getMap(mapManager* map) { m_pMap = map; }
 
+	inline RECT getPlayerRc() { return m_rc; }
 	//int getTargetX() { return m_nTargetX; }
 	//int getTargetY() { return m_nTargetY; }
 	

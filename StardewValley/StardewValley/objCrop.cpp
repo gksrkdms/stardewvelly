@@ -15,7 +15,6 @@ HRESULT objCrop::init()
 {
 	m_pCrop = IMAGEMANAGER->findImage("crops");
 
-	m_nScalar = 4;
 	m_nFrameX = 0;
 	m_nFrameY = 0;
 	m_isOnce = false;
@@ -62,7 +61,7 @@ void objCrop::render(HDC hdc)
 
 void objCrop::render(HDC hdc, int x, int y)
 {
-	m_pCrop->frameRender(hdc, x, y - m_pCrop->getFrameHeight()*m_nScalar, m_nFrameX, m_nFrameY, m_nScalar);
+	m_pCrop->frameRender(hdc, x, y - m_pCrop->getFrameHeight()*GAME_SCALAR, m_nFrameX, m_nFrameY, GAME_SCALAR);
 	//m_pCrop->frameRender(hdc, x - m_pCrop->getFrameWidth()*1.5, y - m_pCrop->getFrameHeight()*m_nScalar, m_nFrameX, m_nFrameY, m_nScalar);
 
 }

@@ -121,7 +121,9 @@ void gametime::update()
 	{
 		m_alpha = 0;
 		m_isNight = false;
-		m_nMinAngle = 180;
+
+		if(m_min==0)
+			m_nMinAngle = 180;
 	}
 
 	//ø‰¿œ

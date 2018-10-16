@@ -277,6 +277,10 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("item_303", "image/Stardew Valley/item/item_303.bmp", 16, 16, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("item_501", "image/Stardew Valley/item/item_501.bmp", 16, 16, true, RGB(255, 0, 255));
 
+	// npc
+	IMAGEMANAGER->addImage("npc_abigail", "image/Stardew Valley/npc/npc_abigail.bmp", 4, 4, true, RGB(255, 0, 255));
+
+
 }
 
 void mainGame::addsound()

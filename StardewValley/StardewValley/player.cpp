@@ -60,7 +60,6 @@ HRESULT player::init()
 	m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 208, 24, 164); // @플레이어 에너지
 	
 
-	
 	m_rc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX, m_nPlayerSizeY);
 	m_TargetRc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX * 3, m_nPlayerSizeY * 3);
 	isMove = false;
