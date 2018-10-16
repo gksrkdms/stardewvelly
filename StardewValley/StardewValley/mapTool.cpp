@@ -316,7 +316,6 @@ void mapTool::update()
 						}
 					}*/
 				}
-				//m_weight[2][2] = { 0 };
 			}
 
 		}
