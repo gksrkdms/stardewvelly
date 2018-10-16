@@ -898,7 +898,7 @@ void player::useItem()
 			case CONITEM_RECOVERY:
 				EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
 				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
-				m_nHp += m_pTargetItem->getHp();
+				//m_nHp += m_pTargetItem->getHp();
 				m_fCurrHp += m_pTargetItem->getHp();
 				if (m_fCurrHp >= m_fMaxHp)
 					m_fCurrHp = m_fMaxHp;
@@ -1063,11 +1063,11 @@ void player::progressBarToolTip()
 	{
 		isProgressBar[1] = false;
 	}
-	else
-	{
-		EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
-		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개물없을때.wav", g_soundVolume.effect);
-	}
+	//else
+	//{
+	//	EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
+	//	SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개물없을때.wav", g_soundVolume.effect);
+	//}
 }
 
 void player::addSound()
