@@ -171,7 +171,7 @@ void player::render(HDC hdc)
 			// 아이템이
 			if (m_pTargetItem->getItemKind() == ITEM_SEED)
 			{
-				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, SCALAR);
+				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, GAME_SCALAR);
 			}
 		}
 	}

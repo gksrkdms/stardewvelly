@@ -62,6 +62,7 @@ void objCrop::render(HDC hdc)
 
 void objCrop::render(HDC hdc, int x, int y)
 {
-	m_pCrop->frameRender(hdc, x - m_pCrop->getFrameWidth()*1.5, y - m_pCrop->getFrameHeight()*m_nScalar, m_nFrameX, m_nFrameY, m_nScalar);
+	m_pCrop->frameRender(hdc, x, y - m_pCrop->getFrameHeight()*m_nScalar, m_nFrameX, m_nFrameY, m_nScalar);
+	//m_pCrop->frameRender(hdc, x - m_pCrop->getFrameWidth()*1.5, y - m_pCrop->getFrameHeight()*m_nScalar, m_nFrameX, m_nFrameY, m_nScalar);
 
 }

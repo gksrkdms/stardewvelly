@@ -172,8 +172,8 @@ void gametime::render(HDC hdc)
 
 	// 시계 랜더
 	if(m_pClock)
-		m_pClock->render(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR -10, 20, CLOCK_SCALAR);
-		m_pMinutehand->rotateRender(hdc, m_nMinAngle, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR -20, -26, CLOCK_SCALAR);
+		m_pClock->render(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR -10, 20, GAME_SCALAR);
+		m_pMinutehand->rotateRender(hdc, m_nMinAngle, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR -20, -26, GAME_SCALAR);
 	//m_pMinutehand->rotateRender(hdc, 0, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 40, 20+ m_pClock->getHeight(), CLOCK_SCALAR);
 		//m_pMinutehand->render(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR +40, 20, CLOCK_SCALAR);
 
@@ -189,25 +189,25 @@ void gametime::render(HDC hdc)
 	switch (m_week)
 	{
 	case MON:
-		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 130, 45, "월요일.", strlen("월요일."));
+		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 130, 45, "월요일.", strlen("월요일."));
 		break;
 	case TUE:
-		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 130, 45, "화요일.", strlen("화요일."));
+		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 130, 45, "화요일.", strlen("화요일."));
 		break;
 	case WED:
-		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 130, 45, "수요일.", strlen("수요일."));
+		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 130, 45, "수요일.", strlen("수요일."));
 		break;
 	case THUR:
-		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 130, 45, "목요일.", strlen("목요일."));
+		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 130, 45, "목요일.", strlen("목요일."));
 		break;
 	case FRI:
-		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 130, 45, "금요일.", strlen("금요일."));
+		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 130, 45, "금요일.", strlen("금요일."));
 		break;
 	case SAT:
-		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 130, 45, "토요일.", strlen("토요일."));
+		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 130, 45, "토요일.", strlen("토요일."));
 		break;
 	case SUN:
-		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 130, 45, "일요일.", strlen("일요일."));
+		TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 130, 45, "일요일.", strlen("일요일."));
 		break;
 	default:
 		break;
@@ -224,15 +224,15 @@ void gametime::render(HDC hdc)
 	//TextOut(hdc, 0, 200, str, strlen(str));
 
 	sprintf_s(str, 256, "%d : ", m_hour);
-	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 150, 135, str, strlen(str));
+	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 150, 135, str, strlen(str));
 
 	sprintf_s(str, 256, "%d", m_nPrintMin);
-	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 190, 135, str, strlen(str));
+	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 190, 135, str, strlen(str));
 
 	SelectObject(hdc, oldFont);
 	DeleteObject(myFont);
 
 	sprintf_s(str, 256, "%d", m_day);
-	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 215, 50, str, strlen(str));
+	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 215, 50, str, strlen(str));
 
 }
