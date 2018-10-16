@@ -9,7 +9,6 @@ class fishing;
 class mapManager;
 
 #define TARGET_SIZE 2
-#define SCALAR 4
 
 enum PLAYERDIR
 {

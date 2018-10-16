@@ -138,15 +138,13 @@ void player::update()
 
 void player::render(HDC hdc)
 {
-	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth(),WINSIZEY-260); // @체력,에너지틀
+	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth()*4,WINSIZEY-260,4); // @체력,에너지틀
 	//MakeRect(hdc, m_HpRc);		// @체력렉트
 	//MakeRect(hdc, m_EnergyRc);  //@에너지렉트
 	HBRUSH brush = CreateSolidBrush(RGB(9, 255, 0)); //색깔브러쉬
 	FillRect(hdc, &m_HpRc, brush);
 	FillRect(hdc, &m_EnergyRc, brush);
 	DeleteObject(brush);
-
-
 
 	// 플레이어 랜더
 	if (m_pFishing->getIsFishing() == false)
@@ -173,7 +171,7 @@ void player::render(HDC hdc)
 			// 아이템이
 			if (m_pTargetItem->getItemKind() == ITEM_SEED)
 			{
-				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, SCALAR);
+				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, GAME_SCALAR);
 			}
 		}
 	}
@@ -931,16 +929,14 @@ void player::setWaterTile()
 		m_pTargetItem->setWaterDurability(m_pTargetItem->getWaterDurability() - 1);
 		if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND)
 		{
-			m_pMap->getTile(m_nTempIndex)->terrainFrameX = 13;
-			m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
+			//m_pMap->getTile(m_nTempIndex)->terrainFrameX = 13;
+			//m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
 			m_pMap->getTile(m_nTempIndex)->terrain = WETFARMLAND;
 		}
 		m_pTargetItem->progressWaterDurability(1);
 		m_nHp -= 2;
 	}
 }
-
-
 
 void player::addSound()
 {
