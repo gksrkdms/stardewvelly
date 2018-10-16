@@ -22,6 +22,7 @@ HRESULT mainGame::init()
 	TIMEMANAGER->init();
 	SCENEMANAGER->init();
 	SOUNDMANAGER->init();
+	EFFECTMANAGER->init();
 
 	setBackBuffer();
 
@@ -57,7 +58,8 @@ void mainGame::release()
 	SCENEMANAGER->release();
 	PLAYTIMEMANAGER->release();
 	SOUNDMANAGER->release();
-
+	EFFECTMANAGER->release();
+	
 	DATAMANAGER->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
 	IMAGEMANAGER->releaseSingleton();
@@ -65,6 +67,7 @@ void mainGame::release()
 	SCENEMANAGER->releaseSingleton();
 	PLAYTIMEMANAGER->releaseSingleton();
 	SOUNDMANAGER->releaseSingleton();
+	EFFECTMANAGER->releaseSingleton();
 }
 
 LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -191,17 +194,18 @@ LRESULT mainGame::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LP
 void mainGame::update()
 {
 	InvalidateRect(g_hWnd, NULL, false);
-
+	EFFECTMANAGER->update();
 	SCENEMANAGER->update();
+	
 }
 
 void mainGame::render()
 {
+
 	HDC backDC = m_pBackBuffer->getMemDC();
-
 	SCENEMANAGER->render(backDC);
-
 	m_pBackBuffer->render(hdc, 0, 0);
+	
 }
 
 void mainGame::imgload()
@@ -328,6 +332,16 @@ void mainGame::imgload()
 	// crops
 	IMAGEMANAGER->addImage("crops", "image/Stardew Valley/crop/crops.bmp", 256, 669,16,20, true, RGB(255, 0, 255));
 
+	//추가아이템 나중에정리할것
+	IMAGEMANAGER->addImage("item_214", "image/Stardew Valley/item/item_214.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_215", "image/Stardew Valley/item/item_215.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_219", "image/Stardew Valley/item/item_219.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_220", "image/Stardew Valley/item/item_220.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_221", "image/Stardew Valley/item/item_221.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_301", "image/Stardew Valley/item/item_301.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_302", "image/Stardew Valley/item/item_302.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_303", "image/Stardew Valley/item/item_303.bmp", 16, 16, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("item_501", "image/Stardew Valley/item/item_501.bmp", 16, 16, true, RGB(255, 0, 255));
 
 }
 

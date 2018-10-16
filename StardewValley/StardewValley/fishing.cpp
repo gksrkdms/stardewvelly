@@ -637,21 +637,21 @@ void fishing::zziThrow()
 	if (m_pPlayer->getPlayerDir() == PLAYER_DOWN)//앞을보고있을떄
 	{
 		m_fTime3 += TIMEMANAGER->getElapsedTime();
-		if (m_fTime3 < 0.1f)
+		if (m_fTime3 < 0.2f)
 		{
 			m_fZziX -= 5.f;
 			m_fZziY += 10.f;
 		}
 		else if (m_fTime3 < 0.2f)
 		{
-			m_fZziY += 10.f;
+			m_fZziY += 12.f;
 		}
-		else if (m_fTime3 < 0.3f)
+		else if (m_fTime3 < 0.4f)
 		{
 			m_fZziX += 8.f;
-			m_fZziY += 15.f;
+			m_fZziY += 16.f;
 		}
-		if (m_fTime3 > 0.4f && m_fTime3 < 0.6f)
+		if (m_fTime3 > 0.5f && m_fTime3 < 0.6f)
 		{
 			m_fZziY += 0.7f;
 		}
@@ -664,16 +664,16 @@ void fishing::zziThrow()
 	{
 
 		m_fTime3 += TIMEMANAGER->getElapsedTime();
-		if (m_fTime3 < 0.1f)
+		if (m_fTime3 < 0.2f)
 		{
 			m_fZziX += 10.f;
 			m_fZziY -= 10.f;
 		}
-		else if (m_fTime3 < 0.2f)
+		else if (m_fTime3 < 0.3f)
 		{
 			m_fZziY -= 10.f;
 		}
-		else if (m_fTime3 < 0.3f)
+		else if (m_fTime3 < 0.4f)
 		{
 			m_fZziX -= 5.f;
 			m_fZziY -= 15.f;
@@ -690,20 +690,20 @@ void fishing::zziThrow()
 	else if (m_pPlayer->getPlayerDir() == PLAYER_LEFT)//왼
 	{
 		m_fTime3 += TIMEMANAGER->getElapsedTime();
-		if (m_fTime3 < 0.1f)
+		if (m_fTime3 < 0.2f)
 		{
 			m_fZziX -= 5.f;
 			m_fZziY -= 10.f;
 		}
-		else if (m_fTime3 < 0.2f)
+		else if (m_fTime3 < 0.3f)
 		{
 			m_fZziX -= 10.f;
 			m_fZziY -= 10.f;
 		}
-		else if (m_fTime3 < 0.3f)
+		else if (m_fTime3 < 0.4f)
 		{
 			m_fZziX -= 20.f;
-			m_fZziY += 35.f;
+			m_fZziY += 50.f;
 		}
 		if (m_fTime3 > 0.4f && m_fTime3 < 0.6f)
 		{
@@ -717,20 +717,20 @@ void fishing::zziThrow()
 	else if (m_pPlayer->getPlayerDir() == PLAYER_RIGHT)//오
 	{
 		m_fTime3 += TIMEMANAGER->getElapsedTime();
-		if (m_fTime3 < 0.1f)
+		if (m_fTime3 < 0.2f)
 		{
 			m_fZziX += 5.f;
 			m_fZziY -= 10.f;
 		}
-		else if (m_fTime3 < 0.2f)
+		else if (m_fTime3 < 0.3f)
 		{
 			m_fZziX += 10.f;
 			m_fZziY -= 10.f;
 		}
-		else if (m_fTime3 < 0.3f)
+		else if (m_fTime3 < 0.4f)
 		{
-			m_fZziX += 23.f;
-			m_fZziY += 35.f;
+			m_fZziX += 35.f;
+			m_fZziY += 50.f;
 		}
 		if (m_fTime3 > 0.4f && m_fTime3 < 0.6f)
 		{

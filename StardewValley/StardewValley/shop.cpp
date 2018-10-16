@@ -363,9 +363,12 @@ void shop::setItem()
 				m_iterItem->second->deleteItem();
 			}
 			m_iterItem = m_mapItem.find(0);
-			m_iterItem->second->getItem(105, false);
+			m_iterItem->second->getItem(303, false);
 			m_iterItem = m_mapItem.find(1);
-			m_iterItem->second->getItem(205, false);
+			m_iterItem->second->getItem(302, false);
+			m_iterItem = m_mapItem.find(2);   //@@@ 내가 추가
+			m_iterItem->second->getItem(501, false);
+		
 			isOnceSetItem = false;
 			break;
 		}

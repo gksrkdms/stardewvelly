@@ -17,6 +17,10 @@ HRESULT player::init()
 	m_pSeedTarget = IMAGEMANAGER->findImage("focustile_002");
 	m_pNumber = IMAGEMANAGER->findImage("goldnumber");
 	m_pHpEnergyUi = IMAGEMANAGER->findImage("hp_EnergyBar");
+	EFFECTMANAGER->addEffect("water_drop", "image/Stardew Valley/물뿌바닥이펙트.bmp",640,64,64,64,8,5);
+	EFFECTMANAGER->addEffect("water_drop2", "image/Stardew Valley/물뿌윗부분이펙트.bmp",192,64,64,64,5,5);
+	EFFECTMANAGER->addEffect("recovery", "image/Stardew Valley/회복이펙트.bmp",448,64,64,64,10,5);
+	EFFECTMANAGER->addEffect("need_water", "image/Stardew Valley/물부족.bmp",256,64,64,64,4,5);
 
 	m_pAni = new animation;
 	m_playerDir = PLAYER_DOWN;
@@ -82,9 +86,10 @@ void player::release()
 
 void player::update()
 {	
+	
 	m_pTargetItem = m_pMenu->getQuickItem();	// 퀵바 아이템 정보 받아옴
 	m_pAni->frameUpdate(TIMEMANAGER->getElapsedTime());	// 에니매이션용
-
+	
 	if (m_pMenu->getMenu() == false && m_playerState == PLAYER_MENU)
 	{
 		// 메뉴클래스에서 false되면 플레이 상태로 전환
@@ -143,6 +148,10 @@ void player::update()
 
 void player::render(HDC hdc)
 {
+	if (m_pTargetItem && m_pTargetItem->getActItemKind()==ACTITEM_WATER)
+	{
+		EFFECTMANAGER->render(hdc);
+	}
 	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth(),WINSIZEY-260); // @체력,에너지틀
 	m_pHpBar->render(hdc);
 	m_pEnergyBar->render(hdc);
@@ -152,7 +161,11 @@ void player::render(HDC hdc)
 	{
 		m_pPlayer->aniRender(hdc, m_nX - CAMERA->getX() - m_nSyncX, m_nY - CAMERA->getY() - m_nSyncY, m_pAni);
 	}
-
+	if (m_pTargetItem && m_pTargetItem->getActItemKind() != ACTITEM_WATER)
+	{
+		EFFECTMANAGER->render(hdc);
+	}
+    
 	// 퀵바 아이템이 있을때
 	if (m_pTargetItem)
 	{
@@ -294,6 +307,7 @@ void player::setKey()
 
 	if (KEYMANAGER->isStayKeyDown('A'))
 	{
+		
 		if (SOUNDMANAGER->isPlaying("sound/effect/startbutton.wav") == false)
 			SOUNDMANAGER->play("sound/effect/startbutton.wav", g_soundVolume.effect);
 		if (isMove == false)
@@ -372,7 +386,7 @@ void player::setKey()
 		SOUNDMANAGER->play("sound/effect/startbutton.wav", g_soundVolume.effect);
 		if (isMove == false)
 		{
-		
+			
 			switch (m_playerMotion)
 			{
 			case MOTION_IDLE:
@@ -449,10 +463,11 @@ void player::setKey()
 		SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
 		m_playerState = PLAYER_MENU;
 		m_pMenu->setMenuDir(MENU_INVEN);
-		
+	
 	}
 	if (KEYMANAGER->isOnceKeyDown('R'))
 	{
+		SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
 		m_playerState = PLAYER_MENU;
 		m_pMenu->setMenuDir(MENU_SHOP);
 	}
@@ -716,7 +731,9 @@ void player::setItemMotion()
 					break;
 				case ACTITEM_WATER:
 					m_playerMotion = MOTION_WATER;
+					
 					setMotion(m_pAni, &m_pPlayer, "player_water", 2, 4);
+					
 					switch (m_playerDir)
 					{
 					case PLAYER_LEFT:
@@ -726,7 +743,7 @@ void player::setItemMotion()
 						startMotion(m_pAni, 4, 6, false, false, 5);
 						break;
 					case PLAYER_UP:
-						startMotion(m_pAni, 6, 8, false, false, 5);
+						startMotion(m_pAni, 6, 8, false, false, 5);						
 						break;
 					case PLAYER_DOWN:
 						startMotion(m_pAni, 0, 2, false, false, 5);
@@ -879,6 +896,9 @@ void player::useItem()
 			switch (m_pTargetItem->getConsumItemKind())
 			{
 			case CONITEM_RECOVERY:
+				EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
+				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
+				m_nHp += m_pTargetItem->getHp();
 				m_fCurrHp += m_pTargetItem->getHp();
 				if (m_fCurrHp >= m_fMaxHp)
 					m_fCurrHp = m_fMaxHp;
@@ -886,7 +906,6 @@ void player::useItem()
 				if (m_fCurrEnergy >= m_fMaxEnergy)
 					m_fCurrEnergy = m_fMaxEnergy;
 				m_pTargetItem->useItem();
-				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 			case CONITEM_SEED:
 				break;
 			}
@@ -945,6 +964,9 @@ void player::setWaterTile()
 {
 	if (m_pTargetItem->getWaterDurability() > 0)
 	{
+		EFFECTMANAGER->play("water_drop2", (m_nTargetX), (m_nTargetY)-30);
+		EFFECTMANAGER->play("water_drop", (m_nTargetX), (m_nTargetY));
+		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개2.wav", g_soundVolume.effect);
 		m_pTargetItem->setWaterDurability(m_pTargetItem->getWaterDurability() - 1);
 		if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND)
 		{
@@ -1041,6 +1063,11 @@ void player::progressBarToolTip()
 	{
 		isProgressBar[1] = false;
 	}
+	else
+	{
+		EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
+		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개물없을때.wav", g_soundVolume.effect);
+	}
 }
 
 
@@ -1054,5 +1081,5 @@ void player::addSound()
 	SOUNDMANAGER->addSound("sound/effect/playerAct/도끼질.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/playerAct/물뿌리개2.wav", false, false);
 	SOUNDMANAGER->addSound("sound/effect/playerAct/밭갈다.wav", false, false);
-
+	SOUNDMANAGER->addSound("sound/effect/playerAct/물뿌리개물없을때.wav", false, false);
 }

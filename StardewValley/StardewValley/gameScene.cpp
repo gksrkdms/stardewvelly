@@ -14,20 +14,21 @@ HRESULT gameScene::init()
 	m_pPlayer->init();
 	m_pMapManager = new mapManager;
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/ddd.map");
+	m_pMapManager->loadMap("image/goldBeach1.map");
 	m_pPlayer->getMap(m_pMapManager);
 
 	//게임시간
 	PLAYTIMEMANAGER->init();
-
+	
 	//배경음
 	SOUNDMANAGER->play("sound/CloudCountry.mp3", g_soundVolume.bgm);
-
+	
 	return S_OK;
 }
 
 void gameScene::release()
 {
+	
 	CAMERA->release();
 	CAMERA->releaseSingleton();
 	m_pPlayer->release();
@@ -40,6 +41,7 @@ void gameScene::release()
 
 void gameScene::update()
 {
+	
 	m_pPlayer->update();
 	m_pMapManager->update();
 	CAMERA->setFocus(m_pPlayer);
@@ -89,14 +91,16 @@ void gameScene::addSound()
 	SOUNDMANAGER->addSound("sound/effect/changeitem.wav", false, false);
 	// 인벤 열기 닫기
 	SOUNDMANAGER->addSound("sound/effect/인벤토리.wav", false, false);
+	// 인벤 쓰레기통
+	SOUNDMANAGER->addSound("sound/effect/쓰레기통버리기.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/쓰레기통여는소리.wav", false, false);
+	// 인벤 정리
+	SOUNDMANAGER->addSound("sound/effect/인벤정리.wav", false, false);
+	
 	//상점 페이지넘기기
 	SOUNDMANAGER->addSound("sound/effect/선택음1.wav", false, false);
 	//상점 물건사고파는소리
 	SOUNDMANAGER->addSound("sound/effect/돈소리.wav", false, false);
-
-
-
-
 
 	//음식먹기
 	SOUNDMANAGER->addSound("sound/effect/아삭소리2.wav", false, false);
