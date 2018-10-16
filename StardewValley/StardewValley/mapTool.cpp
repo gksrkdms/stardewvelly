@@ -213,6 +213,7 @@ void mapTool::update()
 		}
 	}
 
+	//오토타일
 	autoTile();
 
 	// camera 이동
