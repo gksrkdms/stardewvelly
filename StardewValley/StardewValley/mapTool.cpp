@@ -257,8 +257,7 @@ void mapTool::render(HDC hdc)
 
 			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
 			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
-
-		
+					
 			// 농장타일랜더
 			if (m_pTiles[m_indexCamera].terrain == FARMLAND || m_pTiles[m_indexCamera].terrain == WETFARMLAND)
 			{
