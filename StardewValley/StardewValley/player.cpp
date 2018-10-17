@@ -6,6 +6,8 @@
 #include "item.h"
 #include "fishing.h"
 #include "progressBarHp.h"
+#include "mapObject.h"
+#include "objCrop.h"
 
 #include "mapManager.h"
 
@@ -70,6 +72,7 @@ HRESULT player::init()
 
 	m_pRight.x = 0;
 	m_pRight.y = 0;
+	isHarvest = false;
 
 	return S_OK;
 }
@@ -121,7 +124,7 @@ void player::update()
 	{
 		m_pTargetItem->setPlayXY(m_nX, m_nY);	// 도구아이템이 아닐때 플레이어 x,y받아오는 함수
 		// L버튼 가능을하기위해 낚시상태가 아닐떄, 인벤클래스의 L버튼불값이 false일떄
-		if (m_playerState != PLAYER_FISHING && m_pMenu->getInven()->getLbutton() == false)
+		if (m_playerState != PLAYER_FISHING && m_pMenu->getInven()->getLbutton() == false && isHarvest == false)
 		{
 			setItemMotion();
 		}						// 도구아이템 모션 상태
@@ -145,6 +148,25 @@ void player::update()
 
 	// 충돌 값 구하는 함수
 	PointCollide();
+	if (m_pMap->getTile(m_nTempIndex)->object == OB_NUM)
+	{
+		isHarvest = true;
+	}
+	else
+	{
+		isHarvest = false;
+	}
+	if (isHarvest)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			m_mapObj = m_pMap->getObject();
+			m_iterObj = m_mapObj.find(m_nTempIndex);
+			m_pMenu->getInven()->addItem(m_iterObj->second->getCropId());
+			m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+			m_pMap->objectDelete(m_nTempIndex);
+		}
+	}
 }
 
 void player::render(HDC hdc)
@@ -186,8 +208,7 @@ void player::render(HDC hdc)
 			// 아이템이 씨앗일때
 			if (m_pTargetItem->getItemKind() == ITEM_SEED)
 			{
-				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, 0, 0, 150, 4);
-				int a = 9;
+				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, 4);
 			}
 		}
 	}
@@ -209,7 +230,7 @@ void player::render(HDC hdc)
 
 	char str[128];
 
-	sprintf_s(str, 128, "충돌상태 : %d", m_playerCollision);
+	sprintf_s(str, 128, "수확상태 : %d", isHarvest);
 	TextOut(hdc, 0, 600, str, strlen(str));
 
 
@@ -892,8 +913,11 @@ void player::useItem()
 				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 				m_pTargetItem->useItem();
 			case CONITEM_SEED:
-				if (m_pMap->getTile(m_nTempIndex)->terrain == WETFARMLAND && m_pMap->getTile(m_nTempIndex)->object != CROP)
+				if ((m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND || m_pMap->getTile(m_nTempIndex)->terrain == WETFARMLAND) &&
+					m_pMap->getTile(m_nTempIndex)->object != CROP)
 				{
+					m_pMap->getTile(m_nTempIndex)->object = CROP;
+					m_pMap->setCrop(m_pTargetItem->getItemId(), m_nTempIndex);
 					m_pTargetItem->useItem();
 				}
 				break;

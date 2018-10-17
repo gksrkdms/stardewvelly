@@ -143,6 +143,11 @@ HRESULT mapTool::init()
 	m_pSampleTiles[144].terrain = SEA;
 	m_pSampleTiles[146].terrain = SEA;
 	m_pSampleTiles[166].terrain = SEA;
+
+	m_pSampleTiles[378].object = DOOR;
+	m_pSampleTiles[379].object = DOOR;
+	m_pSampleTiles[398].object = DOOR;
+	m_pSampleTiles[399].object = DOOR;
 		
 	EnableWindow(m_hBtnSetCollision, FALSE);
 	EnableWindow(m_hBtnCancelCollision, FALSE);

@@ -10,6 +10,7 @@ enum LOADINGSTATE
 };
 
 class mapObject;
+class objCrop;
 
 class mapManager: public mapTool
 {
@@ -19,6 +20,9 @@ private:
 
 	std::vector<tagTile> m_vecTile;
 	std::vector<tagTile>::iterator m_iterTile;
+
+	map<int, mapObject*> m_mapObj;
+	map<int, mapObject*>::iterator m_iterObj;
 
 	string m_mapName;
 
@@ -46,6 +50,9 @@ public:
 	void render(HDC hdc);
 	void loadingRender(HDC hdc);
 
+	void setCrop(int seedNum, int tileIndex);
+	void objectDelete(int objIndex);
+
 	void saveMap(const char* szfileName);
 	void loadingMap(const char * szfileName, int mapSizex, int mapSizey);
 	void loadMap(const char * szfileName);
@@ -57,6 +64,8 @@ public:
 	inline int getTileSize() { return TILE_SIZE_1; }
 	inline int getTileX() { return TILE_X; }
 	inline int getTileY() { return TILE_Y; }
+
+	inline map<int, mapObject*> getObject() { return m_mapObj; }
 
 
 };
