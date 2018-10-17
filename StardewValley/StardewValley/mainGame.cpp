@@ -60,7 +60,8 @@ void mainGame::release()
 	PLAYTIMEMANAGER->release();
 	SOUNDMANAGER->release();
 	EFFECTMANAGER->release();
-	
+	OBJMANAGER->release();
+
 	DATAMANAGER->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
 	IMAGEMANAGER->releaseSingleton();
@@ -69,6 +70,7 @@ void mainGame::release()
 	PLAYTIMEMANAGER->releaseSingleton();
 	SOUNDMANAGER->releaseSingleton();
 	EFFECTMANAGER->releaseSingleton();
+	OBJMANAGER->releaseSingleton();
 }
 
 LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -155,6 +157,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("town_Shop", "image/maptool/town.bmp", 320, 320,20,20, true, RGB(255, 255, 255));
 	IMAGEMANAGER->addImage("town_Nomal", "image/maptool/town_nomal.bmp", 320, 320,20,20, true, RGB(255, 255, 255));
 	IMAGEMANAGER->addImage("object3", "image/maptool/object3.bmp", 320, 320,20,20, true, RGB(255, 255, 255));
+	IMAGEMANAGER->addImage("object4_npc", "image/maptool/npc.bmp", 320, 320,20,20, true, RGB(255, 255, 255));
 	
 	IMAGEMANAGER->addImage("objtree", "image/maptool/object/objtree.bmp", 176, 654,11,41, true, RGB(255, 255, 255));
 	IMAGEMANAGER->addImage("objtree2", "image/maptool/object/environment_003.bmp", 432, 560,9,7, true, RGB(255, 0, 255));
@@ -278,7 +281,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("item_501", "image/Stardew Valley/item/item_501.bmp", 16, 16, true, RGB(255, 0, 255));
 
 	// npc
-	IMAGEMANAGER->addImage("npc_abigail", "image/Stardew Valley/npc/npc_abigail.bmp", 4, 4, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("npc_abigail", "image/Stardew Valley/npc/npc_abigail.bmp",62,123, 4, 4, true, RGB(255, 0, 255));
 
 
 }

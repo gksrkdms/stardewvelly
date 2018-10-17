@@ -6,32 +6,23 @@ class animation;
 class mapManager;
 
 enum State {
-	IDLE, MOVE, TALK
+	TOP, BOTTOM, LEFT, RIGHT
 };
 
 enum NPC_NAME {
 	ABIGAIL,
 };
 
-struct NPCINFO
-{
-	float fNpcX;
-	float fNpcY;
-	float fNpcSpeed;
-	int NpcID;
-
-	State NpcState;
-};
-
-
 class objNpc :
 	public mapObject
 {
 private:
-	NPCINFO* m_NpcInfo;
 
-	NPC_NAME m_NpcName;
+	NPC_NAME m_NpcName; // 이름
+	State NpcState; // 상태
+
 	animation* m_pAniNpc;
+	float m_fNpcSpeed;
 
 	//int m_costG; // 시작점으로부터의 비용
 	//int m_costH; // 도착점까지의 비용
@@ -58,7 +49,11 @@ public:
 
 	virtual void getPlayer(player* player) { m_player = player; }
 
-	void findPath();
+	void abiMove();
+
+	void startMotion(animation * ani, int start, int end, bool reverse, bool loop, int fps);
+
+	//void findPath();
 	
 };
 

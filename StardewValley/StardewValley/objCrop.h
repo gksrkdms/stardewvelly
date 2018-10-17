@@ -1,20 +1,17 @@
 #pragma once
 #include "mapObject.h"
 
-enum CropKINDS
+enum CROP_KIND
 {
 	STRAWBERRY,
 	CARROT
 };
 
-class item;
-
 class objCrop : public mapObject
 {
 private:
-	image * m_pCrop;
-	item* m_pitem;
-
+	//item* m_pitem;
+	CROP_KIND m_cropKind;
 public:
 	objCrop();
 	~objCrop();
@@ -24,5 +21,8 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render(HDC hdc);
+
+	virtual void getPlayer(player* player) { m_player = player; }
+
 };
 

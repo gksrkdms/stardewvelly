@@ -50,7 +50,7 @@ HRESULT mapManager::init()
 		m_pTiles[i].autoWeightWet = { 0,0,0,0 };
 	}
 	
-	m_pObjMgr = new objectManager;
+	//m_pObjMgr = new objectManager;
 	//m_pObjMgr->setTree(m_pTiles[4].rc.left, m_pTiles[5].rc.top);
 	//m_pObjMgr->setTree(m_pTiles[8].rc.left, m_pTiles[15].rc.top);
 	//m_pObjMgr->setTree(m_pTiles[20].rc.left, m_pTiles[15].rc.top);
@@ -74,7 +74,7 @@ void mapManager::release()
 	SAFE_DELETE_ARRAY(m_pTiles);
 	SAFE_DELETE_ARRAY(m_pObjectMap);
 	SAFE_DELETE_ARRAY(m_pObjectCrop);
-	delete m_pObjMgr;
+	//delete m_pObjMgr;
 
 
 	m_vecTile.clear();
@@ -90,8 +90,7 @@ void mapManager::update()
 
 	autoTile();
 
-	m_pObjMgr->update();
-	
+	OBJMANAGER->update();
 	
 	//m_pObjectMap->update();
 
@@ -224,15 +223,13 @@ void mapManager::objRender(HDC hdc)
 			m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
 			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 			
-			//if (m_pTiles[m_indexCamera].object == TREE_BIG || m_pTiles[m_indexCamera].object == TREE_SMALL)
 			if (m_pTiles[m_indexCamera].object == TREE_SMALL || m_pTiles[m_indexCamera].object == TREE_BIG
-				|| m_pTiles[y*TILE_X + x].object == CROP)
-				m_pObjMgr->render(hdc);
-			//m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top);
+				|| m_pTiles[m_indexCamera].object == CROP)
+				OBJMANAGER->render(hdc);
 
-			//else if (m_pTiles[m_indexCamera].object == CROP)
-			//	m_pObjectCrop->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
-			
+			else if (m_pTiles[m_indexCamera].object == NPC)
+				OBJMANAGER->Npcrender(hdc);
+
 			else if (m_pTiles[m_indexCamera].object != OBJ_NULL)
 			{
 				if (m_pTiles[m_indexCamera].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
@@ -368,19 +365,24 @@ void mapManager::SetTree()
 		{			
 			if (m_pTiles[y*TILE_X + x].object == TREE_SMALL)
 			{
-				m_pObjMgr->setTree(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom,0);
+				OBJMANAGER->setTree(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom,0);
 			}
 
 			if (m_pTiles[y*TILE_X + x].object == TREE_BIG)
 			{
-				m_pObjMgr->setTree(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 1);
+				OBJMANAGER->setTree(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 1);
 			}
 
 			if (m_pTiles[y*TILE_X + x].object == CROP)
 			{
-				m_pObjMgr->setCrop(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 0);
+				OBJMANAGER->setCrop(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 101);
+			}
+
+			if (m_pTiles[y*TILE_X + x].object == NPC)
+			{
+				OBJMANAGER->setNpc(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 0);
 			}
 		}
 	}
-	m_pObjMgr->getPlayer(m_player);
+	OBJMANAGER->getPlayer(m_player);
 }

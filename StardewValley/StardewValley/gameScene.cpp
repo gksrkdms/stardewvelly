@@ -61,11 +61,6 @@ void gameScene::update()
 		m_pMapManager->loadingMap("image/ddd.map", 50, 50);
 	}
 
-	if (KEYMANAGER->isOnceKeyDown('W'))
-	{
-		m_pMapManager->loadingMap("image/ddd.map", 50, 50);
-	}
-
 	//m_rcPlayer = m_pPlayer->getPlayerRc();
 	//m_rcPlayer.left / 64;
 

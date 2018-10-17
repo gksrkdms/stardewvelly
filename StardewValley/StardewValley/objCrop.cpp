@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "objCrop.h"
-#include "item.h"
+#include "player.h"
 
 objCrop::objCrop()
 {
@@ -28,6 +28,22 @@ HRESULT objCrop::init(int x, int y, int id)
 
 	m_nObjID = id;
 
+	switch (m_nObjID)
+	{
+	case 101:
+		m_pObject = IMAGEMANAGER->findImage("crops");
+		m_cropKind = STRAWBERRY;
+		break;
+
+	case 102:
+		m_pObject = IMAGEMANAGER->findImage("crops");
+		m_cropKind = CARROT;
+		break;
+
+	default:
+		break;
+	}
+
 	m_nObjX = x;
 	m_nObjY = y;
 	m_rcObjet = RectMake(x, y - m_pObject->getFrameHeight()*GAME_SCALAR, m_pObject->getFrameWidth()*GAME_SCALAR, m_pObject->getFrameHeight()*GAME_SCALAR);
@@ -49,6 +65,16 @@ void objCrop::update()
 	//m_rcObjetc = RectMake(m_nObjX - m_pCrop->getFrameWidth()*1.5 - CAMERA->getX(), m_nObjY - m_pCrop->getFrameHeight()*GAME_SCALAR - CAMERA->getY(), m_pCrop->getFrameWidth()*GAME_SCALAR, m_pCrop->getFrameHeight()*GAME_SCALAR);
 	m_rcObjet = RectMake(m_nObjX - CAMERA->getX(), m_nObjY - m_pObject->getFrameHeight()*GAME_SCALAR - CAMERA->getY(), m_pObject->getFrameWidth()*GAME_SCALAR, m_pObject->getFrameHeight()*GAME_SCALAR);
 
+	switch (m_cropKind)
+	{
+	case STRAWBERRY:
+		break;
+	case CARROT:
+		break;
+	default:
+		break;
+	}
+
 	if (PLAYTIMEMANAGER->getMin() % 5 == 0 && !m_isOnce)
 	{
 		m_isOnce = true;
@@ -61,20 +87,9 @@ void objCrop::update()
 	}
 	else if (PLAYTIMEMANAGER->getMin() % 5 != 0)
 		m_isOnce = false;
+	
 
-	if (m_pCrop)
-	{
-		//switch (m_pitem->getItemId())
-		//{
-		//case 101:
-		//	break;
-
-		//default:
-		//	break;
-		//}
-
-		
-	}
+	
 }
 
 void objCrop::render(HDC hdc)

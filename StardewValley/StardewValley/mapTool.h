@@ -36,6 +36,7 @@ enum OBJECT
 	BOX,
 	CROP,
 	DOOR,
+	NPC,
 	OB_NUM
 };
 
@@ -45,6 +46,7 @@ enum OBJECTIDNUM
 	OBID_1,
 	OBID_2,
 	OBID_3,
+	OBID_4,
 	OBID_NUM
 };
 
@@ -190,8 +192,6 @@ private:
 	HWND	m_hBtnCollisionON;
 	HWND	m_hBtnCollisionOFF;
 	
-	// obj 강도 지정
-
 protected:
 	tagTile* m_pTiles;
 	tagSampleTile* m_pSampleTiles;

@@ -908,7 +908,9 @@ void player::useItem()
 				EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
 				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 				m_pTargetItem->useItem();
-			case CONITEM_SEED:
+			case CONITEM_SEED: //작물 심기
+				OBJMANAGER->setCrop(m_pMap->getTile(m_nTempIndex)->rc.left, m_pMap->getTile(m_nTempIndex)->rc.bottom, m_pTargetItem->getItemId());
+				m_pMap->getTile(m_nTempIndex)->object = CROP;
 				break;
 			}
 		}
@@ -973,9 +975,10 @@ void player::setWaterTile()
 		if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND)
 		{
 			SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개2.wav", g_soundVolume.effect);
-			m_pMap->getTile(m_nTempIndex)->terrainFrameX = 13;
-			m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
+			//m_pMap->getTile(m_nTempIndex)->terrainFrameX = 13;
+			//m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
 			m_pMap->getTile(m_nTempIndex)->terrain = WETFARMLAND;
+
 		}
 		m_pTargetItem->progressWaterDurability(1);
 		m_fCurrEnergy -= 2;
@@ -997,8 +1000,13 @@ void player::setAxeTile()
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(201);
 	}
-	if (m_pMap->getTile(m_nTempIndex)->object == TREE_BIG)
+	if (m_pMap->getTile(m_nTempIndex)->object == TREE_BIG
+		|| m_pMap->getTile(m_nTempIndex)->object == TREE_SMALL)
 	{
+		// 나무 삭제
+		OBJMANAGER->deleteTree(m_pMap->getTile(m_nTempIndex)->rc.left, m_pMap->getTile(m_nTempIndex)->rc.bottom);
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+
 		// 특정확률로 나무 수액 아이템 획득
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(203);

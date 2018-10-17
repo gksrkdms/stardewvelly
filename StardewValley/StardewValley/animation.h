@@ -28,6 +28,8 @@ public:
 	void setPlayFrame(int* arrPlay, int arrLen, bool loop = false);
 	void setPlayFrame(int start, int end, bool reverse = false, bool loop = false);
 
+	void setPlayFrameN(int start, int end, bool reverse, bool loop);
+
 	void setFPS(int fps);		// 초당 갱신 횟수 설정
 
 	void frameUpdate(float elapsedTime);	// 프레임 업데이트
