@@ -216,6 +216,10 @@ void player::render(HDC hdc)
 		}
 	}
 
+	char str[128];
+	sprintf_s(str, 128, "%d", i);
+	TextOut(hdc, 500, 50, str, strlen(str));
+
 	//MakeRect(hdc, m_temprc);
 	//MakeRect(hdc, m_rc);
 	//MakeRect(hdc, m_TargetRc);
