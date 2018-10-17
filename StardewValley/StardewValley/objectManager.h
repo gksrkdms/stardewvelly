@@ -9,9 +9,12 @@ class player;
 class objectManager:public singletonBase<objectManager>
 {
 private:
+
+	// list로 object 돌 나무 등 생성 및 해제
 	list<mapObject*> m_listObj;
 	list<mapObject*>::iterator m_iterObj;
 
+	// vector로 npc세팅
 	vector<mapObject*> m_listObjNpc;
 	vector<mapObject*>::iterator m_iterObjNpc;
 
