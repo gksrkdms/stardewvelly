@@ -91,14 +91,14 @@ void objectManager::deleteTree(int x, int y)
 {
 	for (m_iterObj = m_listObj.begin(); m_iterObj != m_listObj.end();)
 	{
-		if (((*m_iterObj)->getX() <= x + 2 || (*m_iterObj)->getX() >= x -2) && (*m_iterObj)->getY() == y)
+		if (((*m_iterObj)->getX() <= x + 1 || (*m_iterObj)->getX() >= x -1) && (*m_iterObj)->getY() == y)
 		{
-			m_listObj.erase(m_iterObj++);
+			m_listObj.erase(m_iterObj++); break;
 		}
 
-		else if((*m_iterObj)->getX() == x && ((*m_iterObj)->getY() <= y +2 || (*m_iterObj)->getY() >= y-2))
+		else if((*m_iterObj)->getX() == x && ((*m_iterObj)->getY() <= y +1 || (*m_iterObj)->getY() >= y-1))
 		{
-			m_listObj.erase(m_iterObj++);
+			m_listObj.erase(m_iterObj++); break;
 		}
 
 		else
