@@ -153,8 +153,6 @@ void player::update()
 	//낚시
 	m_pFishing->setPlayer(this);
 	m_pFishing->update();
-	
-
 }
 
 void player::render(HDC hdc)
@@ -210,7 +208,6 @@ void player::render(HDC hdc)
 	}
 
 	char str[128];
-
 	sprintf_s(str, 128, "%d", i);
 	TextOut(hdc, 500, 50, str, strlen(str));
 
@@ -231,10 +228,6 @@ void player::render(HDC hdc)
 
 	sprintf_s(str, 128, "hp : %d", m_nHp);
 	TextOut(hdc, 0, 500, str, strlen(str));
-
-	
-		
-	
 }
 
 void player::numRender(HDC hdc, int x, int y)
@@ -504,8 +497,9 @@ void player::setKey()
 	}
 
 	if (KEYMANAGER->isOnceKeyDown('E'))
-	{
+	{	
 		SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
+		m_pMenu->setMoney(m_nMoney);
 		m_playerState = PLAYER_MENU;
 		m_pMenu->setMenuDir(MENU_INVEN);
 	
@@ -515,6 +509,12 @@ void player::setKey()
 		SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
 		m_playerState = PLAYER_MENU;
 		m_pMenu->setMenuDir(MENU_SHOP);
+	}
+	if (KEYMANAGER->isOnceKeyDown('M')) //@@ 미니맵추가
+	{
+		SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
+		m_playerState = PLAYER_MENU;
+		m_pMenu->setMenuDir(MENU_MAP);
 	}
 }
 

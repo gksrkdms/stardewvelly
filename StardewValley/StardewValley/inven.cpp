@@ -182,7 +182,25 @@ void inven::render(HDC hdc)
 	// ÀÎº¥Åä¸®¸Þ´ºÀÏ¶§ ui¿Í ¸ðµç¾ÆÀÌÅÛ ·£´õ
 	if (m_invenDir == INVEN_INVEN)
 	{
+		char str[128];
 		m_pInvenBG->render(hdc, m_nBgX, m_nBgY);
+		
+		sprintf_s(str, 128, "ÇöÀç ÀÚ±Ý : %d g", m_nPlayerMoney); //@@
+		TextOut(hdc, m_nBgX +250, m_nBgY+330, str, strlen(str)); //@@
+
+		sprintf_s(str, 128, "NamNam ³óÀå"); //@@
+		TextOut(hdc, m_nBgX+250, m_nBgY +300, str, strlen(str)); //@@
+
+		sprintf_s(str, 128, "³Û³Û"); //@@
+		TextOut(hdc, m_nBgX+160, m_nBgY+500, str, strlen(str)); //@@
+
+		sprintf_s(str, 128, "¼¼°è °©ºÎ³óºÎ ÇùÈ¸ ·©Å· ¼øÀ§ 13 À§"); //@@
+		TextOut(hdc, m_nBgX + 250, m_nBgY + 390, str, strlen(str)); //@@
+
+		sprintf_s(str, 128, "ÃÑÇÕ ¼Òµæ±Ý : %d g", m_nPlayerMoney*3); //@@
+		TextOut(hdc, m_nBgX + 250, m_nBgY + 360, str, strlen(str)); //@@
+
+
 		m_pSlot1->render(hdc, m_nSlotX, m_nSlot1Y);
 		m_pSlot2->render(hdc, m_nSlotX, m_nSlot2Y);
 		m_pSlot3->render(hdc, m_nSlotX, m_nSlot3Y);

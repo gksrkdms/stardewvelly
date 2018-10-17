@@ -69,10 +69,10 @@ void playerMenu::update()
 	// 메뉴가 호출되면
 	if (isMenu)
 	{
+		m_pInven->setMoney(m_nPlayerMoney);
 		// 메뉴가 인벤토리,상점,제작,등등 체크해줌
 		if (m_menuDir == MENU_INVEN)
 		{
-
 			m_pInven->setInvenDir(INVEN_INVEN);	// 메뉴가 인벤토리일떄 인벤토리 랜더를위해 상태값변경
 		}
 		if (m_menuDir == MENU_SHOP)
@@ -90,8 +90,21 @@ void playerMenu::update()
 				isMenu = false;							// 인벤토리 false		
 			}	
 		}
+		if (m_menuDir == MENU_MAP)
+		{
+			if (KEYMANAGER->isOnceKeyDown('M')) //@ 미니맵추가
+			{
+				SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
+				m_pInven->setInvenDir(INVEN_QUICKBAR);
+				isMenu = false;
+			}
+			
+
+		}
 		
 	}
+
+		
 
 }
 
@@ -140,10 +153,11 @@ void playerMenu::render(HDC hdc)
 				char str[128];
 				sprintf_s(str, 128, "%s", m_Tooltip[i].c_str());
 				TextOut(hdc, g_ptMouse.x + 30, g_ptMouse.y + 35, str, strlen(str));
-
-				if(i== MENU_MAP && (KEYMANAGER->isStayKeyDown(VK_LBUTTON))) //@@ 월드맵 추가 이건아닌거같음
-				m_pWordMap->render(hdc, 270, 30); //@@ 월드맵 추가 이건아닌거같음
 			}
+		}
+		if (m_menuDir == MENU_MAP)
+		{	
+			m_pWordMap->render(hdc, 150, 0); //@@ 월드맵 추가 이건아닌거같음
 		}
 	}
 	
@@ -192,15 +206,14 @@ void playerMenu::menuUpdate()
 		if (m_pInven->getHandItem() == false)
 		{
 			if (KEYMANAGER->isOnceKeyDown('E'))
-			{
-				
+			{				
 				SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
 				m_pInven->setInvenDir(INVEN_QUICKBAR);	// 인벤토리 상태를 퀵바로
 				m_menuDir = MENU_INVEN;					// 메뉴상태값을 인벤토리로 초기화
 				isMenu = false;							// 인벤토리 false
 			}
 		}
-		if (m_menuDir != MENU_SHOP)
+		if (m_menuDir != MENU_SHOP && m_menuDir != MENU_MAP) //@@ 미니맵추가
 		{
 			for (int i = 0; i < 8; i++)
 			{

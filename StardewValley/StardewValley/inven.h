@@ -44,7 +44,7 @@ private:
 	int	m_nSlot1Y;
 	int	m_nSlot2Y;
 	int	m_nSlot3Y;
-
+	int m_nPlayerMoney; //@@ 돈표시추가
 	PRIVATESYNTHESIZE(int, m_nBgX, BgX);	// 인벤토리 배경 xy좌표
 	PRIVATESYNTHESIZE(int, m_nBgY, BgY);
 
@@ -80,6 +80,7 @@ private:
 	void setKey();		// 키 셋팅
 	void setUiUpdate();	// 정렬, 쓰레기통 업데이트
 
+	void setMoney(int money) { m_nPlayerMoney = money; } //@@돈표시추가
 
 public:
 	HRESULT init();

@@ -37,10 +37,10 @@ private:
 	RECT m_IconRc[8];	// 메뉴 아이콘 렉트 8개
 	bool isMouseIn[8];	// 메뉴 아이콘 불값 8개
 
-
 	map<int, item*> m_mapItem;	// 인벤토리 크기 담아줄 맵
 	map<int, item*>::iterator m_iterItem;
 
+	int m_nPlayerMoney;
 	void menuUpdate();
 
 public:
@@ -49,10 +49,11 @@ public:
 	void update();
 	void render(HDC hdc);
 
+	
 	void getPlayer(player* play);	// 상점한테 플레이어 정보 넘기는함수
 	item* getQuickItem();			// 퀵바아이템 정보를 플레이어한테 정보를 넘기는 함수
 	inven * getInven() { return m_pInven; }
-
+	void setMoney(int money) { m_nPlayerMoney =money;} //@@ 인벤 돈표시 추가
 
 	playerMenu();
 	~playerMenu();

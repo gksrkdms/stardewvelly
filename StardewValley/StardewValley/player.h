@@ -76,7 +76,7 @@ private:
 	mapManager* m_pMap;			// 맵 포인터
 
 	PRIVATESYNTHESIZE(int, m_nMoney, Money);
-
+	
 	float m_fMaxHp;				// @플레이어 최대 체력
 	float m_fMaxEnergy;			// @플레이어 최대 에너지
 	float m_fCurrHp;			// @플레이어 현재 체력
