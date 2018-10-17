@@ -49,6 +49,19 @@ void objCrop::update()
 	//m_rcObjetc = RectMake(m_nObjX - m_pCrop->getFrameWidth()*1.5 - CAMERA->getX(), m_nObjY - m_pCrop->getFrameHeight()*GAME_SCALAR - CAMERA->getY(), m_pCrop->getFrameWidth()*GAME_SCALAR, m_pCrop->getFrameHeight()*GAME_SCALAR);
 	m_rcObjet = RectMake(m_nObjX - CAMERA->getX(), m_nObjY - m_pObject->getFrameHeight()*GAME_SCALAR - CAMERA->getY(), m_pObject->getFrameWidth()*GAME_SCALAR, m_pObject->getFrameHeight()*GAME_SCALAR);
 
+	if (PLAYTIMEMANAGER->getMin() % 5 == 0 && !m_isOnce)
+	{
+		m_isOnce = true;
+		m_nFrameX++;
+		m_pObject->setFrameX(m_nFrameX);
+		if (m_nFrameX > 5)
+		{
+			m_nFrameX = 5;
+		}
+	}
+	else if (PLAYTIMEMANAGER->getMin() % 5 != 0)
+		m_isOnce = false;
+
 	if (m_pCrop)
 	{
 		//switch (m_pitem->getItemId())
@@ -60,18 +73,7 @@ void objCrop::update()
 		//	break;
 		//}
 
-		if (PLAYTIMEMANAGER->getMin() % 5 == 0 && !m_isOnce)
-		{
-			m_isOnce = true;
-			m_nFrameX++;
-			m_pObject->setFrameX(m_nFrameX);
-			if (m_nFrameX > 5)
-			{
-				m_nFrameX = 5;
-			}
-		}
-		else if (PLAYTIMEMANAGER->getMin() % 5 != 0)
-			m_isOnce = false;
+		
 	}
 }
 

@@ -74,6 +74,8 @@ void mapManager::release()
 	SAFE_DELETE_ARRAY(m_pTiles);
 	SAFE_DELETE_ARRAY(m_pObjectMap);
 	SAFE_DELETE_ARRAY(m_pObjectCrop);
+	delete m_pObjMgr;
+
 
 	m_vecTile.clear();
 	//delete[] m_pTiles;
@@ -86,7 +88,6 @@ void mapManager::update()
 		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1 - CAMERA->getX(), (i / TILE_X)*TILE_SIZE_1 - CAMERA->getY(), TILE_SIZE_1, TILE_SIZE_1);
 	}
 
-	   	 
 	autoTile();
 
 	m_pObjMgr->update();
@@ -224,7 +225,8 @@ void mapManager::objRender(HDC hdc)
 			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 			
 			//if (m_pTiles[m_indexCamera].object == TREE_BIG || m_pTiles[m_indexCamera].object == TREE_SMALL)
-			if (m_pTiles[m_indexCamera].object == TREE_SMALL || m_pTiles[m_indexCamera].object == TREE_BIG)
+			if (m_pTiles[m_indexCamera].object == TREE_SMALL || m_pTiles[m_indexCamera].object == TREE_BIG
+				|| m_pTiles[y*TILE_X + x].object == CROP)
 				m_pObjMgr->render(hdc);
 			//m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top);
 
@@ -372,6 +374,11 @@ void mapManager::SetTree()
 			if (m_pTiles[y*TILE_X + x].object == TREE_BIG)
 			{
 				m_pObjMgr->setTree(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 1);
+			}
+
+			if (m_pTiles[y*TILE_X + x].object == CROP)
+			{
+				m_pObjMgr->setCrop(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 0);
 			}
 		}
 	}

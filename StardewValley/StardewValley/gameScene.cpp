@@ -3,8 +3,6 @@
 #include "player.h"
 #include "mapManager.h"
 
-
-
 HRESULT gameScene::init()
 {
 	g_mapSize.mapSizeX = 3200;
@@ -59,6 +57,11 @@ void gameScene::update()
 		m_pMapManager->loadingMap("image/1280.map", 20, 15);
 	}
 	if (KEYMANAGER->isStayKeyDown('P'))
+	{
+		m_pMapManager->loadingMap("image/ddd.map", 50, 50);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('W'))
 	{
 		m_pMapManager->loadingMap("image/ddd.map", 50, 50);
 	}

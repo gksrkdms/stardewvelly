@@ -53,9 +53,31 @@ void objectManager::setTree(int x, int y, int id)
 
 void objectManager::setCrop(int x, int y, int id)
 {
+	mapObject* m_pObjectCrop;
+	m_pObjectCrop = new objCrop;
+	m_pObjectCrop->init(x, y, id);
+	m_listObjTree.push_back(m_pObjectCrop);
 }
 
 void objectManager::setNpc(int x, int y, int id)
+{
+}
+
+void objectManager::deleteTree(int x, int y)
+{
+	for (m_iterObjTree = m_listObjTree.begin(); m_iterObjTree != m_listObjTree.end();)
+	{
+		if ((*m_iterObjTree)->getX() == x && (*m_iterObjTree)->getY() == y)
+		{
+			m_listObjTree.erase(m_iterObjTree++);
+		}
+
+		else
+			m_iterObjTree++;
+	}
+}
+
+void objectManager::deleteCrop(int x, int y)
 {
 }
 
