@@ -230,7 +230,7 @@ void player::render(HDC hdc)
 
 	char str[128];
 
-	sprintf_s(str, 128, "수확상태 : %d", isHarvest);
+	sprintf_s(str, 128, "타일오브젝트 : %d", m_pMap->getTile(m_nTempIndex)->terrain);
 	TextOut(hdc, 0, 600, str, strlen(str));
 
 
@@ -321,6 +321,13 @@ void player::setTargetXY()
 					m_nTargetX = m_pMap->getTile(m_indexCamera)->rc.left;
 					m_nTargetY = m_pMap->getTile(m_indexCamera)->rc.top;
 					break;
+				}
+			}
+			if (IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
+			{
+				if (m_pMap->getTile(m_indexCamera)->terrain == EXIT)
+				{
+					m_pMap->loadingMap("image/1111.map", 50, 50);
 				}
 			}
 		}
