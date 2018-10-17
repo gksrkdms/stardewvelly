@@ -13,6 +13,9 @@ private:
 	player*	m_pPlayer;
 	mapManager*	m_pMapManager;
 
+	RECT m_rcPlayer;
+
+
 public:
 	void addSound();
 

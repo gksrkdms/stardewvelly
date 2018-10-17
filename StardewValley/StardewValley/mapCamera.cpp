@@ -54,17 +54,17 @@ void mapCamera::render(HDC hdc)
 void mapCamera::camera()
 {
 	if (m_ptMoveCameraX < 0) m_ptMoveCameraX = 0;
-	if (m_ptMoveCameraX > MAPSIZEX- 50) m_ptMoveCameraX = MAPSIZEX- 50;
+	if (m_ptMoveCameraX > g_mapSize .mapSizeX- 50) m_ptMoveCameraX = g_mapSize.mapSizeX - 50;
 	if (m_ptMoveCameraY < 0) m_ptMoveCameraY = 0;
-	if (m_ptMoveCameraY > MAPSIZEY - 50) m_ptMoveCameraY = MAPSIZEY - 50;
+	if (m_ptMoveCameraY > g_mapSize.mapSizeY - 50) m_ptMoveCameraY = g_mapSize.mapSizeY - 50;
 
 	m_ptCameraX = m_ptMoveCameraX - WINSIZEX / 2;
 	if (m_ptCameraX < 0) m_ptCameraX = 0;
-	if (m_ptCameraX > MAPSIZEX - WINSIZEX) m_ptCameraX = MAPSIZEX - WINSIZEX;
+	if (m_ptCameraX > g_mapSize.mapSizeX - WINSIZEX) m_ptCameraX = g_mapSize.mapSizeX - WINSIZEX;
 
 	m_ptCameraY = m_ptMoveCameraY - WINSIZEY / 2;
 	if (m_ptCameraY < 0) m_ptCameraY = 0;
-	if (m_ptCameraY > MAPSIZEY - WINSIZEY) m_ptCameraY = MAPSIZEY - WINSIZEY;
+	if (m_ptCameraY > g_mapSize.mapSizeY - WINSIZEY) m_ptCameraY = g_mapSize.mapSizeY - WINSIZEY;
 }
 
 void mapCamera::cameraMiniInit(int focusX, int focusY)

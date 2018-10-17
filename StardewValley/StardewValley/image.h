@@ -113,6 +113,12 @@ public:
 	void alphaFrameRender(HDC hdc, int destX, int destY,
 		int currFrameX, int currFrameY, BYTE alpha, int scalar = 1);
 
+	//프레임알파랜더
+	void alphaFrameRenderM(HDC hdc, int destX, int destY, int currFrameX, int currFrameY, BYTE alpha, int scalar);
+
+	// 돋보기
+	void enlargementRender(HDC hdc, int destX, int destY, int currFrameX, int currFrameY, BYTE alpha, int scalar);
+
 	// 애니 렌더
 	void aniRender(HDC hdc, int destX, int destY, animation* ani, int scalar = 1);
 	// 플롯 용스칼라 애니랜더

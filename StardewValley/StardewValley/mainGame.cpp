@@ -15,7 +15,7 @@ HRESULT mainGame::init()
 	hdc = GetDC(g_hWnd);
 
 	g_soundVolume.bgm = 0.4f;
-	g_soundVolume.effect = 1.f;
+	g_soundVolume.effect = 1.0f;
 
 	KEYMANAGER->init();
 	IMAGEMANAGER->init();
@@ -48,9 +48,10 @@ HRESULT mainGame::init()
 void mainGame::release()
 {
 	SAFE_DELETE(m_pBackBuffer);
-
+	
 	ReleaseDC(g_hWnd, hdc);
 
+	SOUNDMANAGER->release();
 	DATAMANAGER->release();
 	KEYMANAGER->release();
 	IMAGEMANAGER->release();
@@ -59,7 +60,8 @@ void mainGame::release()
 	PLAYTIMEMANAGER->release();
 	SOUNDMANAGER->release();
 	EFFECTMANAGER->release();
-	
+	OBJMANAGER->release();
+
 	DATAMANAGER->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
 	IMAGEMANAGER->releaseSingleton();
@@ -68,6 +70,7 @@ void mainGame::release()
 	PLAYTIMEMANAGER->releaseSingleton();
 	SOUNDMANAGER->releaseSingleton();
 	EFFECTMANAGER->releaseSingleton();
+	OBJMANAGER->releaseSingleton();
 }
 
 LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -99,6 +102,7 @@ LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			switch (wParam)
 			{
 			case VK_ESCAPE:
+				PostQuitMessage(0);
 				break;
 			}
 			return 0;
@@ -108,73 +112,6 @@ LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 
 		case WM_PRINT:
 			break;
-
-			//case WM_COMMAND:
-			//{
-			//	switch (LOWORD(wParam))
-			//	{
-			//		//save
-			//	case 0:
-			//		OPENFILENAME ofn;
-
-			//		ZeroMemory(&ofn, sizeof(OPENFILENAME));
-			//		ofn.lStructSize = sizeof(OPENFILENAME);
-			//		ofn.hwndOwner = hWnd;
-			//		ofn.lpstrFilter = _T("Map Files(*.map)\0*.map\0All Files (*.*)\0*.*\0");
-			//		ofn.lpstrFile = szFileName;
-			//		ofn.nMaxFile = nFileNameMaxLen;
-			//		ofn.lpstrDefExt = "map";
-			//		//ofn.nFilterIndex = 1;
-			//		//ofn.lpstrFileTitle = szFileName;
-			//		//ofn.nMaxFileTitle = 0;
-			//		//ofn.lpstrInitialDir = NULL;
-			//		ofn.Flags = OFN_OVERWRITEPROMPT;
-			//		GetSaveFileName(&ofn);
-
-			//		//if (0 != GetOpenFileName(&OFN))
-			//		//{
-			//		//}
-			//		
-			//		m_pTileMap->saveMap(szFileName);
-			//		//MessageBox(g_hWnd, TEXT("dd"), TEXT("ddkkk"), MB_OK);
-			//		break;
-
-			//		// load
-			//	case 1:
-
-			//		memset(&OFN, 0, sizeof(OPENFILENAME));
-			//		OFN.lStructSize = sizeof(OPENFILENAME);
-			//		OFN.hwndOwner = hWnd;
-			//		OFN.lpstrFilter = "Map Files(*.map)\0*.map\0All Files (*.*)\0*.*\0";
-			//		OFN.lpstrFile = szFileName;
-			//		OFN.nMaxFile = nFileNameMaxLen;
-
-			//		if (0 != GetOpenFileName(&OFN))
-			//		{
-			//			SetWindowText(hEditFileToBeOpened, OFN.lpstrFile);
-			//			m_pTileMap->loadMap(OFN.lpstrFile);
-			//		}
-			//		return TRUE;
-
-			//		break;
-
-			//		// terrain
-			//	case 2:
-			//		m_pTileMap->setObject(false);
-			//		break;
-
-			//		// object
-			//	case 3:
-			//		m_pTileMap->setObject(true);
-			//		break;
-
-			//		// eraser
-			//	case 4:
-			//		m_pTileMap->objectEraser();
-			//		break;
-			//	}
-			//	break;
-			//}
 
 		case WM_DESTROY:
 			PostQuitMessage(0);
@@ -220,6 +157,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("town_Shop", "image/maptool/town.bmp", 320, 320,20,20, true, RGB(255, 255, 255));
 	IMAGEMANAGER->addImage("town_Nomal", "image/maptool/town_nomal.bmp", 320, 320,20,20, true, RGB(255, 255, 255));
 	IMAGEMANAGER->addImage("object3", "image/maptool/object3.bmp", 320, 320,20,20, true, RGB(255, 255, 255));
+	IMAGEMANAGER->addImage("object4_npc", "image/maptool/npc.bmp", 320, 320,20,20, true, RGB(255, 255, 255));
 	
 	IMAGEMANAGER->addImage("objtree", "image/maptool/object/objtree.bmp", 176, 654,11,41, true, RGB(255, 255, 255));
 	IMAGEMANAGER->addImage("objtree2", "image/maptool/object/environment_003.bmp", 432, 560,9,7, true, RGB(255, 0, 255));
@@ -230,6 +168,7 @@ void mainGame::imgload()
 	// background
 	IMAGEMANAGER->addImage("whitebackground", "image/background.bmp", WINSIZEX, WINSIZEY);
 	IMAGEMANAGER->addImage("dark", "image/dark.bmp", WINSIZEX, WINSIZEY); //밤, 네이비
+	IMAGEMANAGER->addImage("black", "image/black.bmp", WINSIZEX, WINSIZEY); // 블랙
 
 	// 타이틀
 	IMAGEMANAGER->addImage("title_001", "image/Stardew Valley/title/title_001.bmp", 400, 183, true, RGB(255, 0, 255));	// 스타듀밸리
@@ -260,6 +199,7 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("menu_textBox", "image/Stardew Valley/ui/menu_textBox.bmp", 73, 60, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("goldnumber", "image/Stardew Valley/ui/goldnumber.bmp", 200, 28, 10, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("hp_EnergyBar", "image/Stardew Valley/ui/hp_energy.bmp", 104, 224, true, RGB(255, 0, 255)); // @체력에너지 이미지
+	IMAGEMANAGER->addImage("hp_energy_top", "image/Stardew Valley/ui/hp_energy_top.bmp", 24, 168, true, RGB(255, 0, 255)); // @체력에너지 이미지
 
 	IMAGEMANAGER->addImage("sort", "image/Stardew Valley/ui/sort.bmp", 65, 65, true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("trash_can", "image/Stardew Valley/ui/trash_can.bmp", 16, 26, true, RGB(255,0,255));
@@ -342,6 +282,10 @@ void mainGame::imgload()
 	IMAGEMANAGER->addImage("item_302", "image/Stardew Valley/item/item_302.bmp", 16, 16, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("item_303", "image/Stardew Valley/item/item_303.bmp", 16, 16, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("item_501", "image/Stardew Valley/item/item_501.bmp", 16, 16, true, RGB(255, 0, 255));
+
+	// npc
+	IMAGEMANAGER->addImage("npc_abigail", "image/Stardew Valley/npc/npc_abigail.bmp",62,123, 4, 4, true, RGB(255, 0, 255));
+
 
 }
 

@@ -5,11 +5,10 @@ class playerMenu;
 class inven;
 class item;
 class fishing;
-
+class progressBarHp;
 class mapManager;
 
 #define TARGET_SIZE 2
-#define SCALAR 4
 
 enum PLAYERDIR
 {
@@ -71,9 +70,11 @@ private:
 	RECT	m_HpRc;				// @체력 렉트
 	RECT	m_EnergyRc;			// @에너지 렉트
 	RECT	m_rc;				// 플래이어 렉트
-	RECT	m_TargetRc;			// 빨간네모 렉트
+	RECT	m_TargetRc;			// 플레이어 주변 렉트
 	RECT	m_temprc;			// 빨간네모 렉트
 	mapManager* m_pMap;			// 맵 포인터
+	progressBarHp*	m_pHpBar;
+	progressBarHp*	m_pEnergyBar;
 
 	PRIVATESYNTHESIZE(int, m_nMoney, Money);
 	
@@ -97,6 +98,7 @@ private:
 	bool isMove;				// 프레임렌더용 불값
 	bool isStop;				// 멈춰있을때 타일타겟 보이게
 	bool isSeed;				// 씨앗을 뿌릴수 있는지 없는지 확인용
+	bool isProgressBar[2];		// 체력,기력바 출력용 불값
 
 	int m_nTempIndex;			// 타일에 접근할 임시 인덱스
 
@@ -116,8 +118,12 @@ private:
 	void setDir();			// 도구 사용시 플레이어 방향잡는함수
 	void setSpadeTile();			// 괭이로 타일바꾸는 함수
 	void setWaterTile();			// 물뿌리개로 타일바꾸는 함수
+	void setAxeTile();				// 도끼 상호작용 함수
+	void setPickaxTile();			// 곡괭이 상호작용 함수
+	void setNotTile();				// 낫 상호작용 함수
+	void setSwordTile();			// 검 상호작용 함수
+	void progressBarToolTip();		// 체력,에너지 표시 처리함수
 
-	int i;
 	bool m_isMove =false;
 
 	void addSound();
@@ -141,6 +147,7 @@ public:
 	playerMenu* getPlayerMenu() { return m_pMenu; }
 	void getMap(mapManager* map) { m_pMap = map; }
 
+	inline RECT getPlayerRc() { return m_rc; }
 	//int getTargetX() { return m_nTargetX; }
 	//int getTargetY() { return m_nTargetY; }
 	

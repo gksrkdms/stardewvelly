@@ -1,9 +1,6 @@
 #pragma once
 #include "singletonBase.h"
 
-//시계 이미지 배율
-#define CLOCK_SCALAR 4
-
 // 게임시간단위로 한시간일때 현실시간으로 몇초인지 환산한 값
 #define CONVER_HOUR 60
 

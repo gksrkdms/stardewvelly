@@ -442,7 +442,7 @@ void item::setItem(bool sameItem)
 		if (m_actItemKind == ACTITEM_WATER)
 		{
 			waterBar = new progressBar;
-			waterBar->init((float)m_nX, (float)m_nY + 40, 48, 20);
+			waterBar->init((float)m_nX, (float)m_nY + 40, 48, 8);
 		}
 	}
 }

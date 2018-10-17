@@ -37,13 +37,11 @@ HRESULT soundManager::init()
 void soundManager::release()
 {
 	m_system->release();
-	
 }
 
 void soundManager::update()
 {
 	m_system->update();
-
 }
 
 void soundManager::addSound(string soundName, bool isBGM, bool isLoop)

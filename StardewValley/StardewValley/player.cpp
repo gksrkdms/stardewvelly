@@ -5,6 +5,7 @@
 #include "inven.h"
 #include "item.h"
 #include "fishing.h"
+#include "progressBarHp.h"
 
 #include "mapManager.h"
 
@@ -32,6 +33,11 @@ HRESULT player::init()
 	m_pFishing->setPlayer(this);
 	m_pFishing->init();
 
+	m_pHpBar = new progressBarHp;
+	m_pHpBar->init(WINSIZEX - m_pHpEnergyUi->getWidth() + 8, WINSIZEY - 216, 24, 168);
+	m_pEnergyBar = new progressBarHp;
+	m_pEnergyBar->init(WINSIZEX - m_pHpEnergyUi->getWidth() + 60, WINSIZEY - 216, 24, 168);
+
 	m_nX = WINSIZEX / 2;
 	m_nY = WINSIZEY / 2;
 	m_nTargetX = 0;
@@ -43,24 +49,25 @@ HRESULT player::init()
 	m_nPlayerSizeY = 64;
 	m_nMoveSpeed = 10;
 	m_nMoney = 54321;
-	
 
+	m_fCurrHp = m_fMaxHp = 100;			// @플레이어 체력
+	m_fCurrEnergy = m_fMaxEnergy = 270;		// @플레이어 에너지 
+	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, 164);  //@플레이어 체력
 
 	m_fCurrHp = m_fMaxHp = 270;			// @플레이어 체력
 	m_fCurrEnergy = m_fMaxEnergy = 300;		// @플레이어 에너지 
-	m_fGaugeBar = 164; //@@
-	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, m_fGaugeBar);  //@플레이어 체력
-	//m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 44, 24, -164); // @플레이어 에너지
+	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, 164);  //@플레이어 체력
 	m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 208, 24, 164); // @플레이어 에너지
-	//m_HpRc.top = (m_fCurrHp / m_fMaxHp) / 164 + (WINSIZEY - 208);
 	
 
-	
 	m_rc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX, m_nPlayerSizeY);
 	m_TargetRc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX * 3, m_nPlayerSizeY * 3);
 	isMove = false;
 	isStop = true;
 	isSeed = false;
+	isProgressBar[0] = false;
+	isProgressBar[1] = false;
+
 	isRideHorse = false; //@@ 말타기 불값초기화
 	setMotion(m_pAni, &m_pPlayer, "player_idle", 5, 5);
 	startMotion(m_pAni, 0, 1, false, false, 5);
@@ -149,6 +156,8 @@ void player::update()
 			m_pTargetItem->setPlayerPlaying(false);
 		}
 	}
+	// 체력,에너지바 
+	progressBarToolTip();
 
 	//낚시
 	m_pFishing->setPlayer(this);
@@ -170,8 +179,8 @@ void player::render(HDC hdc)
 	FillRect(hdc, &m_HpRc, brush);
 	FillRect(hdc, &m_EnergyRc, brush);
 	DeleteObject(brush);
-
-
+	//m_pHpBar->render(hdc);
+	//m_pEnergyBar->render(hdc);
 
 	// 플레이어 랜더
 	if (m_pFishing->getIsFishing() == false)
@@ -199,10 +208,10 @@ void player::render(HDC hdc)
 					m_pTarget->render(hdc, m_nTargetX, m_nTargetY, TARGET_SIZE);
 				}
 			}
-			// 아이템이
+			// 아이템이 씨앗일때
 			if (m_pTargetItem->getItemKind() == ITEM_SEED)
 			{
-				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, SCALAR);
+				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, GAME_SCALAR);
 			}
 		}
 	}
@@ -217,7 +226,6 @@ void player::render(HDC hdc)
 
 	m_pMenu->render(hdc);
 
-	
 	if (m_pTargetItem)
 	{
 		char str[128];
@@ -226,8 +234,20 @@ void player::render(HDC hdc)
 	}
 	m_pFishing->render(hdc);
 
-	sprintf_s(str, 128, "hp : %d", m_nHp);
-	TextOut(hdc, 0, 500, str, strlen(str));
+	char str[128];
+	sprintf_s(str, 128, "씨앗불값 : %d", isSeed);
+	TextOut(hdc, 0, 550, str, strlen(str));
+
+	if (isProgressBar[1] == true)
+	{
+		sprintf_s(str, 128, "%d / %d", m_fCurrEnergy, m_fMaxEnergy);
+		TextOut(hdc, WINSIZEX - m_pHpEnergyUi->getWidth() - 100, WINSIZEY - 196, str, strlen(str));
+	}
+	if (isProgressBar[0] == true)
+	{
+		sprintf_s(str, 128, "%d / %d", m_fCurrHp, m_fMaxHp);
+		TextOut(hdc, WINSIZEX - m_pHpEnergyUi->getWidth() - 100, WINSIZEY - 196, str, strlen(str));
+	}
 }
 
 void player::numRender(HDC hdc, int x, int y)
@@ -285,11 +305,8 @@ void player::setTargetXY()
 				{
 					if (PtInRect(&m_pMap->getTile(m_indexCamera)->rc, g_ptMouse))
 					{
-						//물일때 확인
-						if (m_pMap->getTile(m_indexCamera)->object == TREE_SMALL)
-							i++;
-
-						if (m_pMap->getTile(m_indexCamera)->terrain == EARTH)
+						if (m_pMap->getTile(m_indexCamera)->terrain == FARMLAND || 
+							m_pMap->getTile(m_indexCamera)->terrain == WETFARMLAND)
 						{
 							isSeed = true;
 						}
@@ -738,7 +755,6 @@ void player::setItemMotion()
 				{
 				case ACTITEM_AXE:
 					m_playerMotion = MOTION_AXE;
-					SOUNDMANAGER->play("sound/effect/playerAct/맨땅에.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_axe", 4, 4);
 					switch (m_playerDir)
 					{
@@ -755,6 +771,7 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 4, false, false, 5);
 						break;
 					}
+					setAxeTile();	// 상호작용 함수
 					break;
 				case ACTITEM_SPADE:
 					m_playerMotion = MOTION_SPADE;
@@ -775,12 +792,10 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 4, false, false, 5);
 						break;
 					}
-					SOUNDMANAGER->play("sound/effect/playerAct/밭갈다.wav", g_soundVolume.effect);
-					setSpadeTile();
+					setSpadeTile();	// 상호작용 함수
 					break;
 				case ACTITEM_WATER:
 					m_playerMotion = MOTION_WATER;
-					
 					setMotion(m_pAni, &m_pPlayer, "player_water", 2, 4);
 					
 					switch (m_playerDir)
@@ -798,11 +813,10 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 2, false, false, 5);
 						break;
 					}
-					setWaterTile();
+					setWaterTile();	// 상호작용 함수
 					break;
 				case ACTITEM_PICKAX:
 					m_playerMotion = MOTION_PICKAX;
-					SOUNDMANAGER->play("sound/effect/playerAct/맨땅에.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_mine", 3, 4);
 					switch (m_playerDir)
 					{
@@ -819,10 +833,10 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 3, false, false, 5);
 						break;
 					}
+					setPickaxTile(); // 상호작용 함수
 					break;
 				case ACTITEM_NOT:
 					m_playerMotion = MOTION_NOT;
-					SOUNDMANAGER->play("sound/effect/playerAct/낫질.wav", g_soundVolume.effect);
 					setMotion(m_pAni, &m_pPlayer, "player_not", 3, 4);
 					switch (m_playerDir)
 					{
@@ -839,16 +853,17 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 3, false, false, 5);
 						break;
 					}
+					setNotTile();	// 상호작용 함수
 					break;
 				case ACTITEM_FISHINGROD:
 					m_pFishing->init();
 					m_pFishing->setIsFishing(true);
 					m_playerState = PLAYER_FISHING;		
+					m_fCurrEnergy -= 8;
 					break;
 				case ACTITEM_SWORD:
 					m_playerMotion = MOTION_SWORD;
 					setMotion(m_pAni, &m_pPlayer, "player_sword", 3, 4);
-					SOUNDMANAGER->play("sound/effect/playerAct/낫질.wav", g_soundVolume.effect);
 					switch (m_playerDir)
 					{
 					case PLAYER_LEFT:
@@ -864,6 +879,7 @@ void player::setItemMotion()
 						startMotion(m_pAni, 0, 3, false, false, 5);
 						break;
 					}
+					setSwordTile();	// 상호작용 함수
 					break;
 				}
 			}
@@ -968,17 +984,25 @@ void player::useItem()
 			switch (m_pTargetItem->getConsumItemKind())
 			{
 			case CONITEM_RECOVERY:
+				m_fCurrHp += m_pTargetItem->getHp();
+				if (m_fCurrHp >= m_fMaxHp)
+					m_fCurrHp = m_fMaxHp;
+				m_fCurrEnergy += m_pTargetItem->getEnergy();
+				if (m_fCurrEnergy >= m_fMaxEnergy)
+					m_fCurrEnergy = m_fMaxEnergy;
 				EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
 				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
-				m_nHp += m_pTargetItem->getHp();
 				m_pTargetItem->useItem();
-			case CONITEM_SEED:
+			case CONITEM_SEED: //작물 심기
+				OBJMANAGER->setCrop(m_pMap->getTile(m_nTempIndex)->rc.left, m_pMap->getTile(m_nTempIndex)->rc.bottom, m_pTargetItem->getItemId());
+				m_pMap->getTile(m_nTempIndex)->object = CROP;
 				break;
 			}
 		}
 	}
 }
 
+// 도구사용시 방향 잡는 함수
 void player::setDir()
 {
 
@@ -1007,11 +1031,22 @@ void player::setDir()
 
 void player::setSpadeTile()
 {
-	//m_pMap->getTile(m_nTempIndex)->index = 129;
-	m_pMap->getTile(m_nTempIndex)->terrainFrameX = 9;
-	m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
-	m_pMap->getTile(m_nTempIndex)->terrain = FARMLAND;
-	m_nHp -= 2;
+	SOUNDMANAGER->play("sound/effect/playerAct/밭갈다.wav", g_soundVolume.effect);
+	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// 특정확률로 풀 아이템 획득
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(201);
+	}
+	if (m_pMap->getTile(m_nTempIndex)->terrain == EARTH)
+	{ 
+		m_pMap->getTile(m_nTempIndex)->terrainFrameX = 9;
+		m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
+		m_pMap->getTile(m_nTempIndex)->terrain = FARMLAND;
+	}
+	m_fCurrEnergy -= 2;
+	m_pEnergyBar->setGauge(m_fCurrEnergy, m_fMaxEnergy);
 }
 
 void player::setWaterTile()
@@ -1024,12 +1059,14 @@ void player::setWaterTile()
 		m_pTargetItem->setWaterDurability(m_pTargetItem->getWaterDurability() - 1);
 		if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND)
 		{
-			m_pMap->getTile(m_nTempIndex)->terrainFrameX = 13;
-			m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
+			SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개2.wav", g_soundVolume.effect);
+			//m_pMap->getTile(m_nTempIndex)->terrainFrameX = 13;
+			//m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
 			m_pMap->getTile(m_nTempIndex)->terrain = WETFARMLAND;
+
 		}
 		m_pTargetItem->progressWaterDurability(1);
-		m_nHp -= 2;
+		m_fCurrEnergy -= 2;
 	}
 	else
 	{
@@ -1038,7 +1075,95 @@ void player::setWaterTile()
 	}
 }
 
+void player::setAxeTile()
+{
+	SOUNDMANAGER->play("sound/effect/playerAct/맨땅에.wav", g_soundVolume.effect);
+	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// 특정확률로 풀 아이템 획득
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(201);
+	}
+	if (m_pMap->getTile(m_nTempIndex)->object == TREE_BIG
+		|| m_pMap->getTile(m_nTempIndex)->object == TREE_SMALL)
+	{
+		// 나무 삭제
+		OBJMANAGER->deleteTree(m_pMap->getTile(m_nTempIndex)->rc.left, m_pMap->getTile(m_nTempIndex)->rc.bottom);
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
 
+		// 특정확률로 나무 수액 아이템 획득
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(203);
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(204);
+	}
+	m_fCurrEnergy -= 2;
+}
+
+void player::setPickaxTile()
+{
+	SOUNDMANAGER->play("sound/effect/playerAct/맨땅에.wav", g_soundVolume.effect);
+	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// 특정확률로 풀 아이템 획득
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(201);
+	}
+	if (m_pMap->getTile(m_nTempIndex)->object == MINE_ROCK)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// 특정확률로 광석 아이템 획득
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(202);
+	}
+	m_fCurrEnergy -= 2;
+}
+
+void player::setNotTile()
+{
+	SOUNDMANAGER->play("sound/effect/playerAct/낫질.wav", g_soundVolume.effect);
+	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// 특정확률로 풀 아이템 획득
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(201);
+	}
+}
+
+void player::setSwordTile()
+{
+	SOUNDMANAGER->play("sound/effect/playerAct/낫질.wav", g_soundVolume.effect);
+	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
+	{
+		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		// 특정확률로 풀 아이템 획득
+		//if(RANDOM->getFromIntTo(0,1) > 0)
+		//m_pMenu->getInven()->addItem(201);
+	}
+}
+
+void player::progressBarToolTip()
+{
+	if (PtInRect(&m_HpRc, g_ptMouse))
+	{
+		isProgressBar[0] = true;
+	}
+	else
+	{
+		isProgressBar[0] = false;
+	}
+	if (PtInRect(&m_EnergyRc, g_ptMouse))
+	{
+		isProgressBar[1] = true;
+	}
+	else
+	{
+		isProgressBar[1] = false;
+	}
+}
 
 void player::addSound()
 {

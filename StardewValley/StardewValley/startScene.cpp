@@ -15,6 +15,10 @@ HRESULT startScene::init()
 
 	m_pAni_1 = new animation;
 	m_pAni_1->init(m_pImg2->getWidth(), m_pImg2->getHeight(), 222, 174);
+
+	g_mapSize.mapSizeX = 3200;
+	g_mapSize.mapSizeY = 3200;
+
 	//m_pAni_1->setFPS(1);
 
 	// 타이틀씬 메뉴 렉트, 불값 초기화

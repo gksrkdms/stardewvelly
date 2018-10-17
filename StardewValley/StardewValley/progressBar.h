@@ -1,9 +1,10 @@
 #pragma once
 class progressBar
 {
-private:
+protected:
 	float	m_fX, m_fY;
 	float	m_fWidth;
+	float	m_fHeight;
 
 	image*	m_imgTop;
 	image*	m_imgBottom;

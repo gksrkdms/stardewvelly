@@ -178,6 +178,81 @@ void animation::setPlayFrame(int start, int end, bool reverse, bool loop)
 	}
 }
 
+void animation::setPlayFrameN(int start, int end, bool reverse, bool loop)
+{
+	m_isLoop = loop;
+
+	m_vecPlayList.clear();
+
+	if (start == end)
+	{
+		return;
+	}
+
+	if (start > end)
+	{
+		if (reverse)
+		{
+			// 정->
+			for (int i = start; i < m_nFrameNum; i++)
+			{
+				m_vecPlayList.push_back(i);
+			}
+			for (int i = 0; i < end; i++)
+			{
+				m_vecPlayList.push_back(i);
+			}
+
+			// 역 <-
+			for (int i = end - 1; i >= 0; i--)
+			{
+				m_vecPlayList.push_back(i);
+			}
+			for (int i = m_nFrameNum - 1; i >= start; i--)
+			{
+				m_vecPlayList.push_back(i);
+			}
+		}
+		else
+		{
+			for (int i = start; i < m_nFrameNum; i++)
+			{
+				m_vecPlayList.push_back(i);
+			}
+			for (int i = 0; i < end; i++)
+			{
+				m_vecPlayList.push_back(i);
+			}
+		}
+
+	}
+	else
+	{
+		// 정 -> 역 <- 애니메이션
+		if (reverse)
+		{
+			for (int i = start; i < end; i++)
+			{
+				m_vecPlayList.push_back(i);
+			}
+
+			for (int i = end - 1; i >= start; i--)
+			{
+				m_vecPlayList.push_back(i);
+			}
+
+		}
+		// 정 -> 애니메이션
+		else
+		{
+			for (int i = start; i < end; i++)
+			{
+				m_vecPlayList.push_back(i);
+			}
+		}
+	}
+}
+
 // 초당 프레임 수
 void animation::setFPS(int fps)
 {

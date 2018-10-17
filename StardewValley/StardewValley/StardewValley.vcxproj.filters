@@ -70,6 +70,9 @@
     <Filter Include="MainGame\gameScene\progressBar">
       <UniqueIdentifier>{2847cda8-bd90-447d-85cd-ebb131f3a872}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\MapTool\object\Manager">
+      <UniqueIdentifier>{9d4dd484-55ff-45a5-ad34-e35d54e2bf99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -192,6 +195,15 @@
     <ClInclude Include="objCrop.h">
       <Filter>MainGame\MapTool\object</Filter>
     </ClInclude>
+    <ClInclude Include="objNpc.h">
+      <Filter>MainGame\MapTool\object</Filter>
+    </ClInclude>
+    <ClInclude Include="progressBarHp.h">
+      <Filter>MainGame\gameScene\progressBar</Filter>
+    </ClInclude>
+    <ClInclude Include="objectManager.h">
+      <Filter>MainGame\MapTool\object\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -298,6 +310,15 @@
     </ClCompile>
     <ClCompile Include="objCrop.cpp">
       <Filter>MainGame\MapTool\object</Filter>
+    </ClCompile>
+    <ClCompile Include="progressBarHp.cpp">
+      <Filter>MainGame\gameScene\progressBar</Filter>
+    </ClCompile>
+    <ClCompile Include="objNpc.cpp">
+      <Filter>MainGame\MapTool\object</Filter>
+    </ClCompile>
+    <ClCompile Include="objectManager.cpp">
+      <Filter>MainGame\MapTool\object\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
