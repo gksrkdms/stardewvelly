@@ -156,7 +156,7 @@ void mapManager::render(HDC hdc)
 				//m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left+ (m_pTiles[m_indexCamera].rc.right- m_pTiles[m_indexCamera].rc.left)/2, m_pTiles[m_indexCamera].rc.bottom);
 				m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
 
-			else if (m_pTiles[m_indexCamera].object == CROP || m_pTiles[m_indexCamera].object == DOOR)
+			else if (m_pTiles[m_indexCamera].object == CROP || m_pTiles[m_indexCamera].object == OB_NUM)
 			{
 				//m_pObjectCrop->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
 				for (m_iterObj = m_mapObj.begin(); m_iterObj != m_mapObj.end(); m_iterObj++)
@@ -322,6 +322,8 @@ void mapManager::loadingProcess()
 	if (m_Loading == LOAD_END)
 	{
 		m_Loading = LOAD_FALSE;
+		//string temp;
+		//temp = "image/temp_1111.map";
 		saveMap(tempCurrMapId);
 		g_mapSize.mapSizeX = m_ntempX;
 		g_mapSize.mapSizeY = m_ntempY;

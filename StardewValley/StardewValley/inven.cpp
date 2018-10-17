@@ -119,12 +119,12 @@ void inven::update()
 
 	setDir(); // 플레이어 상황에 따른 인벤토리값 셋팅함수
 	// 손에 집은 아이템 x,y마우스 따라다니게
-	if (isHandItem == true)
-	{
+	//if (isHandItem == true)
+	//{
 		m_pHand->setX(g_ptMouse.x + 5);
 		m_pHand->setY(g_ptMouse.y + 5);
-		//m_pHand->update(true);
-	}
+		m_pHand->update();
+	//}
 
 	if (m_invenDir == INVEN_INVEN)
 	{

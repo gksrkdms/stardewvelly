@@ -173,7 +173,7 @@ void player::render(HDC hdc)
 {
 	if (m_pTargetItem && m_pTargetItem->getActItemKind()==ACTITEM_WATER)
 	{
-		EFFECTMANAGER->render(hdc);
+		//EFFECTMANAGER->render(hdc);
 	}
 	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth(),WINSIZEY-260); // @체력,에너지틀
 	m_pHpBar->render(hdc);
@@ -186,7 +186,7 @@ void player::render(HDC hdc)
 	}
 	if (m_pTargetItem && m_pTargetItem->getActItemKind() != ACTITEM_WATER)
 	{
-		EFFECTMANAGER->render(hdc);
+		//EFFECTMANAGER->render(hdc);
 	}
     
 	// 퀵바 아이템이 있을때
@@ -916,9 +916,10 @@ void player::useItem()
 				m_fCurrEnergy += m_pTargetItem->getEnergy();
 				if (m_fCurrEnergy >= m_fMaxEnergy)
 					m_fCurrEnergy = m_fMaxEnergy;
-				EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
+				//EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
 				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 				m_pTargetItem->useItem();
+				break;
 			case CONITEM_SEED:
 				if ((m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND || m_pMap->getTile(m_nTempIndex)->terrain == WETFARMLAND) &&
 					m_pMap->getTile(m_nTempIndex)->object != CROP)
@@ -984,8 +985,8 @@ void player::setWaterTile()
 {
 	if (m_pTargetItem->getWaterDurability() > 0)
 	{
-		EFFECTMANAGER->play("water_drop2", (m_nTargetX), (m_nTargetY)-30);
-		EFFECTMANAGER->play("water_drop", (m_nTargetX), (m_nTargetY));
+		//EFFECTMANAGER->play("water_drop2", (m_nTargetX), (m_nTargetY)-30);
+		//EFFECTMANAGER->play("water_drop", (m_nTargetX), (m_nTargetY));
 		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개2.wav", g_soundVolume.effect);
 		m_pTargetItem->setWaterDurability(m_pTargetItem->getWaterDurability() - 1);
 		if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND)
@@ -1000,7 +1001,7 @@ void player::setWaterTile()
 	}
 	else
 	{
-		EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
+		//EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
 		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개물없을때.wav", g_soundVolume.effect);
 	}
 }
