@@ -171,9 +171,6 @@
     <ClInclude Include="txtData.h">
       <Filter>2DGameFramework\txtData</Filter>
     </ClInclude>
-    <ClInclude Include="inven.h">
-      <Filter>MainGame\gameScene\item</Filter>
-    </ClInclude>
     <ClInclude Include="camera.h">
       <Filter>MainGame\gameScene</Filter>
     </ClInclude>
@@ -203,6 +200,9 @@
     </ClInclude>
     <ClInclude Include="objectManager.h">
       <Filter>MainGame\MapTool\object\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="inven.h">
+      <Filter>MainGame\gameScene\menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
