@@ -21,6 +21,7 @@ protected:
 	SYNTHESIZE(bool, m_isLayerFirst, First);
 	SYNTHESIZE(int, m_nFrameX, FrameX);
 	SYNTHESIZE(int, m_nFrameY, FrameY);
+	SYNTHESIZE(int, m_isWaterTile, WaterTile);	// 타일이 워터일떄 확인용
 
 	player* m_player;
 

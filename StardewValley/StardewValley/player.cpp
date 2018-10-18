@@ -182,11 +182,10 @@ void player::update()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
-			m_mapObj = m_pMap->getObject();
-			m_iterObj = m_mapObj.find(m_nTempIndex);
-			m_pMenu->getInven()->addItem(m_iterObj->second->getCropId());
-			m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
-			m_pMap->objectDelete(m_nTempIndex);
+			//m_mapObj = m_pMap->getObject();
+			//m_iterObj = m_mapObj.find(m_nTempIndex);
+			//m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+			//m_pMap->objectDelete(m_nTempIndex);
 		}
 	}
 }
@@ -1015,7 +1014,8 @@ void player::useItem()
 					m_pMap->getTile(m_nTempIndex)->object != CROP)
 				{
 					m_pMap->getTile(m_nTempIndex)->object = CROP;
-					m_pMap->setCrop(m_pTargetItem->getItemId(), m_nTempIndex);
+					OBJMANAGER->setCrop(m_pMap->getTile(m_nTempIndex)->rc.left, m_pMap->getTile(m_nTempIndex)->rc.bottom,
+						m_pTargetItem->getItemId(), m_nTempIndex);
 					m_pTargetItem->useItem();
 				}
 				break;
@@ -1111,7 +1111,7 @@ void player::setAxeTile()
 		|| m_pMap->getTile(m_nTempIndex)->object == TREE_SMALL)
 	{
 		// 나무 삭제
-		OBJMANAGER->deleteTree(m_nTempIndex);
+		OBJMANAGER->deleteObj(m_nTempIndex);
 		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
 
 		// 특정확률로 나무 수액 아이템 획득

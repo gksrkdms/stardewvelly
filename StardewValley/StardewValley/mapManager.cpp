@@ -108,9 +108,10 @@ void mapManager::update()
 
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
-		if (m_pTiles[i].object == TREE_SMALL || m_pTiles[i].object == TREE_BIG || m_pTiles[m_indexCamera].object == CROP)
+		if (m_pTiles[i].object == TREE_SMALL || m_pTiles[i].object == TREE_BIG || m_pTiles[i].object == CROP)
 			OBJMANAGER->update();
-
+		if (m_pTiles[i].terrain == WETFARMLAND)
+			OBJMANAGER->setWaterFarm(i);
 	}
 
 	loadingProcess();
@@ -294,14 +295,6 @@ void mapManager::loadingRender(HDC hdc)
 		m_pBlack->alphaRender(hdc, m_nAlpha);
 	}
 
-}
-
-void mapManager::setCrop(int seedNum, int tileIndex)
-{
-
-	m_pObjectCrop = new objCrop;
-	m_pObjectCrop->init(seedNum, tileIndex, m_pTiles[tileIndex].rc.left, m_pTiles[tileIndex].rc.bottom);
-	m_mapObj.insert(pair<int, mapObject*>(tileIndex, m_pObjectCrop));
 }
 
 void mapManager::objectDelete(int objIndex)

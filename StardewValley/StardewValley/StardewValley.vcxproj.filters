@@ -202,7 +202,7 @@
       <Filter>MainGame\MapTool\object\Manager</Filter>
     </ClInclude>
     <ClInclude Include="inven.h">
-      <Filter>MainGame\gameScene\menu</Filter>
+      <Filter>MainGame\gameScene\item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

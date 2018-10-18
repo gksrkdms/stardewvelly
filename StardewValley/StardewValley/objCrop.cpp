@@ -18,6 +18,7 @@ HRESULT objCrop::init()
 	m_nFrameX = 0;
 	m_nFrameY = 0;
 	m_isOnce = false;
+	m_isWaterTile = false;
 
 	return S_OK;
 }
@@ -75,21 +76,21 @@ void objCrop::update()
 		break;
 	}
 
-	if (PLAYTIMEMANAGER->getMin() % 5 == 0 && !m_isOnce)
+	if (m_isWaterTile)
 	{
-		m_isOnce = true;
-		m_nFrameX++;
-		m_pObject->setFrameX(m_nFrameX);
-		if (m_nFrameX > 5)
+		if (PLAYTIMEMANAGER->getMin() % 5 == 0 && !m_isOnce)
 		{
-			m_nFrameX = 5;
+			m_isOnce = true;
+			m_nFrameX++;
+			m_pObject->setFrameX(m_nFrameX);
+			if (m_nFrameX > 5)
+			{
+				m_nFrameX = 5;
+			}
 		}
-	}
-	else if (PLAYTIMEMANAGER->getMin() % 5 != 0)
-		m_isOnce = false;
-	
-
-	
+		else if (PLAYTIMEMANAGER->getMin() % 5 != 0)
+			m_isOnce = false;
+	}	
 }
 
 void objCrop::render(HDC hdc)

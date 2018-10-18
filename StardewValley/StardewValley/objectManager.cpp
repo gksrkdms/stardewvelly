@@ -95,7 +95,7 @@ void objectManager::setNpc(int x, int y, int id, int index)
 	m_listObjNpc.push_back(m_pObjectNpc);
 }
 
-void objectManager::deleteTree(int index)
+void objectManager::deleteObj(int index)
 {
 	for (m_iterObj = m_listObj.begin(); m_iterObj != m_listObj.end();)
 	{
@@ -110,8 +110,13 @@ void objectManager::deleteTree(int index)
 	
 }
 
-void objectManager::deleteCrop(int x, int y)
+void objectManager::setWaterFarm(int index)
 {
+	for (m_iterObj = m_listObj.begin(); m_iterObj != m_listObj.end(); m_iterObj++)
+	{
+		if ((*m_iterObj)->getIndex() == index)
+			(*m_iterObj)->setWaterTile(true);
+	}
 }
 
 void objectManager::getPlayer(player * player)

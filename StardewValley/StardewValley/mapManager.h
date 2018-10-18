@@ -57,7 +57,6 @@ public:
 	void objRender(HDC hdc);
 	void loadingRender(HDC hdc);
 
-	void setCrop(int seedNum, int tileIndex);
 	void objectDelete(int objIndex);
 
 	void saveMap(const char* szfileName);
