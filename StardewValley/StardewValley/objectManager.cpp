@@ -40,7 +40,7 @@ void objectManager::update()
 	{
 		(*m_iterObj)->update();
 	}
-
+	
 	for (m_iterObjNpc = m_listObjNpc.begin(); m_iterObjNpc != m_listObjNpc.end(); m_iterObjNpc++)
 	{
 		(*m_iterObjNpc)->update();
@@ -55,6 +55,14 @@ void objectManager::render(HDC hdc)
 	}
 }
 
+void objectManager::Treerender(HDC hdc)
+{
+	for (m_iterObjTree = m_listObjTree.begin(); m_iterObjTree != m_listObjTree.end(); m_iterObjTree++)
+	{
+		(*m_iterObjTree)->render(hdc);
+	}
+}
+
 void objectManager::Npcrender(HDC hdc)
 {
 	for (m_iterObjNpc = m_listObjNpc.begin(); m_iterObjNpc != m_listObjNpc.end(); m_iterObjNpc++)
@@ -63,44 +71,39 @@ void objectManager::Npcrender(HDC hdc)
 	}
 }
 
-void objectManager::setTree(int x, int y, int id)
+void objectManager::setTree(int x, int y, int id, int index)
 {
 	mapObject* m_pObjTree;
 	m_pObjTree = new objTree;
-	m_pObjTree->init(x,y, id);
+	m_pObjTree->init(x,y, id, index);
 	m_listObj.push_back(m_pObjTree);
 }
 
-void objectManager::setCrop(int x, int y, int id)
+void objectManager::setCrop(int x, int y, int id, int index)
 {
 	mapObject* m_pObjectCrop;
 	m_pObjectCrop = new objCrop;
-	m_pObjectCrop->init(x, y, id);
+	m_pObjectCrop->init(x, y, id, index);
 	m_listObj.push_back(m_pObjectCrop);
 }
 
-void objectManager::setNpc(int x, int y, int id)
+void objectManager::setNpc(int x, int y, int id, int index)
 {
 	mapObject* m_pObjectNpc;
 	m_pObjectNpc = new objNpc;
-	m_pObjectNpc->init(x, y, id);
+	m_pObjectNpc->init(x, y, id, index);
 	m_listObjNpc.push_back(m_pObjectNpc);
 }
 
-void objectManager::deleteTree(int x, int y)
+void objectManager::deleteTree(int index)
 {
 	for (m_iterObj = m_listObj.begin(); m_iterObj != m_listObj.end();)
 	{
-		if (((*m_iterObj)->getX() <= x + 1 || (*m_iterObj)->getX() >= x -1) && (*m_iterObj)->getY() == y)
+		if ((*m_iterObj)->getIndex() == index)
 		{
 			m_listObj.erase(m_iterObj++); break;
 		}
-
-		else if((*m_iterObj)->getX() == x && ((*m_iterObj)->getY() <= y +1 || (*m_iterObj)->getY() >= y-1))
-		{
-			m_listObj.erase(m_iterObj++); break;
-		}
-
+		
 		else
 			m_iterObj++;
 	}
@@ -117,7 +120,7 @@ void objectManager::getPlayer(player * player)
 	{
 		(*m_iterObj)->getPlayer(player);
 	}
-
+	
 	for (m_iterObjNpc = m_listObjNpc.begin(); m_iterObjNpc != m_listObjNpc.end(); m_iterObjNpc++)
 	{
 		(*m_iterObjNpc)->getPlayer(player);

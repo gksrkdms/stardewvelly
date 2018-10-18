@@ -18,7 +18,7 @@ HRESULT objNpc::init()
 	return S_OK;
 }
 
-HRESULT objNpc::init(int x, int y, int id)
+HRESULT objNpc::init(int x, int y, int id, int index)
 {
 	m_nObjID = id;
 	m_nObjX = x;

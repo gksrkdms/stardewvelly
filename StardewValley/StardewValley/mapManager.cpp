@@ -90,11 +90,29 @@ void mapManager::update()
 
 	autoTile();
 
-	OBJMANAGER->update();
-	
-	//m_pObjectMap->update();
+	//for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
+	//{
+	//	for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
+	//	{
+	//		int cullX = CAMERA->getX() / TILE_SIZE_1;
+	//		int cullY = CAMERA->getY() / TILE_SIZE_1;
 
-	//m_pObjectCrop->update();
+	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
+	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
+	//		
+	//		if (m_pTiles[m_indexCamera].object == TREE_SMALL || m_pTiles[m_indexCamera].object == TREE_BIG
+	//			/*|| m_pTiles[m_indexCamera].object == CROP*/)
+	//			OBJMANAGER->update();
+	//	}
+	//}
+
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	{
+		if (m_pTiles[i].object == TREE_SMALL || m_pTiles[i].object == TREE_BIG || m_pTiles[m_indexCamera].object == CROP)
+			OBJMANAGER->update();
+
+	}
+
 	loadingProcess();
 }
 
@@ -226,6 +244,10 @@ void mapManager::objRender(HDC hdc)
 			if (m_pTiles[m_indexCamera].object == TREE_SMALL || m_pTiles[m_indexCamera].object == TREE_BIG
 				|| m_pTiles[m_indexCamera].object == CROP)
 				OBJMANAGER->render(hdc);
+
+			//else if(m_pTiles[m_indexCamera].object == TREE_SMALL)
+			//	OBJMANAGER->render(hdc);
+
 
 			else if (m_pTiles[m_indexCamera].object == NPC)
 				OBJMANAGER->Npcrender(hdc);
@@ -360,22 +382,22 @@ void mapManager::SetTree()
 		{			
 			if (m_pTiles[y*TILE_X + x].object == TREE_SMALL)
 			{
-				OBJMANAGER->setTree(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom,0);
+				OBJMANAGER->setTree(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom,0, y*TILE_X + x);
 			}
 
 			if (m_pTiles[y*TILE_X + x].object == TREE_BIG)
 			{
-				OBJMANAGER->setTree(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 1);
+				OBJMANAGER->setTree(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 1,y*TILE_X + x);
 			}
 
 			if (m_pTiles[y*TILE_X + x].object == CROP)
 			{
-				OBJMANAGER->setCrop(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 101);
+				OBJMANAGER->setCrop(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 101, y*TILE_X + x);
 			}
 
 			if (m_pTiles[y*TILE_X + x].object == NPC)
 			{
-				OBJMANAGER->setNpc(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 0);
+				OBJMANAGER->setNpc(m_pTiles[y*TILE_X + x].rc.left, m_pTiles[y*TILE_X + x].rc.bottom, 0, y*TILE_X + x);
 			}
 		}
 	}

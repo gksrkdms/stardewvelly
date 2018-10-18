@@ -176,8 +176,6 @@ void gametime::render(HDC hdc)
 	if(m_pClock)
 		m_pClock->render(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR -10, 20, GAME_SCALAR);
 		m_pMinutehand->rotateRender(hdc, m_nMinAngle, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR -20, -26, GAME_SCALAR);
-	//m_pMinutehand->rotateRender(hdc, 0, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR + 40, 20+ m_pClock->getHeight(), CLOCK_SCALAR);
-		//m_pMinutehand->render(hdc, WINSIZEX - m_pClock->getWidth()*CLOCK_SCALAR +40, 20, CLOCK_SCALAR);
 
 	TIMEMANAGER->render(hdc);
 
@@ -214,22 +212,20 @@ void gametime::render(HDC hdc)
 	default:
 		break;
 	}
+		  
+	// 시
+	sprintf_s(str, 256, "%d", m_hour/10);
+	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 130, 135, str, strlen(str));
 
-
-	/*sprintf_s(str, 256, "%s", m_zulaTime);
-	TextOut(hdc, 0, 200, str, strlen(str));*/
-
-	//sprintf_s(str, 256, "시간은영어로 time : %f", TIMEMANAGER->getZulaTime());
-	//TextOut(hdc, 0, 150, str, strlen(str));
-
-	//sprintf_s(str, 256, "zulatime : %f", m_zulaTime);
-	//TextOut(hdc, 0, 200, str, strlen(str));
-
-	sprintf_s(str, 256, "%d : ", m_hour);
+	sprintf_s(str, 256, "%d : ", m_hour%10);
 	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 150, 135, str, strlen(str));
 
-	sprintf_s(str, 256, "%d", m_nPrintMin);
+	// 분
+	sprintf_s(str, 256, "%d", m_min/10);
 	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 190, 135, str, strlen(str));
+
+	sprintf_s(str, 256, "%d", m_min%10);
+	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 210, 135, str, strlen(str));
 
 	SelectObject(hdc, oldFont);
 	DeleteObject(myFont);

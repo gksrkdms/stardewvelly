@@ -98,8 +98,6 @@ void playerMenu::update()
 				m_pInven->setInvenDir(INVEN_QUICKBAR);
 				isMenu = false;
 			}
-			
-
 		}
 		
 	}

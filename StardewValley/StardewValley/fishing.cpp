@@ -155,12 +155,12 @@ HRESULT fishing::init()
 	m_fSrcCurrY = m_fSrcY;
 	m_rcSeroBar = RectMake(m_fSrcX, m_fSrcY, m_fSrcWidth, m_fSrcHeight);
 
-	m_rcSeroBar.top = m_fSrcCurrY - 250;  /// 물고기획득바 초기값  
+	m_rcSeroBar.top = m_fSrcCurrY - 250;  // 물고기획득바 초기값  
 
 	m_iRandomFish = 0; //206~209 랜덤물고기 담기는 값
-	m_iLuck = 7;  /// 성공확률 + 해줌
+	m_iLuck = 7;  // 성공확률 + 해줌
 	
-	m_iChance = 100; /// 성공확률 1~100
+	m_iChance = 100; // 성공확률 1~100
 	m_iRandomChance = 0; // 1~100 랜덤숫자 담기는 변수
 
 

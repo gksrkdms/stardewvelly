@@ -27,7 +27,7 @@ HRESULT objTree::init()
 	return S_OK;
 }
 
-HRESULT objTree::init(int x, int y, int id)
+HRESULT objTree::init(int x, int y, int id, int index)
 {
 	//m_ptree = IMAGEMANAGER->findImage("objtree2");
 
@@ -35,6 +35,7 @@ HRESULT objTree::init(int x, int y, int id)
 	m_nObjY = y;
 
 	m_nObjID =id;
+	m_nIndex = index;
 
 	switch (m_nObjID)
 	{
@@ -56,7 +57,7 @@ HRESULT objTree::init(int x, int y, int id)
 	default:
 		break;
 	}
-
+	m_isLayerFirst = false;
 
 	m_isOnce = false;
 
@@ -134,10 +135,16 @@ void objTree::update()
 	m_player->getPlayerRc();
 
 	if (IntersectRect(&m_rcTemp, &m_rcObjet, &m_player->getPlayerRc()))
+	{
 		m_isOverlap = true;
+	}
 	
 	else
+	{
 		m_isOverlap = false;
+	}
+
+
 
 
 }
@@ -150,5 +157,4 @@ void objTree::render(HDC hdc)
 
 	else
 		m_pObject->frameRender(hdc, m_nObjX - m_pObject->getFrameWidth()*1.5 - CAMERA->getX(), m_nObjY - m_pObject->getFrameHeight()*GAME_SCALAR -CAMERA->getY(), m_nFrameX, m_nFrameY, GAME_SCALAR);
-
 }

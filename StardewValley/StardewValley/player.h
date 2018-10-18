@@ -126,6 +126,10 @@ private:
 
 	bool m_isMove =false;
 
+	int m_nPlayerIndexX;
+	int m_nPlayerIndexY;
+	int m_nPlayerIndex;
+
 	void addSound();
 public:
 	HRESULT init();
@@ -150,6 +154,7 @@ public:
 	inline RECT getPlayerRc() { return m_rc; }
 	//int getTargetX() { return m_nTargetX; }
 	//int getTargetY() { return m_nTargetY; }
+	int getPlayerIndex() { return m_nPlayerIndex; }
 	
 	player();
 	~player();

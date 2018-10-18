@@ -59,7 +59,6 @@ HRESULT player::init()
 	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, 164);  //@플레이어 체력
 	m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 208, 24, 164); // @플레이어 에너지
 	
-
 	m_rc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX, m_nPlayerSizeY);
 	m_TargetRc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX * 3, m_nPlayerSizeY * 3);
 	isMove = false;
@@ -78,6 +77,9 @@ HRESULT player::init()
 
 	m_nHp = 50;
 
+	//m_nPlayerIndexX = m_rc.left / 64;
+	//m_nPlayerIndexY = m_rc.top / 64;
+
 	return S_OK;
 }
 
@@ -92,6 +94,11 @@ void player::release()
 
 void player::update()
 {	
+	//플레이어 인덱스 
+	m_nPlayerIndexX = m_rc.left / 64;
+	m_nPlayerIndexY = m_rc.top / 64;
+	m_nPlayerIndex = m_nPlayerIndexY * m_pMap->getTileX() + m_nPlayerIndexX;
+
 	if ((KEYMANAGER->isOnceKeyDown('K')))  //@@ 말 타기 테스트용
 	{
 		m_playerMotion = MOTION_RIDE;
@@ -126,7 +133,7 @@ void player::update()
 	{
 		m_pMenu->setMenu(true);
 	}
-	   
+	  
 	// 플레이어 렉트 셋팅
 	m_rc = RectMake(m_nX + 8 - CAMERA->getX(), m_nY + 63 - CAMERA->getY(), m_nPlayerSizeX, m_nPlayerSizeY);
 	// 바닥에 빨간색네모 타겟 렉트
@@ -990,7 +997,7 @@ void player::useItem()
 				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 				m_pTargetItem->useItem();
 			case CONITEM_SEED: //작물 심기
-				OBJMANAGER->setCrop(m_pMap->getTile(m_nTempIndex)->rc.left, m_pMap->getTile(m_nTempIndex)->rc.bottom, m_pTargetItem->getItemId());
+				OBJMANAGER->setCrop(m_pMap->getTile(m_nTempIndex)->rc.left, m_pMap->getTile(m_nTempIndex)->rc.bottom, m_pTargetItem->getItemId(), m_nTempIndex);
 				m_pMap->getTile(m_nTempIndex)->object = CROP;
 				break;
 			}
@@ -1085,7 +1092,7 @@ void player::setAxeTile()
 		|| m_pMap->getTile(m_nTempIndex)->object == TREE_SMALL)
 	{
 		// 나무 삭제
-		OBJMANAGER->deleteTree(m_pMap->getTile(m_nTempIndex)->rc.left, m_pMap->getTile(m_nTempIndex)->rc.bottom);
+		OBJMANAGER->deleteTree(m_nTempIndex);
 		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
 
 		// 특정확률로 나무 수액 아이템 획득

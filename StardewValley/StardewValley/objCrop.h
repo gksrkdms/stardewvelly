@@ -17,7 +17,7 @@ public:
 	~objCrop();
 
 	virtual HRESULT init();
-	virtual HRESULT init(int x, int y, int id);
+	virtual HRESULT init(int x, int y, int id, int index);
 	virtual void release();
 	virtual void update();
 	virtual void render(HDC hdc);

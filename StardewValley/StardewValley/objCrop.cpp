@@ -22,7 +22,7 @@ HRESULT objCrop::init()
 	return S_OK;
 }
 
-HRESULT objCrop::init(int x, int y, int id)
+HRESULT objCrop::init(int x, int y, int id, int index)
 {
 	m_pObject = IMAGEMANAGER->findImage("crops");
 

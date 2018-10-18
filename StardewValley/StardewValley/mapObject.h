@@ -16,6 +16,8 @@ protected:
 
 	SYNTHESIZE(int, m_nObjX, X);
 	SYNTHESIZE(int, m_nObjY, Y);
+	SYNTHESIZE(int, m_nIndex, Index);
+	SYNTHESIZE(bool, m_isLayerFirst, First);
 	SYNTHESIZE(int, m_nFrameX, FrameX);
 	SYNTHESIZE(int, m_nFrameY, FrameY);
 
@@ -30,7 +32,7 @@ public:
 	virtual ~mapObject();
 
 	virtual HRESULT init();
-	virtual HRESULT init(int x, int y, int id);
+	virtual HRESULT init(int x, int y, int id, int index);
 
 	virtual void release();
 	virtual void update();

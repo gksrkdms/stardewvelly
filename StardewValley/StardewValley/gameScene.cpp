@@ -46,7 +46,9 @@ void gameScene::release()
 void gameScene::update()
 {	
 	m_pPlayer->update();
+	
 	m_pMapManager->update();
+
 	CAMERA->setFocus(m_pPlayer);
 	CAMERA->update();
 
@@ -74,22 +76,21 @@ void gameScene::render(HDC hdc)
 
 	//플레이어가 아래
 	//m_pBG->render(hdc, 0, 0, CAMERA->getX(), CAMERA->getY(), WINSIZEX, WINSIZEY);
-	//if (CAMERA->getY()>WINSIZEY / 2)
-	//{
-	//	m_pMapManager->render(hdc);
-	//	m_pPlayer->render(hdc);
-	//	PLAYTIMEMANAGER->render(hdc);
-	//	m_pMapManager->objRender(hdc);
-	//}
-
-	//else
+	/*if (m_pPlayer->getPlayerIndex() <OBJMANAGER->getLayer())
 	{
 		m_pMapManager->render(hdc);
-		m_pMapManager->objRender(hdc);
 		m_pPlayer->render(hdc);
+		m_pMapManager->objRender(hdc);
 		PLAYTIMEMANAGER->render(hdc);
 	}
 
+	else*/
+	{
+		m_pMapManager->render(hdc);
+		m_pPlayer->render(hdc);
+		m_pMapManager->objRender(hdc);
+		PLAYTIMEMANAGER->render(hdc);
+	}	
 
 	//플레이어가 위
 
