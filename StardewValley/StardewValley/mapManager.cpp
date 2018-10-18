@@ -76,6 +76,20 @@ void mapManager::release()
 	SAFE_DELETE_ARRAY(m_pObjectCrop);
 	//delete m_pObjMgr;
 
+	// 맵의 모든 원소를 돌면서 확인
+	for (m_iter = m_map.begin(); m_iter != m_map.end(); )
+	{
+		// 원소의 value( tagTile* )가 있으면
+		if (m_iter->second != NULL)
+		{
+			m_iter = m_map.erase(m_iter);
+		}
+		else
+		{
+			m_iter++;
+		}
+	}
+	m_map.clear();
 
 	m_vecTile.clear();
 	//delete[] m_pTiles;
@@ -336,7 +350,7 @@ void mapManager::loadingProcess()
 		m_Loading = LOAD_FALSE;
 		//string temp;
 		//temp = "image/temp_1111.map";
-		saveMap(tempCurrMapId);
+		//saveMap(tempCurrMapId);
 		g_mapSize.mapSizeX = m_ntempX;
 		g_mapSize.mapSizeY = m_ntempY;
 		loadMap(tempLoadMapId);
@@ -363,18 +377,22 @@ void mapManager::loadMap(const char* szfileName)
 		OPEN_EXISTING,
 		FILE_ATTRIBUTE_NORMAL,
 		NULL);
-	
-	// 지금 현재 맵 이름이 새로 불러오는 맵이름과 다르면 원래맵 저장
-	if (tempCurrMapId != szfileName)
+
+	m_iter = m_map.find(szfileName);
+
+	// 바꾸고자 하는 맵을 못찾으면 새로 저장
+	if (m_iter == m_map.end())
+		m_map.insert(pair<string, tagTile*>(szfileName, m_pTiles));
+		
+	// 바꿀 맵 있으면
+	else
 	{
-		m_iter = m_map.find(szfileName);
-		m_map.insert(pair<string, tagTile*>(tempCurrMapId, m_pTiles));
+		delete[] m_pTiles;
+		TILE_X = g_mapSize.mapSizeX / TILE_SIZE_1;
+		TILE_Y = g_mapSize.mapSizeY / TILE_SIZE_1;
+		m_pTiles = new tagTile[TILE_X*TILE_Y];
 	}
 
-	delete[] m_pTiles;
-	TILE_X = g_mapSize.mapSizeX / TILE_SIZE_1;
-	TILE_Y = g_mapSize.mapSizeY / TILE_SIZE_1;
-	m_pTiles = new tagTile[TILE_X*TILE_Y];
 
 	ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
 

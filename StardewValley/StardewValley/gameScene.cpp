@@ -13,7 +13,7 @@ HRESULT gameScene::init()
 	m_pMapManager = new mapManager;
 	m_pMapManager->getPlayer(m_pPlayer);
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/town2.map");
+	m_pMapManager->loadMap("image/1280.map");
 	m_pMapManager->SetTree();
 
 	//m_pMapManager->loadMap("image/goldBeach1.map");
@@ -58,7 +58,7 @@ void gameScene::update()
 	}
 	if (KEYMANAGER->isStayKeyDown('P'))
 	{
-		m_pMapManager->loadingMap("image/1111.map", 50, 50);
+		m_pMapManager->loadingMap("image/town2.map", 50, 50);
 	}
 
 	//m_rcPlayer = m_pPlayer->getPlayerRc();
