@@ -1398,6 +1398,9 @@ void mapTool::objectTypeInit()
 		m_pSampleTiles[371].object = DOOR;
 		m_pSampleTiles[390].object = DOOR;
 		m_pSampleTiles[391].object = DOOR;
+
+		// npc test
+		m_pSampleTiles[2].object = NPC;
 		break;
 	case IMGOBJ_2:
 		for (int i = 0; i < SAMPLE_TILE_X *SAMPLE_TILE_Y; i++)

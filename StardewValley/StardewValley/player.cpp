@@ -223,6 +223,10 @@ void player::render(HDC hdc)
 		}
 	}
 
+	char str[128];
+	//sprintf_s(str, 128, "%d", i);
+	//TextOut(hdc, 500, 50, str, strlen(str));
+
 	//MakeRect(hdc, m_temprc);
 	//MakeRect(hdc, m_rc);
 	//MakeRect(hdc, m_TargetRc);
@@ -231,13 +235,13 @@ void player::render(HDC hdc)
 
 	if (m_pTargetItem)
 	{
-		char str[128];
+		//char str[128];
 		sprintf_s(str, 128, "%d", m_pTargetItem->getItemId());
 		TextOut(hdc, 200, 700, str, strlen(str));
 	}
 	m_pFishing->render(hdc);
 
-	char str[128];
+	//char str[128];
 	sprintf_s(str, 128, "¾¾¾ÑºÒ°ª : %d", isSeed);
 	TextOut(hdc, 0, 550, str, strlen(str));
 
