@@ -237,11 +237,7 @@ void mapManager::objRender(HDC hdc)
 			if (m_pTiles[m_indexCamera].object == TREE_SMALL || m_pTiles[m_indexCamera].object == TREE_BIG
 				|| m_pTiles[m_indexCamera].object == CROP || m_pTiles[m_indexCamera].object == HARVEST)
 				OBJMANAGER->render(hdc);
-
-			//else if(m_pTiles[m_indexCamera].object == TREE_SMALL)
-			//	OBJMANAGER->render(hdc);
-
-
+			
 			else if (m_pTiles[m_indexCamera].object == NPC)
 				OBJMANAGER->Npcrender(hdc);
 
