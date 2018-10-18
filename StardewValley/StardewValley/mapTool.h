@@ -208,6 +208,9 @@ protected:
 	// 타일
 	image*	m_pTileSet;
 
+	//@@
+	image* m_pTileShop;
+
 	// 오브젝트
 	image*	m_pObject;
 	image*	m_pObject2;

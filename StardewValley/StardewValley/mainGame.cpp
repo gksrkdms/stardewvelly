@@ -156,6 +156,8 @@ void mainGame::imgload()
 	// background
 	IMAGEMANAGER->addImage("maptoolui", "image/maptool/minimap.bmp", 330, 330,true, RGB(255,0,255));
 	IMAGEMANAGER->addImage("earthAll", "image/maptool/tile20-20.bmp", 320, 320, 20,20,true, RGB(255, 255, 255));
+	IMAGEMANAGER->addImage("shopTile", "image/maptool/shop.bmp", 320, 320, 20, 20, true, RGB(255, 0, 255)); //@@
+
 	// object
 	IMAGEMANAGER->addImage("earthObj", "image/maptool/풀돌나무obj.bmp", 48, 48,3,3, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("town", "image/maptool/마을오브젝트.bmp", 720, 528,45,33, true, RGB(255, 255, 255));

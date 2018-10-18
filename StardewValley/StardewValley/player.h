@@ -80,11 +80,11 @@ private:
 
 	PRIVATESYNTHESIZE(int, m_nMoney, Money);
 	
-	float m_fMaxHp;				// @플레이어 최대 체력
-	float m_fMaxEnergy;			// @플레이어 최대 에너지
-	float m_fCurrHp;			// @플레이어 현재 체력
-	float m_fCurrEnergy;		// @플레이어 현재 에너지
-	float m_fGaugeBar;			//@@
+	int m_fMaxHp;				// @플레이어 최대 체력
+	int m_fMaxEnergy;			// @플레이어 최대 에너지
+	int m_fCurrHp;			// @플레이어 현재 체력
+	int m_fCurrEnergy;		// @플레이어 현재 에너지
+	int m_fGaugeBar;			//@@
 
 	int m_nX;					// 플레이어 좌표x
 	int m_nY;					// 플레이어 좌표y

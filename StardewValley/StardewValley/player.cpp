@@ -97,17 +97,21 @@ void player::update()
 	m_nPlayerIndexY = m_rc.top / 64;
 	m_nPlayerIndex = m_nPlayerIndexY * m_pMap->getTileX() + m_nPlayerIndexX;
 
-	if ((KEYMANAGER->isOnceKeyDown('K')))  //@@ 말 타기 테스트용
+	if ((KEYMANAGER->isOnceKeyDown('K'))) // && m_pAni->getIsPlaying() == false))  //@@ 말 타기 테스트용
 	{
-		m_playerMotion = MOTION_RIDE;
-		m_nMoveSpeed = 30;
+		m_pAni->stop();
 		isRideHorse = true;
+		
+		m_nMoveSpeed = 25;
+		
 	}
 	if ((KEYMANAGER->isOnceKeyDown('L')))  //@@ 말 타기 테스트용
-	{	
+	{
 		m_playerMotion = MOTION_IDLE;
+		m_pAni->stop();
+		isRideHorse = false;	
 		m_nMoveSpeed = 10;
-		isRideHorse = false;
+		
 	}
 
 	m_pTargetItem = m_pMenu->getQuickItem();	// 퀵바 아이템 정보 받아옴
@@ -147,7 +151,7 @@ void player::update()
 		m_pTargetItem->setPlayXY(m_nX, m_nY);	// 도구아이템이 아닐때 플레이어 x,y받아오는 함수
 		// L버튼 가능을하기위해 낚시상태가 아닐떄, 인벤클래스의 L버튼불값이 false일떄
 		if (m_playerState != PLAYER_FISHING && m_pMenu->getInven()->getLbutton() == false && isHarvest == false)
-		{
+		{	
 			setItemMotion();
 		}						// 도구아이템 모션 상태
 		setSyncMotion(m_playerMotion, &m_nSyncX, &m_nSyncY);	// 모션 랜더 x,y보정값
@@ -163,7 +167,7 @@ void player::update()
 	}
 	// 체력,에너지바 
 	progressBarToolTip();
-
+	
 	//낚시
 	m_pFishing->setPlayer(this);
 	m_pFishing->update();
@@ -177,21 +181,23 @@ void player::update()
 void player::render(HDC hdc)
 {
 	
-
 	if (m_pTargetItem && m_pTargetItem->getActItemKind()==ACTITEM_WATER)
 	{
 		//EFFECTMANAGER->render(hdc);
 	}
 	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth(),WINSIZEY-260); // @체력,에너지틀
+
+	//@@@@@@@@@@@@@@@ 필요없는듯함 확인하고 삭제할것@@@@@@@@@@@@@@@ 
 	//MakeRect(hdc, m_HpRc);		// @체력렉트
 	//MakeRect(hdc, m_EnergyRc);  //@에너지렉트
-	HBRUSH brush = CreateSolidBrush(RGB(9, 255, 0)); //색깔브러쉬
-	FillRect(hdc, &m_HpRc, brush);
-	FillRect(hdc, &m_EnergyRc, brush);
-	DeleteObject(brush);
-	//m_pHpBar->render(hdc);
-	//m_pEnergyBar->render(hdc);
+	//HBRUSH brush = CreateSolidBrush(RGB(9, 255, 0)); //색깔브러쉬
+	//FillRect(hdc, &m_HpRc, brush);
+	//FillRect(hdc, &m_EnergyRc, brush);
+	//DeleteObject(brush);
+	//@@@@@@@@@@@@@@@			여기까지			@@@@@@@@@@@@@@@ 
 
+	m_pEnergyBar->render(hdc);
+	m_pHpBar->render(hdc);
 	// 플레이어 랜더
 	if (m_pFishing->getIsFishing() == false)
 	{
@@ -250,6 +256,7 @@ void player::render(HDC hdc)
 	if (isProgressBar[1] == true)
 	{
 		sprintf_s(str, 128, "%d / %d", m_fCurrEnergy, m_fMaxEnergy);
+
 		TextOut(hdc, WINSIZEX - m_pHpEnergyUi->getWidth() - 100, WINSIZEY - 196, str, strlen(str));
 	}
 	if (isProgressBar[0] == true)
@@ -743,6 +750,7 @@ void player::setItemMotion()
 {
 	if (m_playerState == PLAYER_PLAY)
 	{
+		
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && m_playerMotion == MOTION_IDLE &&
 			m_pTargetItem->getItemKind() == ITEM_ACT)
 		{
@@ -886,6 +894,8 @@ void player::setItemMotion()
 		//@@ 소모품 들고있을때 핸드업
 		if (m_pTargetItem->getItemOn() == true && m_pTargetItem->getActItemKind() == ACTITEM_NULL && m_pAni->getIsPlaying() == false && isRideHorse ==false) //@@ 불값조건추가
 		{
+			
+			isMove = false;  //@@
 			m_playerMotion = MOTION_HANDUP;
 			setMotion(m_pAni, &m_pPlayer, "player_handup", 5, 4);			
 			switch (m_playerDir)
@@ -906,6 +916,8 @@ void player::setItemMotion()
 		}  //@@ 액팅아이템 들고있을때 그냥 아이들 상태
 		if ((m_pTargetItem->getActItemKind() != ACTITEM_NULL && m_pAni->getIsPlaying() == false) && isRideHorse== false) //@@ 불값조건추가
 		{
+			
+			isMove = false; //@@
 			m_playerMotion = MOTION_IDLE;
 			setMotion(m_pAni, &m_pPlayer, "player_idle", 5, 5); 
 			switch (m_playerDir)
@@ -926,7 +938,7 @@ void player::setItemMotion()
 		} //@@ 평소에
 		if ((m_pTargetItem->getItemOn() == false && m_pAni->getIsPlaying() == false) && isRideHorse==false)//@@ 불값조건추가
 		{
-			
+			isMove = false; //@@
 			m_playerMotion = MOTION_IDLE;
 			setMotion(m_pAni, &m_pPlayer, "player_idle", 5, 5); 
 			switch (m_playerDir)
@@ -948,7 +960,7 @@ void player::setItemMotion()
 		
 		if (m_pAni->getIsPlaying() == false && isRideHorse)//@@ 말탈경우 추가
 		{
-			
+			isMove = false;
 			m_playerMotion = MOTION_RIDE;
 			setMotion(m_pAni, &m_pPlayer, "player_horse", 7, 4);
 			
@@ -1052,8 +1064,16 @@ void player::setSpadeTile()
 		m_pMap->getTile(m_nTempIndex)->terrainFrameY = 6;
 		m_pMap->getTile(m_nTempIndex)->terrain = FARMLAND;
 	}
-	m_fCurrEnergy -= 2;
-	m_pEnergyBar->setGauge(m_fCurrEnergy, m_fMaxEnergy);
+	if (m_fCurrEnergy >= 0)	//@@
+	{
+		m_fCurrEnergy -= 5;
+	}
+	if (m_fCurrEnergy <= 0)
+	{
+		m_fCurrEnergy = 0;
+	}
+
+	m_pEnergyBar->setGauge(m_fCurrEnergy, m_fMaxEnergy);//@@
 }
 
 void player::setWaterTile()
@@ -1073,7 +1093,17 @@ void player::setWaterTile()
 
 		}
 		m_pTargetItem->progressWaterDurability(1);
-		m_fCurrEnergy -= 2;
+		if (m_fCurrEnergy >= 0)	//@@
+		{
+			m_fCurrEnergy -= 5;
+		}
+		if (m_fCurrEnergy <= 0)
+		{
+			m_fCurrEnergy = 0;
+		}
+		
+		m_pEnergyBar->setGauge(m_fCurrEnergy, m_fMaxEnergy);//@@
+		
 	}
 	else
 	{
@@ -1108,7 +1138,16 @@ void player::setAxeTile()
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(204);
 	}
-	m_fCurrEnergy -= 2;
+	if (m_fCurrEnergy >= 0)	//@@
+	{
+		m_fCurrEnergy -= 5;
+	}
+	if (m_fCurrEnergy <= 0)
+	{
+		m_fCurrEnergy = 0;
+	}
+
+	m_pEnergyBar->setGauge(m_fCurrEnergy, m_fMaxEnergy);//@@
 }
 
 void player::setPickaxTile()
@@ -1144,7 +1183,16 @@ void player::setPickaxTile()
 			OBJMANAGER->deleteObj(m_nTempIndex);
 		}
 	}
-	m_fCurrEnergy -= 2;
+	if (m_fCurrEnergy >= 0)	//@@
+	{
+		m_fCurrEnergy -= 5;
+	}
+	if (m_fCurrEnergy <= 0)
+	{
+		m_fCurrEnergy = 0;
+	}
+
+	m_pEnergyBar->setGauge(m_fCurrEnergy, m_fMaxEnergy);//@@
 }
 
 void player::setNotTile()
