@@ -19,9 +19,9 @@ public:
 	objCrop();
 	~objCrop();
 
-	virtual HRESULT init();
+	HRESULT init(int seedNum, int tileIndex, int posX, int posY);
 	virtual void release();
-	virtual void update();
+	virtual void update(int x, int y);
 	virtual void render(HDC hdc);
 	virtual void render(HDC hdc, int x, int y);
 };

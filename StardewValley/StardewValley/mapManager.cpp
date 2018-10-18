@@ -50,10 +50,7 @@ HRESULT mapManager::init()
 	}
 	
 	m_pObjectMap = new objTree;
-	m_pObjectMap->init();
-
-	m_pObjectCrop = new objCrop;
-	m_pObjectCrop->init();
+	m_pObjectMap->init(1, 1, 10, 10);
 
 	m_vecTile.resize(TILE_Y*TILE_X);
 	
@@ -64,8 +61,13 @@ void mapManager::release()
 {
 	SAFE_DELETE_ARRAY(m_pTiles);
 	SAFE_DELETE_ARRAY(m_pObjectMap);
-	SAFE_DELETE_ARRAY(m_pObjectCrop);
+	//SAFE_DELETE_ARRAY(m_pObjectCrop);
 
+	for (m_iterObj = m_mapObj.begin(); m_iterObj != m_mapObj.end(); m_iterObj++)
+	{
+		m_iterObj->second->release();
+	}
+	m_mapObj.clear();
 	m_vecTile.clear();
 	//delete[] m_pTiles;
 }
@@ -79,8 +81,24 @@ void mapManager::update()
 
 	autoTile();
 
-	m_pObjectMap->update();
-	m_pObjectCrop->update();
+	//m_pObjectMap->update();
+	for (m_iterObj = m_mapObj.begin(); m_iterObj != m_mapObj.end(); m_iterObj++)
+	{
+	}
+	for (m_iterObj = m_mapObj.begin(); m_iterObj != m_mapObj.end(); m_iterObj++)
+	{
+		if (m_pTiles[m_iterObj->second->getTileIndex()].terrain == WETFARMLAND)
+		{
+			m_iterObj->second->setWater(true);
+		}
+
+		if (m_iterObj->second->getHarvest() == true)
+		{
+			m_pTiles[m_iterObj->second->getTileIndex()].object = OB_NUM;
+		}
+
+		m_iterObj->second->update(m_pTiles[m_iterObj->second->getTileIndex()].rc.left, m_pTiles[m_iterObj->second->getTileIndex()].rc.top);
+	}
 	loadingProcess();
 }
 
@@ -138,8 +156,14 @@ void mapManager::render(HDC hdc)
 				//m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left+ (m_pTiles[m_indexCamera].rc.right- m_pTiles[m_indexCamera].rc.left)/2, m_pTiles[m_indexCamera].rc.bottom);
 				m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
 
-			else if (m_pTiles[m_indexCamera].object == CROP)
-				m_pObjectCrop->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
+			else if (m_pTiles[m_indexCamera].object == CROP || m_pTiles[m_indexCamera].object == OB_NUM)
+			{
+				//m_pObjectCrop->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
+				for (m_iterObj = m_mapObj.begin(); m_iterObj != m_mapObj.end(); m_iterObj++)
+				{
+					m_iterObj->second->render(hdc);
+				}
+			}
 
 
 			else if (m_pTiles[m_indexCamera].object != OBJ_NULL)
@@ -246,6 +270,21 @@ void mapManager::loadingRender(HDC hdc)
 
 }
 
+void mapManager::setCrop(int seedNum, int tileIndex)
+{
+
+	m_pObjectCrop = new objCrop;
+	m_pObjectCrop->init(seedNum, tileIndex, m_pTiles[tileIndex].rc.left, m_pTiles[tileIndex].rc.bottom);
+	m_mapObj.insert(pair<int, mapObject*>(tileIndex, m_pObjectCrop));
+}
+
+void mapManager::objectDelete(int objIndex)
+{
+	m_iterObj = m_mapObj.find(objIndex);
+	delete m_iterObj->second;
+	m_iterObj = m_mapObj.erase(m_iterObj);
+}
+
 void mapManager::saveMap(const char * szfileName)
 {
 	DWORD write;
@@ -284,6 +323,8 @@ void mapManager::loadingProcess()
 	if (m_Loading == LOAD_END)
 	{
 		m_Loading = LOAD_FALSE;
+		//string temp;
+		//temp = "image/temp_1111.map";
 		saveMap(tempCurrMapId);
 		g_mapSize.mapSizeX = m_ntempX;
 		g_mapSize.mapSizeY = m_ntempY;

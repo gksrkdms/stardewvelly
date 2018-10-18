@@ -22,15 +22,15 @@ HRESULT mainGame::init()
 	TIMEMANAGER->init();
 	SCENEMANAGER->init();
 	SOUNDMANAGER->init();
-	EFFECTMANAGER->init();
+	//EFFECTMANAGER->init();
 
 	setBackBuffer();
 
 
-	EFFECTMANAGER->addEffect("water_drop", "image/Stardew Valley/water_bottom.bmp", 640, 64, 64, 64, 8, 3);
-	EFFECTMANAGER->addEffect("water_drop2", "image/Stardew Valley/water_top.bmp", 192, 64, 64, 64, 5, 3);
-	EFFECTMANAGER->addEffect("recovery", "image/Stardew Valley/recovery.bmp", 448, 64, 64, 64, 10, 3);
-	EFFECTMANAGER->addEffect("need_water", "image/Stardew Valley/water_zero.bmp", 256, 64, 64, 64, 4, 3);
+	//EFFECTMANAGER->addEffect("water_drop", "image/Stardew Valley/water_bottom.bmp", 640, 64, 64, 64, 8, 3);
+	//EFFECTMANAGER->addEffect("water_drop2", "image/Stardew Valley/water_top.bmp", 192, 64, 64, 64, 5, 3);
+	//EFFECTMANAGER->addEffect("recovery", "image/Stardew Valley/recovery.bmp", 448, 64, 64, 64, 10, 3);
+	//EFFECTMANAGER->addEffect("need_water", "image/Stardew Valley/water_zero.bmp", 256, 64, 64, 64, 4, 3);
 
 	// 필요한 리소스 미리 로드
 	imgload();
@@ -65,7 +65,7 @@ void mainGame::release()
 	SCENEMANAGER->release();
 	PLAYTIMEMANAGER->release();
 	SOUNDMANAGER->release();
-	EFFECTMANAGER->release();
+	//EFFECTMANAGER->release();
 	
 	DATAMANAGER->releaseSingleton();
 	KEYMANAGER->releaseSingleton();
@@ -74,7 +74,7 @@ void mainGame::release()
 	SCENEMANAGER->releaseSingleton();
 	PLAYTIMEMANAGER->releaseSingleton();
 	SOUNDMANAGER->releaseSingleton();
-	EFFECTMANAGER->releaseSingleton();
+	//EFFECTMANAGER->releaseSingleton();
 }
 
 LRESULT mainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -135,7 +135,7 @@ void mainGame::update()
 {
 	InvalidateRect(g_hWnd, NULL, false);
 	SCENEMANAGER->update();
-	EFFECTMANAGER->update();
+	//EFFECTMANAGER->update();
 	
 }
 
@@ -294,6 +294,7 @@ void mainGame::addsound()
 
 	//gameScene
 	SOUNDMANAGER->addSound("sound/CloudCountry.mp3", true, true);
+
 
 
 }

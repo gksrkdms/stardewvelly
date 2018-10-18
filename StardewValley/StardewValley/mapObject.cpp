@@ -11,7 +11,7 @@ mapObject::~mapObject()
 {
 }
 
-HRESULT mapObject::init()
+HRESULT mapObject::init(int seedNum, int tileIndex, int posX, int posY)
 {
 	return S_OK;
 }
@@ -20,7 +20,7 @@ void mapObject::release()
 {
 }
 
-void mapObject::update()
+void mapObject::update(int x, int y)
 {
 }
 

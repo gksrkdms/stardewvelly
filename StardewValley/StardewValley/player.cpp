@@ -6,13 +6,15 @@
 #include "item.h"
 #include "fishing.h"
 #include "progressBarHp.h"
+#include "mapObject.h"
+#include "objCrop.h"
 
 #include "mapManager.h"
 
 HRESULT player::init()
 {
-	addSound(); //@ 사운드모음 
-	//m_pPlayer = IMAGEMANAGER->findImage("player_idle");
+	//addSound(); //@ 사운드모음 
+	m_pPlayer = IMAGEMANAGER->findImage("player_idle");
 	m_pTarget = IMAGEMANAGER->findImage("focustile_001");
 	m_pSeedTarget = IMAGEMANAGER->findImage("focustile_002");
 	m_pNumber = IMAGEMANAGER->findImage("goldnumber");
@@ -70,6 +72,7 @@ HRESULT player::init()
 
 	m_pRight.x = 0;
 	m_pRight.y = 0;
+	isHarvest = false;
 
 	return S_OK;
 }
@@ -121,7 +124,7 @@ void player::update()
 	{
 		m_pTargetItem->setPlayXY(m_nX, m_nY);	// 도구아이템이 아닐때 플레이어 x,y받아오는 함수
 		// L버튼 가능을하기위해 낚시상태가 아닐떄, 인벤클래스의 L버튼불값이 false일떄
-		if (m_playerState != PLAYER_FISHING && m_pMenu->getInven()->getLbutton() == false)
+		if (m_playerState != PLAYER_FISHING && m_pMenu->getInven()->getLbutton() == false && isHarvest == false)
 		{
 			setItemMotion();
 		}						// 도구아이템 모션 상태
@@ -145,13 +148,32 @@ void player::update()
 
 	// 충돌 값 구하는 함수
 	PointCollide();
+	if (m_pMap->getTile(m_nTempIndex)->object == OB_NUM)
+	{
+		isHarvest = true;
+	}
+	else
+	{
+		isHarvest = false;
+	}
+	if (isHarvest)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			m_mapObj = m_pMap->getObject();
+			m_iterObj = m_mapObj.find(m_nTempIndex);
+			m_pMenu->getInven()->addItem(m_iterObj->second->getCropId());
+			m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+			m_pMap->objectDelete(m_nTempIndex);
+		}
+	}
 }
 
 void player::render(HDC hdc)
 {
 	if (m_pTargetItem && m_pTargetItem->getActItemKind()==ACTITEM_WATER)
 	{
-		EFFECTMANAGER->render(hdc);
+		//EFFECTMANAGER->render(hdc);
 	}
 	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth(),WINSIZEY-260); // @체력,에너지틀
 	m_pHpBar->render(hdc);
@@ -164,7 +186,7 @@ void player::render(HDC hdc)
 	}
 	if (m_pTargetItem && m_pTargetItem->getActItemKind() != ACTITEM_WATER)
 	{
-		EFFECTMANAGER->render(hdc);
+		//EFFECTMANAGER->render(hdc);
 	}
     
 	// 퀵바 아이템이 있을때
@@ -193,7 +215,7 @@ void player::render(HDC hdc)
 
 
 	//MakeRect(hdc, m_temprc);
-	MakeRect(hdc, m_rc);
+	//MakeRect(hdc, m_rc);
 	//MakeRect(hdc, m_TargetRc);
 
 	m_pMenu->render(hdc);
@@ -208,7 +230,7 @@ void player::render(HDC hdc)
 
 	char str[128];
 
-	sprintf_s(str, 128, "충돌상태 : %d", m_playerCollision);
+	sprintf_s(str, 128, "무브 : %d", isMove);
 	TextOut(hdc, 0, 600, str, strlen(str));
 
 
@@ -299,6 +321,13 @@ void player::setTargetXY()
 					m_nTargetX = m_pMap->getTile(m_indexCamera)->rc.left;
 					m_nTargetY = m_pMap->getTile(m_indexCamera)->rc.top;
 					break;
+				}
+			}
+			if (IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
+			{
+				if (m_pMap->getTile(m_indexCamera)->terrain == EXIT)
+				{
+					m_pMap->loadingMap("image/1111.map", 50, 50);
 				}
 			}
 		}
@@ -669,6 +698,7 @@ void player::setItemMotion()
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && m_playerMotion == MOTION_IDLE &&
 			m_pTargetItem->getItemKind() == ITEM_ACT)
 		{
+			isMove = false;
 			setDir();	// 플레이어 방향 정하는 함수
 			if (m_pTargetItem->getActItemKind() != ACTITEM_NULL)
 			{
@@ -887,15 +917,16 @@ void player::useItem()
 				m_fCurrEnergy += m_pTargetItem->getEnergy();
 				if (m_fCurrEnergy >= m_fMaxEnergy)
 					m_fCurrEnergy = m_fMaxEnergy;
-				EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
+				//EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
 				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 				m_pTargetItem->useItem();
+				break;
 			case CONITEM_SEED:
-				if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND ||
-					m_pMap->getTile(m_nTempIndex)->terrain == WETFARMLAND &&
+				if ((m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND || m_pMap->getTile(m_nTempIndex)->terrain == WETFARMLAND) &&
 					m_pMap->getTile(m_nTempIndex)->object != CROP)
 				{
 					m_pMap->getTile(m_nTempIndex)->object = CROP;
+					m_pMap->setCrop(m_pTargetItem->getItemId(), m_nTempIndex);
 					m_pTargetItem->useItem();
 				}
 				break;
@@ -955,8 +986,8 @@ void player::setWaterTile()
 {
 	if (m_pTargetItem->getWaterDurability() > 0)
 	{
-		EFFECTMANAGER->play("water_drop2", (m_nTargetX), (m_nTargetY)-30);
-		EFFECTMANAGER->play("water_drop", (m_nTargetX), (m_nTargetY));
+		//EFFECTMANAGER->play("water_drop2", (m_nTargetX), (m_nTargetY)-30);
+		//EFFECTMANAGER->play("water_drop", (m_nTargetX), (m_nTargetY));
 		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개2.wav", g_soundVolume.effect);
 		m_pTargetItem->setWaterDurability(m_pTargetItem->getWaterDurability() - 1);
 		if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND)
@@ -971,7 +1002,7 @@ void player::setWaterTile()
 	}
 	else
 	{
-		EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
+		//EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
 		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개물없을때.wav", g_soundVolume.effect);
 	}
 }
@@ -1064,11 +1095,11 @@ void player::progressBarToolTip()
 void player::addSound()
 {
 	//플레이어 액션
-	SOUNDMANAGER->addSound("sound/effect/playerAct/곡소리.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/낫질.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/맨땅에.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/도끼질.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/물뿌리개2.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/밭갈다.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/물뿌리개물없을때.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/gok.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/not.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/ground.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/axe.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/water.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/spade.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/notwater.wav", false, false);
 }
