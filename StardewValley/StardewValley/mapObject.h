@@ -17,11 +17,13 @@ protected:
 
 	SYNTHESIZE(int, m_nObjX, X);
 	SYNTHESIZE(int, m_nObjY, Y);
-	SYNTHESIZE(int, m_nIndex, Index);
-	SYNTHESIZE(int, m_nHarvestId, HarvestId);
+	SYNTHESIZE(int, m_nIndex, Index);			// 타일 인덱스
+	SYNTHESIZE(int, m_nHarvestId, HarvestId);	// 반환아는 아이템id
 	SYNTHESIZE(bool, m_isLayerFirst, First);
-	SYNTHESIZE(int, m_nFrameX, FrameX);
-	SYNTHESIZE(int, m_nFrameY, FrameY);
+	SYNTHESIZE(int, m_nFrameX, FrameX);			// 프레임 x
+	SYNTHESIZE(int, m_nMaxGrowth, MaxGrowth);	// 최대성장치(최대프레임)
+	SYNTHESIZE(int, m_nFrameY, FrameY);			// 프레임 y
+	SYNTHESIZE(int, m_nNum, Num);			// 작물 수량
 	SYNTHESIZE(int, m_isWaterTile, WaterTile);	// 타일이 워터일떄 확인용
 	SYNTHESIZE(bool, isHarvest, Harvest);		// 작물이 다 자랐는지 확인용
 

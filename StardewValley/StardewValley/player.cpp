@@ -191,12 +191,6 @@ void player::render(HDC hdc)
 	DeleteObject(brush);
 	//m_pHpBar->render(hdc);
 	//m_pEnergyBar->render(hdc);
-
-	// 플레이어 랜더
-	if (m_pFishing->getIsFishing() == false)
-	{
-		m_pPlayer->aniRender(hdc, m_nX - CAMERA->getX() - m_nSyncX, m_nY - CAMERA->getY() - m_nSyncY, m_pAni);
-	}
 	if (m_pTargetItem && m_pTargetItem->getActItemKind() != ACTITEM_WATER)
 	{
 		//EFFECTMANAGER->render(hdc);
@@ -256,6 +250,15 @@ void player::render(HDC hdc)
 	{
 		sprintf_s(str, 128, "%d / %d", m_fCurrHp, m_fMaxHp);
 		TextOut(hdc, WINSIZEX - m_pHpEnergyUi->getWidth() - 100, WINSIZEY - 196, str, strlen(str));
+	}
+}
+
+// 플레이어 랜더
+void player::playerRender(HDC hdc)
+{
+	if (m_pFishing->getIsFishing() == false)
+	{
+		m_pPlayer->aniRender(hdc, m_nX - CAMERA->getX() - m_nSyncX, m_nY - CAMERA->getY() - m_nSyncY, m_pAni);
 	}
 }
 
@@ -1080,6 +1083,12 @@ void player::setWaterTile()
 		//EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
 		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개물없을때.wav", g_soundVolume.effect);
 	}
+	if (m_pMap->getTile(m_nTempIndex)->terrain == WATER || m_pMap->getTile(m_nTempIndex)->terrain == SEA)
+	{
+		m_pTargetItem->setWaterDurability(m_pTargetItem->getMaxWaterDurability());
+		m_pTargetItem->progressWaterDurability(0);
+		m_fCurrEnergy -= 4;
+	}
 }
 
 void player::setAxeTile()
@@ -1158,10 +1167,6 @@ void player::setNotTile()
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(201);
 	}
-	if (m_pMap->getTile(m_nTempIndex)->isCollide == true)
-	{
-		m_pMap->getTile(m_nTempIndex)->isCollide = false;
-	}
 }
 
 void player::setSwordTile()
@@ -1174,10 +1179,6 @@ void player::setSwordTile()
 		// 특정확률로 풀 아이템 획득
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(201);
-	}
-	if (m_pMap->getTile(m_nTempIndex)->isCollide == false)
-	{
-		m_pMap->getTile(m_nTempIndex)->isCollide = true;
 	}
 }
 
@@ -1216,8 +1217,15 @@ void player::harvest()
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			m_pMenu->getInven()->addItem(OBJMANAGER->harvest(m_nTempIndex));
-			m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
-			OBJMANAGER->deleteObj(m_nTempIndex);
+			if (OBJMANAGER->getCropRemain(m_nTempIndex) > 1)
+			{
+				OBJMANAGER->setCropRemain(m_nTempIndex);
+			}
+			else
+			{
+				m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+				OBJMANAGER->deleteObj(m_nTempIndex);
+			}
 		}
 	}
 }

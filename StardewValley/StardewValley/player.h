@@ -80,10 +80,10 @@ private:
 
 	PRIVATESYNTHESIZE(int, m_nMoney, Money);
 	
-	float m_fMaxHp;				// @플레이어 최대 체력
-	float m_fMaxEnergy;			// @플레이어 최대 에너지
-	float m_fCurrHp;			// @플레이어 현재 체력
-	float m_fCurrEnergy;		// @플레이어 현재 에너지
+	int m_fMaxHp;				// @플레이어 최대 체력
+	int m_fMaxEnergy;			// @플레이어 최대 에너지
+	int m_fCurrHp;			// @플레이어 현재 체력
+	int m_fCurrEnergy;		// @플레이어 현재 에너지
 	float m_fGaugeBar;			//@@
 
 	int m_nX;					// 플레이어 좌표x
@@ -146,6 +146,7 @@ public:
 	void release();
 	void update();
 	void render(HDC hdc);
+	void playerRender(HDC hdc);
 	void numRender(HDC hdc, int x, int y);
 
 	int getX() { return m_nX; }					// 카메라 매니저에 쓰일 x,y겟터셋터들

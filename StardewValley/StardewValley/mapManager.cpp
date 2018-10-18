@@ -104,6 +104,8 @@ void mapManager::update()
 
 		if ((*m_iterObj)->getHarvest() == true)
 			m_pTiles[(*m_iterObj)->getIndex()].object = HARVEST;
+		else
+			m_pTiles[(*m_iterObj)->getIndex()].object = CROP;
 	}
 
 	loadingProcess();
@@ -151,7 +153,8 @@ void mapManager::render(HDC hdc)
 			}
 		}
 
-	TextOut(hdc, 0, 400, tempCurrMapId, strlen(tempCurrMapId));
+		TextOut(hdc, 0, 400, tempCurrMapId, strlen(tempCurrMapId));
+	}
 }
 
 void mapManager::objRender(HDC hdc)

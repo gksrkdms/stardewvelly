@@ -85,6 +85,7 @@ void gameScene::render(HDC hdc)
 	else*/
 	{
 		m_pMapManager->render(hdc);
+		m_pPlayer->playerRender(hdc);
 		m_pMapManager->objRender(hdc);
 		m_pPlayer->render(hdc);
 		PLAYTIMEMANAGER->render(hdc);

@@ -35,12 +35,40 @@ HRESULT objCrop::init(int x, int y, int id, int index)
 		m_pObject = IMAGEMANAGER->findImage("crops");
 		m_cropKind = STRAWBERRY;
 		m_nHarvestId = 201;
+		m_nFrameX = 0;
+		m_nFrameY = 0;
+		m_nMaxGrowth = 5;
+		m_nNum = 1;
 		break;
 
 	case 102:
 		m_pObject = IMAGEMANAGER->findImage("crops");
 		m_cropKind = CARROT;
 		m_nHarvestId = 202;
+		m_nFrameX = 8;
+		m_nFrameY = 0;
+		m_nMaxGrowth = 15;
+		m_nNum = 5;
+		break;
+
+	case 103:
+		m_pObject = IMAGEMANAGER->findImage("crops");
+		m_cropKind = CARROT;
+		m_nHarvestId = 203;
+		m_nFrameX = 0;
+		m_nFrameY = 1;
+		m_nMaxGrowth = 6;
+		m_nNum = 1;
+		break;
+
+	case 104:
+		m_pObject = IMAGEMANAGER->findImage("crops");
+		m_cropKind = CARROT;
+		m_nHarvestId = 204;
+		m_nFrameX = 8;
+		m_nFrameY = 1;
+		m_nMaxGrowth = 14;
+		m_nNum = 1;
 		break;
 
 	default:
@@ -50,9 +78,6 @@ HRESULT objCrop::init(int x, int y, int id, int index)
 	m_nObjX = x;
 	m_nObjY = y;
 	m_rcObjet = RectMake(x, y - m_pObject->getFrameHeight()*GAME_SCALAR, m_pObject->getFrameWidth()*GAME_SCALAR, m_pObject->getFrameHeight()*GAME_SCALAR);
-
-	m_nFrameX = 0;
-	m_nFrameY = 0;
 	m_isOnce = false;
 	m_nIndex = index;
 
@@ -86,9 +111,9 @@ void objCrop::update()
 			m_isOnce = true;
 			m_nFrameX++;
 			m_pObject->setFrameX(m_nFrameX);
-			if (m_nFrameX > 5)
+			if (m_nFrameX >= m_nMaxGrowth)
 			{
-				m_nFrameX = 5;
+				m_nFrameX = m_nMaxGrowth;
 				isHarvest = true;
 			}
 		}

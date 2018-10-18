@@ -106,6 +106,30 @@ int objectManager::harvest(int index)
 	}
 }
 
+int objectManager::getCropRemain(int index)
+{
+	for (m_iterObj = m_listObj.begin(); m_iterObj != m_listObj.end(); m_iterObj++)
+	{
+		if ((*m_iterObj)->getIndex() == index)
+		{
+			return (*m_iterObj)->getNum();
+		}
+	}
+}
+
+void objectManager::setCropRemain(int index)
+{
+	for (m_iterObj = m_listObj.begin(); m_iterObj != m_listObj.end(); m_iterObj++)
+	{
+		if ((*m_iterObj)->getIndex() == index)
+		{
+			(*m_iterObj)->setNum((*m_iterObj)->getNum() - 1);
+			(*m_iterObj)->setFrameX((*m_iterObj)->getFrameX() - 3);
+			(*m_iterObj)->setHarvest(false);
+		}
+	}
+}
+
 void objectManager::deleteObj(int index)
 {
 	for (m_iterObj = m_listObj.begin(); m_iterObj != m_listObj.end();)

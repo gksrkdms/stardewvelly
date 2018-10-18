@@ -43,6 +43,8 @@ public:
 	void setNpc(int x, int y, int id, int index); // Npc set
 
 	int harvest(int index);	// 수확
+	int getCropRemain(int index);	// 작물 내구도확인
+	void setCropRemain(int index);	// 작물 수량 셋팅
 	void deleteObj(int index); // 오브젝트 삭제
 
 	list<mapObject*> getObject() { return m_listObj; }
