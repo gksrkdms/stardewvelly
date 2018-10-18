@@ -35,7 +35,7 @@ void effectManager::release()
 			if ((*iterVE))
 			{
 				(*iterVE)->release();
-				SAFE_DELETE((*iterVE));
+				delete (*iterVE);
 			}
 		}
 		vecE.clear();

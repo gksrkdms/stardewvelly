@@ -28,6 +28,6 @@ public:
 	inline int getY() { return m_nY; }
 	inline bool getIsAlive() { return m_isAlive; }
 	effect();
-	~effect();
+	virtual ~effect();
 };
 
