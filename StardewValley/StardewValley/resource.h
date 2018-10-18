@@ -14,6 +14,8 @@
 #define IDR_MAINFRAME                   128
 #define IDR_MAPTILE                     129
 #define IDC_CURSOR1                     130
+#define IDC_CURSOR2                     132
+#define IDC_CURSOR3                     133
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773
@@ -35,7 +37,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_RESOURCE_VALUE        134
 #define _APS_NEXT_COMMAND_VALUE         32785
 #define _APS_NEXT_CONTROL_VALUE         1012
 #define _APS_NEXT_SYMED_VALUE           110
