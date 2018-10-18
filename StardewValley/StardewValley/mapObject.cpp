@@ -31,3 +31,7 @@ void mapObject::update()
 void mapObject::render(HDC hdc)
 {
 }
+
+void mapObject::setXY(int x, int y)
+{
+}

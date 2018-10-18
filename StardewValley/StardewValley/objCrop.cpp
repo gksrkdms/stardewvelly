@@ -92,7 +92,7 @@ void objCrop::release()
 void objCrop::update()
 {
 	//m_rcObjetc = RectMake(m_nObjX - m_pCrop->getFrameWidth()*1.5 - CAMERA->getX(), m_nObjY - m_pCrop->getFrameHeight()*GAME_SCALAR - CAMERA->getY(), m_pCrop->getFrameWidth()*GAME_SCALAR, m_pCrop->getFrameHeight()*GAME_SCALAR);
-	m_rcObjet = RectMake(m_nObjX - CAMERA->getX(), m_nObjY - m_pObject->getFrameHeight()*GAME_SCALAR - CAMERA->getY(), m_pObject->getFrameWidth()*GAME_SCALAR, m_pObject->getFrameHeight()*GAME_SCALAR);
+	m_rcObjet = RectMake(m_nObjX , m_nObjY - m_pObject->getFrameHeight()*GAME_SCALAR , m_pObject->getFrameWidth()*GAME_SCALAR, m_pObject->getFrameHeight()*GAME_SCALAR);
 
 	switch (m_cropKind)
 	{
@@ -122,10 +122,16 @@ void objCrop::update()
 	}	
 }
 
+void objCrop::setXY(int x, int y)
+{
+	m_nObjX = x;
+	m_nObjY = y;
+}
+
 void objCrop::render(HDC hdc)
 {
 	//m_pCrop->frameRender(hdc, x, y - m_pCrop->getFrameHeight()*GAME_SCALAR, m_nFrameX, m_nFrameY, GAME_SCALAR);
-	m_pObject->frameRender(hdc, m_nObjX - CAMERA->getX(), m_nObjY - m_pObject->getFrameHeight()*GAME_SCALAR - CAMERA->getY(), m_nFrameX, m_nFrameY, GAME_SCALAR);
+	m_pObject->frameRender(hdc, m_nObjX, m_nObjY - m_pObject->getFrameHeight()*GAME_SCALAR, m_nFrameX, m_nFrameY, GAME_SCALAR);
 
 }
 

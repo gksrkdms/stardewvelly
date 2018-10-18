@@ -66,7 +66,10 @@ HRESULT inven::init()
 		}
 		if (i == 7)
 		{
-			newItem->getItem(201, false);
+			for (int i = 0; i < 5; i++)
+			{
+				newItem->getItem(101, false);
+			}
 		}
 	}
 

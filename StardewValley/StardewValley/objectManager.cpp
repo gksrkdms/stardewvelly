@@ -95,6 +95,17 @@ void objectManager::setNpc(int x, int y, int id, int index)
 	m_listObjNpc.push_back(m_pObjectNpc);
 }
 
+void objectManager::setCropXY(int x, int y, int index)
+{
+	for (m_iterObj = m_listObj.begin(); m_iterObj != m_listObj.end(); m_iterObj++)
+	{
+		if ((*m_iterObj)->getIndex() == index)
+		{
+			(*m_iterObj)->setXY(x, y);
+		}
+	}
+}
+
 int objectManager::harvest(int index)
 {
 	for (m_iterObj = m_listObj.begin(); m_iterObj != m_listObj.end(); m_iterObj++)

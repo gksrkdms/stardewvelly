@@ -203,7 +203,7 @@ void playerMenu::menuUpdate()
 		// 손에 아이템이 없을떄만 메뉴창을 닫을수있게함
 		if (m_pInven->getHandItem() == false)
 		{
-			if (KEYMANAGER->isOnceKeyDown('E'))
+			if (KEYMANAGER->isOnceKeyDown('E') || KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
 			{				
 				SOUNDMANAGER->play("sound/effect/인벤토리.wav", g_soundVolume.effect);
 				m_pInven->setInvenDir(INVEN_QUICKBAR);	// 인벤토리 상태를 퀵바로

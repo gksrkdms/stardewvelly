@@ -93,6 +93,7 @@ void mapManager::update()
 	m_listObj = OBJMANAGER->getObject();
 	for (m_iterObj = m_listObj.begin(); m_iterObj != m_listObj.end(); m_iterObj++)
 	{
+		OBJMANAGER->setCropXY(m_pTiles[(*m_iterObj)->getIndex()].rc.left, m_pTiles[(*m_iterObj)->getIndex()].rc.bottom, (*m_iterObj)->getIndex());
 		if (m_pTiles[(*m_iterObj)->getIndex()].object == TREE_SMALL ||
 			m_pTiles[(*m_iterObj)->getIndex()].object == TREE_BIG ||
 			m_pTiles[(*m_iterObj)->getIndex()].object == CROP)

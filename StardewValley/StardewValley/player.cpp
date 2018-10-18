@@ -73,10 +73,12 @@ HRESULT player::init()
 	m_pRight.y = 0;
 	isHarvest = false;
 
-	m_nHp = 50;
+	for (int i = 0; i < 3; i++)
+	{
+		isFirstMap[i] = false;
+	}
+	isFirstMap[0] = true;
 
-	//m_nPlayerIndexX = m_rc.left / 64;
-	//m_nPlayerIndexY = m_rc.top / 64;
 
 	return S_OK;
 }
@@ -215,7 +217,7 @@ void player::render(HDC hdc)
 			// 아이템이 씨앗일때
 			if (m_pTargetItem->getItemKind() == ITEM_SEED)
 			{
-				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, 4);
+				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 200, 4);
 			}
 		}
 	}
@@ -235,11 +237,6 @@ void player::render(HDC hdc)
 		TextOut(hdc, 200, 700, str, strlen(str));
 	}
 	m_pFishing->render(hdc);
-
-
-	sprintf_s(str, 128, "작물 : %d", m_pMap->getTile(m_nTempIndex)->object);
-	TextOut(hdc, 0, 600, str, strlen(str));
-
 
 	if (isProgressBar[1] == true)
 	{
@@ -339,11 +336,12 @@ void player::setTargetXY()
 					break;
 				}
 			}
+			// 맵이동
 			if (IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
 			{
 				if (m_pMap->getTile(m_indexCamera)->terrain == EXIT)
 				{
-					m_pMap->loadingMap("image/1111.map", 50, 50);
+					m_pMap->loadingMap("town", 50, 50);
 				}
 			}
 		}
@@ -858,10 +856,14 @@ void player::setItemMotion()
 					setNotTile();	// 상호작용 함수
 					break;
 				case ACTITEM_FISHINGROD:
-					m_pFishing->init();
-					m_pFishing->setIsFishing(true);
-					m_playerState = PLAYER_FISHING;		
-					m_fCurrEnergy -= 8;
+					if (m_pMap->getTile(m_nTempIndex)->terrain == WATER || 
+						m_pMap->getTile(m_nTempIndex)->terrain == SEA)
+					{
+						m_pFishing->init();
+						m_pFishing->setIsFishing(true);
+						m_playerState = PLAYER_FISHING;
+						m_fCurrEnergy -= 8;
+					}
 					break;
 				case ACTITEM_SWORD:
 					m_playerMotion = MOTION_SWORD;

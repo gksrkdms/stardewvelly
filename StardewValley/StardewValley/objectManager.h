@@ -42,6 +42,8 @@ public:
 	void setCrop(int x, int y, int id, int index); // 작물 set
 	void setNpc(int x, int y, int id, int index); // Npc set
 
+	void setCropXY(int x, int y, int index);
+
 	int harvest(int index);	// 수확
 	int getCropRemain(int index);	// 작물 내구도확인
 	void setCropRemain(int index);	// 작물 수량 셋팅

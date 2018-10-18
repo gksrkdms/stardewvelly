@@ -20,6 +20,7 @@ public:
 	virtual HRESULT init(int x, int y, int id, int index);
 	virtual void release();
 	virtual void update();
+	void setXY(int x, int y);
 	virtual void render(HDC hdc);
 
 	virtual void getPlayer(player* player) { m_player = player; }

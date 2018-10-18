@@ -109,7 +109,7 @@ private:
 	POINT m_pUp;
 	POINT m_pDown;
 
-	int m_nHp;	// 소모품 확인용 hp변수 (삭제해야함)
+	bool isFirstMap[3];			// 맵 처음갔는지 확인용
 
 	bool isRideHorse; //@@ 말타기 불값 추가
 	PLAYCOLLISION m_playerCollision;	// 플레이어 충돌 상태값

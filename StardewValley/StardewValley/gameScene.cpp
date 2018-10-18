@@ -52,14 +52,14 @@ void gameScene::update()
 
 	PLAYTIMEMANAGER->update();
 
-	if (KEYMANAGER->isStayKeyDown('O'))
-	{
-		m_pMapManager->loadingMap("image/1280.map", 20, 20);
-	}
-	if (KEYMANAGER->isStayKeyDown('P'))
-	{
-		m_pMapManager->loadingMap("image/1111.map", 50, 50);
-	}
+	//if (KEYMANAGER->isStayKeyDown('O'))
+	//{
+	//	m_pMapManager->loadingMap("image/1280.map", 20, 20);
+	//}
+	//if (KEYMANAGER->isStayKeyDown('P'))
+	//{
+	//	m_pMapManager->loadingMap("image/1111.map", 50, 50);
+	//}
 
 	//m_rcPlayer = m_pPlayer->getPlayerRc();
 	//m_rcPlayer.left / 64;
@@ -87,8 +87,8 @@ void gameScene::render(HDC hdc)
 		m_pMapManager->render(hdc);
 		m_pPlayer->playerRender(hdc);
 		m_pMapManager->objRender(hdc);
-		m_pPlayer->render(hdc);
 		PLAYTIMEMANAGER->render(hdc);
+		m_pPlayer->render(hdc);
 	}	
 
 	//플레이어가 위

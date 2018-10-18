@@ -42,6 +42,7 @@ private:
 
 	int		m_ntempX;			// 맵교체시 담아줄 맵크기 x,y
 	int		m_ntempY;
+	bool	isFirstMap;			// 맵 처음갔는지 여부
 	void loadingProcess();		// 로딩 데이터처리
 
 	player* m_player;

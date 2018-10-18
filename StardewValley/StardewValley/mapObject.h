@@ -43,6 +43,7 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render(HDC hdc);
+	virtual void setXY(int x, int y);
 
 	virtual void getPlayer(player* player) { m_player = player; }
 

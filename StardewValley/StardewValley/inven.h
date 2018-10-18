@@ -2,7 +2,7 @@
 class item;
 
 #define INVENSIZE 36
-#define MAXITEM 3
+#define MAXITEM 5
 
 enum INVENDIR
 {
