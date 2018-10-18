@@ -24,8 +24,8 @@ private:
 	std::vector<tagTile> m_vecTile;
 	std::vector<tagTile>::iterator m_iterTile;
 
-	map<int, mapObject*> m_mapObj;
-	map<int, mapObject*>::iterator m_iterObj;
+	list<mapObject*> m_listObj;
+	list<mapObject*>::iterator m_iterObj;
 
 	string m_mapName;
 
@@ -71,7 +71,7 @@ public:
 	inline int getTileX() { return TILE_X; }
 	inline int getTileY() { return TILE_Y; }
 
-	inline map<int, mapObject*> getObject() { return m_mapObj; }
+	//inline map<int, mapObject*> getObject() { return m_mapObj; }
 
 	void getPlayer(player* player) { m_player = player; }
 

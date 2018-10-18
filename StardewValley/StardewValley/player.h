@@ -78,9 +78,6 @@ private:
 	progressBarHp*	m_pHpBar;
 	progressBarHp*	m_pEnergyBar;
 
-	map<int, mapObject*>	m_mapObj;
-	map<int, mapObject*>::iterator m_iterObj;
-
 	PRIVATESYNTHESIZE(int, m_nMoney, Money);
 	
 	float m_fMaxHp;				// @플레이어 최대 체력
@@ -135,6 +132,7 @@ private:
 	void setNotTile();				// 낫 상호작용 함수
 	void setSwordTile();			// 검 상호작용 함수
 	void progressBarToolTip();		// 체력,에너지 표시 처리함수
+	void harvest();					// 작물 수확함수
 
 	bool m_isMove =false;
 

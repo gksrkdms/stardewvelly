@@ -18,10 +18,12 @@ protected:
 	SYNTHESIZE(int, m_nObjX, X);
 	SYNTHESIZE(int, m_nObjY, Y);
 	SYNTHESIZE(int, m_nIndex, Index);
+	SYNTHESIZE(int, m_nHarvestId, HarvestId);
 	SYNTHESIZE(bool, m_isLayerFirst, First);
 	SYNTHESIZE(int, m_nFrameX, FrameX);
 	SYNTHESIZE(int, m_nFrameY, FrameY);
 	SYNTHESIZE(int, m_isWaterTile, WaterTile);	// 타일이 워터일떄 확인용
+	SYNTHESIZE(bool, isHarvest, Harvest);		// 작물이 다 자랐는지 확인용
 
 	player* m_player;
 

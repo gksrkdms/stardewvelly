@@ -90,28 +90,20 @@ void mapManager::update()
 
 	autoTile();
 
-	//for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
-	//{
-	//	for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
-	//	{
-	//		int cullX = CAMERA->getX() / TILE_SIZE_1;
-	//		int cullY = CAMERA->getY() / TILE_SIZE_1;
-
-	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
-	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
-	//		
-	//		if (m_pTiles[m_indexCamera].object == TREE_SMALL || m_pTiles[m_indexCamera].object == TREE_BIG
-	//			/*|| m_pTiles[m_indexCamera].object == CROP*/)
-	//			OBJMANAGER->update();
-	//	}
-	//}
-
-	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	m_listObj = OBJMANAGER->getObject();
+	for (m_iterObj = m_listObj.begin(); m_iterObj != m_listObj.end(); m_iterObj++)
 	{
-		if (m_pTiles[i].object == TREE_SMALL || m_pTiles[i].object == TREE_BIG || m_pTiles[i].object == CROP)
+		if (m_pTiles[(*m_iterObj)->getIndex()].object == TREE_SMALL ||
+			m_pTiles[(*m_iterObj)->getIndex()].object == TREE_BIG ||
+			m_pTiles[(*m_iterObj)->getIndex()].object == CROP)
+		{
 			OBJMANAGER->update();
-		if (m_pTiles[i].terrain == WETFARMLAND)
-			OBJMANAGER->setWaterFarm(i);
+		}
+		if (m_pTiles[(*m_iterObj)->getIndex()].terrain == WETFARMLAND)
+		OBJMANAGER->setWaterFarm((*m_iterObj)->getIndex());
+
+		if ((*m_iterObj)->getHarvest() == true)
+			m_pTiles[(*m_iterObj)->getIndex()].object = HARVEST;
 	}
 
 	loadingProcess();
@@ -243,7 +235,7 @@ void mapManager::objRender(HDC hdc)
 			if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
 			
 			if (m_pTiles[m_indexCamera].object == TREE_SMALL || m_pTiles[m_indexCamera].object == TREE_BIG
-				|| m_pTiles[m_indexCamera].object == CROP)
+				|| m_pTiles[m_indexCamera].object == CROP || m_pTiles[m_indexCamera].object == HARVEST)
 				OBJMANAGER->render(hdc);
 
 			//else if(m_pTiles[m_indexCamera].object == TREE_SMALL)
@@ -297,12 +289,12 @@ void mapManager::loadingRender(HDC hdc)
 
 }
 
-void mapManager::objectDelete(int objIndex)
-{
-	m_iterObj = m_mapObj.find(objIndex);
-	delete m_iterObj->second;
-	m_iterObj = m_mapObj.erase(m_iterObj);
-}
+//void mapManager::objectDelete(int objIndex)
+//{
+//	m_iterObj = m_mapObj.find(objIndex);
+//	delete m_iterObj->second;
+//	m_iterObj = m_mapObj.erase(m_iterObj);
+//}
 
 void mapManager::saveMap(const char * szfileName)
 {

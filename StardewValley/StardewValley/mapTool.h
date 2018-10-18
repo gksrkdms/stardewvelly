@@ -35,6 +35,7 @@ enum OBJECT
 	TV,
 	BOX,
 	CROP,
+	HARVEST,
 	DOOR,
 	NPC,
 	OB_NUM

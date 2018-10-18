@@ -170,24 +170,8 @@ void player::update()
 
 	// 충돌 값 구하는 함수
 	PointCollide();
-	if (m_pMap->getTile(m_nTempIndex)->object == OB_NUM)
-	{
-		isHarvest = true;
-	}
-	else
-	{
-		isHarvest = false;
-	}
-	if (isHarvest)
-	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			//m_mapObj = m_pMap->getObject();
-			//m_iterObj = m_mapObj.find(m_nTempIndex);
-			//m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
-			//m_pMap->objectDelete(m_nTempIndex);
-		}
-	}
+	// 작물 수확함수
+	harvest();
 }
 
 void player::render(HDC hdc)
@@ -259,7 +243,7 @@ void player::render(HDC hdc)
 	m_pFishing->render(hdc);
 
 
-	sprintf_s(str, 128, "무브 : %d", isMove);
+	sprintf_s(str, 128, "작물 : %d", m_pMap->getTile(m_nTempIndex)->object);
 	TextOut(hdc, 0, 600, str, strlen(str));
 
 
@@ -1184,6 +1168,27 @@ void player::progressBarToolTip()
 	else
 	{
 		isProgressBar[1] = false;
+	}
+}
+
+void player::harvest()
+{
+	if (m_pMap->getTile(m_nTempIndex)->object == HARVEST)
+	{
+		isHarvest = true;
+	}
+	else
+	{
+		isHarvest = false;
+	}
+	if (isHarvest)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			m_pMenu->getInven()->addItem(OBJMANAGER->harvest(m_nTempIndex));
+			m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+			OBJMANAGER->deleteObj(m_nTempIndex);
+		}
 	}
 }
 

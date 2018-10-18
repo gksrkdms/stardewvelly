@@ -34,11 +34,13 @@ HRESULT objCrop::init(int x, int y, int id, int index)
 	case 101:
 		m_pObject = IMAGEMANAGER->findImage("crops");
 		m_cropKind = STRAWBERRY;
+		m_nHarvestId = 201;
 		break;
 
 	case 102:
 		m_pObject = IMAGEMANAGER->findImage("crops");
 		m_cropKind = CARROT;
+		m_nHarvestId = 202;
 		break;
 
 	default:
@@ -52,6 +54,7 @@ HRESULT objCrop::init(int x, int y, int id, int index)
 	m_nFrameX = 0;
 	m_nFrameY = 0;
 	m_isOnce = false;
+	m_nIndex = index;
 
 	//m_isOverlap = false;
 	return S_OK;
@@ -86,6 +89,7 @@ void objCrop::update()
 			if (m_nFrameX > 5)
 			{
 				m_nFrameX = 5;
+				isHarvest = true;
 			}
 		}
 		else if (PLAYTIMEMANAGER->getMin() % 5 != 0)

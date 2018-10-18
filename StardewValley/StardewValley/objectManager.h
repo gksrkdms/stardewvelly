@@ -42,7 +42,10 @@ public:
 	void setCrop(int x, int y, int id, int index); // 작물 set
 	void setNpc(int x, int y, int id, int index); // Npc set
 
+	int harvest(int index);	// 수확
 	void deleteObj(int index); // 오브젝트 삭제
+
+	list<mapObject*> getObject() { return m_listObj; }
 
 	void setWaterFarm(int index);
 
