@@ -100,7 +100,7 @@ void player::update()
 	if ((KEYMANAGER->isOnceKeyDown('K')))  //@@ 말 타기 테스트용
 	{
 		m_playerMotion = MOTION_RIDE;
-		m_nMoveSpeed = 50;
+		m_nMoveSpeed = 30;
 		isRideHorse = true;
 	}
 	if ((KEYMANAGER->isOnceKeyDown('L')))  //@@ 말 타기 테스트용

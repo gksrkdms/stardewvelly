@@ -149,11 +149,15 @@ void mapManager::render(HDC hdc)
 				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 					, m_pTiles[m_indexCamera].terrainFrameX, m_pTiles[m_indexCamera].terrainFrameY, TILE_SIZE_1, TILE_SIZE_1);
 			}
+
+			if (m_pTiles[m_indexCamera].isCollide == true)
+				MakeRect(hdc, m_pTiles[m_indexCamera].rc);
+
 		}
 
-	TextOut(hdc, 0, 400, tempCurrMapId, strlen(tempCurrMapId));
+		TextOut(hdc, 0, 400, tempCurrMapId, strlen(tempCurrMapId));
+	}
 }
-
 void mapManager::objRender(HDC hdc)
 {
 	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
