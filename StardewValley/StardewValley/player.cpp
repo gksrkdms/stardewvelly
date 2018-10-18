@@ -1158,6 +1158,10 @@ void player::setNotTile()
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(201);
 	}
+	if (m_pMap->getTile(m_nTempIndex)->isCollide == true)
+	{
+		m_pMap->getTile(m_nTempIndex)->isCollide = false;
+	}
 }
 
 void player::setSwordTile()
@@ -1170,6 +1174,10 @@ void player::setSwordTile()
 		// Æ¯Á¤È®·ü·Î Ç® ¾ÆÀÌÅÛ È¹µæ
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(201);
+	}
+	if (m_pMap->getTile(m_nTempIndex)->isCollide == false)
+	{
+		m_pMap->getTile(m_nTempIndex)->isCollide = true;
 	}
 }
 

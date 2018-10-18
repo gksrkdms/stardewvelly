@@ -149,75 +149,7 @@ void mapManager::render(HDC hdc)
 				m_pTileSet->frameRenderTile(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top
 					, m_pTiles[m_indexCamera].terrainFrameX, m_pTiles[m_indexCamera].terrainFrameY, TILE_SIZE_1, TILE_SIZE_1);
 			}
-
-			////if (m_pTiles[m_indexCamera].object == TREE_BIG || m_pTiles[m_indexCamera].object == TREE_SMALL)
-			//if (m_pTiles[m_indexCamera].object == TREE_SMALL)
-			//	m_pObjMgr->render(hdc);			
-			//	//m_pObjectMap->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top);
-
-			////else if (m_pTiles[m_indexCamera].object == CROP)
-			////	m_pObjectCrop->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.bottom);
-
-
-			//else if (m_pTiles[m_indexCamera].object != OBJ_NULL)
-			//{
-			//	if (m_pTiles[m_indexCamera].objectID != OBID_2 && m_pTiles[m_indexCamera].objectID != OBID_3)
-			//	{
-			//		m_pObject->frameRenderTile(hdc,
-			//			m_pTiles[m_indexCamera].rc.left,
-			//			m_pTiles[m_indexCamera].rc.top,
-			//			m_pTiles[m_indexCamera].objectFrameX,
-			//			m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-			//	}
-
-			//	if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_3)
-			//	{
-			//		m_pObject2->frameRenderTile(hdc,
-			//			m_pTiles[m_indexCamera].rc.left,
-			//			m_pTiles[m_indexCamera].rc.top,
-			//			m_pTiles[m_indexCamera].objectFrameX,
-			//			m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-			//	}
-
-			//	if (m_pTiles[m_indexCamera].objectID != OBID_1 && m_pTiles[m_indexCamera].objectID != OBID_2)
-			//	{
-			//		m_pObject3->frameRenderTile(hdc,
-			//			m_pTiles[m_indexCamera].rc.left,
-			//			m_pTiles[m_indexCamera].rc.top,
-			//			m_pTiles[m_indexCamera].objectFrameX,
-			//			m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
-			//	}
-			//}
-
 		}
-	}
-
-	//char str[128];
-
-	//for (int y = 0; y < TILE_Y; y++)
-	//{	
-	//for (int x = 0; x < TILE_X; x++)
-	//	{
-	//		int cullX = CAMERAMANAGER->getCameraX() / TILE_SIZE_1;
-	//		int cullY = CAMERAMANAGER->getCameraY() / TILE_SIZE_1;
-
-	//		m_indexCamera = (y + cullY)*TILE_X + (x + cullX);
-	//		if (m_indexCamera >= (TILE_X * TILE_Y)) continue;
-
-	//		if (m_pTiles[m_indexCamera].terrain==WATER)
-	//		{
-	//			sprintf_s(str, 128, "%d", 1);
-	//			TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
-	//		}
-	//		else
-	//		{
-	//			sprintf_s(str, 128, "%d", 0);
-	//			TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
-	//		}
-	//		//sprintf_s(str, 128, "%d", m_pTiles[m_indexCamera].index);
-	//		//TextOut(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top, str, strlen(str));
-	//	}
-	//}
 
 	TextOut(hdc, 0, 400, tempCurrMapId, strlen(tempCurrMapId));
 }
