@@ -14,7 +14,7 @@ HRESULT gameScene::init()
 	m_pMapManager->getPlayer(m_pPlayer);
 	m_pMapManager->init();
 	m_pMapManager->loadMap("image/1280.map");
-	m_pMapManager->SetTree();
+	//m_pMapManager->SetTree();
 
 	//m_pMapManager->loadMap("image/goldBeach1.map");
 	m_pPlayer->getMap(m_pMapManager);

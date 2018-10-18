@@ -231,7 +231,6 @@ void player::render(HDC hdc)
 	//MakeRect(hdc, m_temprc);
 	//MakeRect(hdc, m_rc);
 	//MakeRect(hdc, m_TargetRc);
-
 	m_pMenu->render(hdc);
 
 	if (m_pTargetItem)
@@ -242,9 +241,12 @@ void player::render(HDC hdc)
 	}
 	m_pFishing->render(hdc);
 
-
-	sprintf_s(str, 128, "작물 : %d", m_pMap->getTile(m_nTempIndex)->object);
+	sprintf_s(str, 128, "작물 : %d", m_nTempIndex);
 	TextOut(hdc, 0, 600, str, strlen(str));
+
+
+	//sprintf_s(str, 128, "작물 : %d", m_pMap->getTile(m_nTempIndex)->object);
+	//TextOut(hdc, 0, 600, str, strlen(str));
 
 
 	if (isProgressBar[1] == true)

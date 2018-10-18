@@ -319,7 +319,7 @@ void mapManager::saveMap(const char * szfileName)
 		0,						// 파일 공유 방식 지정 (0) : 공유 안함
 								// FILE_SHARE_DELETE : 삭제 접근 요청시 공유
 		NULL,					// 보안 관련 옵션
-		CREATE_ALWAYS,			// CREATE_ALWAYS : 새로운 파일 생성, 동일한 이름의 파일이 있으면 덮어쓴다
+		CREATE_NEW,			// CREATE_ALWAYS : 새로운 파일 생성, 동일한 이름의 파일이 있으면 덮어쓴다
 								// CREATE_NEW : 새로운 파일 생성
 								// OPEN_EXISTING : 파일이 존재하면 오픈, 없으면 에러코드 리턴
 		FILE_ATTRIBUTE_NORMAL,	// FILE_ATTRIBUTE_NORMAL : 다른 속성이 없다
@@ -382,22 +382,26 @@ void mapManager::loadMap(const char* szfileName)
 
 	// 바꾸고자 하는 맵을 못찾으면 새로 저장
 	if (m_iter == m_map.end())
+	{
 		m_map.insert(pair<string, tagTile*>(szfileName, m_pTiles));
+		ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
+		SetTree();
+	}
 		
 	// 바꿀 맵 있으면
 	else
 	{
 		delete[] m_pTiles;
-		TILE_X = g_mapSize.mapSizeX / TILE_SIZE_1;
-		TILE_Y = g_mapSize.mapSizeY / TILE_SIZE_1;
+		//TILE_X = g_mapSize.mapSizeX / TILE_SIZE_1;
+		//TILE_Y = g_mapSize.mapSizeY / TILE_SIZE_1;
 		m_pTiles = new tagTile[TILE_X*TILE_Y];
+
+		ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
 	}
 
-
-	ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
-
+	//ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
+	//SetTree();
 	CloseHandle(hFile);
-
 	tempCurrMapId = szfileName;
 }
 
