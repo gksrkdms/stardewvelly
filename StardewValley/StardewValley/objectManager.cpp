@@ -112,7 +112,7 @@ void objectManager::deleteObj(int index)
 	{
 		if ((*m_iterObj)->getIndex() == index)
 		{
-			//delete (*m_iterObj);
+			delete (*m_iterObj);
 			m_listObj.erase(m_iterObj++); break;
 		}
 		

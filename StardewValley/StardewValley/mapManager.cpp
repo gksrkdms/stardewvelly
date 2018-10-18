@@ -289,12 +289,6 @@ void mapManager::loadingRender(HDC hdc)
 
 }
 
-//void mapManager::objectDelete(int objIndex)
-//{
-//	m_iterObj = m_mapObj.find(objIndex);
-//	delete m_iterObj->second;
-//	m_iterObj = m_mapObj.erase(m_iterObj);
-//}
 
 void mapManager::saveMap(const char * szfileName)
 {

@@ -57,8 +57,6 @@ public:
 	void objRender(HDC hdc);
 	void loadingRender(HDC hdc);
 
-	void objectDelete(int objIndex);
-
 	void saveMap(const char* szfileName);
 	void loadingMap(const char * szfileName, int mapSizex, int mapSizey);
 	void loadMap(const char * szfileName);

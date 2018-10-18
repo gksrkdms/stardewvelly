@@ -1041,6 +1041,7 @@ void player::setSpadeTile()
 	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
 	{
 		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		m_pMap->getTile(m_nTempIndex)->isCollide = false;
 		// Æ¯Á¤È®·ü·Î Ç® ¾ÆÀÌÅÛ È¹µæ
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(201);
@@ -1087,16 +1088,19 @@ void player::setAxeTile()
 	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
 	{
 		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		m_pMap->getTile(m_nTempIndex)->isCollide = false;
 		// Æ¯Á¤È®·ü·Î Ç® ¾ÆÀÌÅÛ È¹µæ
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(201);
 	}
-	if (m_pMap->getTile(m_nTempIndex)->object == TREE_BIG
-		|| m_pMap->getTile(m_nTempIndex)->object == TREE_SMALL)
+	if (m_pMap->getTile(m_nTempIndex)->object == TREE_BIG || 
+		m_pMap->getTile(m_nTempIndex)->object == TREE_SMALL ||
+		m_pMap->getTile(m_nTempIndex)->object == BRANCH_SMALL)
 	{
 		// ³ª¹« »èÁ¦
 		OBJMANAGER->deleteObj(m_nTempIndex);
 		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		m_pMap->getTile(m_nTempIndex)->isCollide = false;
 
 		// Æ¯Á¤È®·ü·Î ³ª¹« ¼ö¾× ¾ÆÀÌÅÛ È¹µæ
 		//if(RANDOM->getFromIntTo(0,1) > 0)
@@ -1113,16 +1117,32 @@ void player::setPickaxTile()
 	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
 	{
 		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		m_pMap->getTile(m_nTempIndex)->isCollide = false;
 		// Æ¯Á¤È®·ü·Î Ç® ¾ÆÀÌÅÛ È¹µæ
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(201);
 	}
-	if (m_pMap->getTile(m_nTempIndex)->object == MINE_ROCK)
+	if (m_pMap->getTile(m_nTempIndex)->object == MINE_ROCK ||
+		m_pMap->getTile(m_nTempIndex)->object == ROCK_BIG ||
+		m_pMap->getTile(m_nTempIndex)->object == ROCK_SMALL)
 	{
 		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		m_pMap->getTile(m_nTempIndex)->isCollide = false;
 		// Æ¯Á¤È®·ü·Î ±¤¼® ¾ÆÀÌÅÛ È¹µæ
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(202);
+	}
+	if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND || 
+		m_pMap->getTile(m_nTempIndex)->terrain == WETFARMLAND)
+	{
+		m_pMap->getTile(m_nTempIndex)->terrain = EARTH;
+		m_pMap->getTile(m_nTempIndex)->terrainFrameX = 0;
+		m_pMap->getTile(m_nTempIndex)->terrainFrameY = 0;
+		if (m_pMap->getTile(m_nTempIndex)->object != OBJ_NULL)
+		{
+			m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+			OBJMANAGER->deleteObj(m_nTempIndex);
+		}
 	}
 	m_fCurrEnergy -= 2;
 }
@@ -1133,6 +1153,7 @@ void player::setNotTile()
 	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
 	{
 		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		m_pMap->getTile(m_nTempIndex)->isCollide = false;
 		// Æ¯Á¤È®·ü·Î Ç® ¾ÆÀÌÅÛ È¹µæ
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(201);
@@ -1145,6 +1166,7 @@ void player::setSwordTile()
 	if (m_pMap->getTile(m_nTempIndex)->object == BUSH_SMALL)
 	{
 		m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+		m_pMap->getTile(m_nTempIndex)->isCollide = false;
 		// Æ¯Á¤È®·ü·Î Ç® ¾ÆÀÌÅÛ È¹µæ
 		//if(RANDOM->getFromIntTo(0,1) > 0)
 		//m_pMenu->getInven()->addItem(201);
