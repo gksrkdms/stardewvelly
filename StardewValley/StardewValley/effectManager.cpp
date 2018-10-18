@@ -106,6 +106,7 @@ void effectManager::addEffect(string effectName,
 
 	m_mapEffects.insert(
 		pair<string, vecEffect>(effectName, vecEffects));
+	int a = 10;
 }
 
 void effectManager::play(string effectName, int x, int y)

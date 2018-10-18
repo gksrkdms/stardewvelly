@@ -7,6 +7,8 @@ class item;
 class fishing;
 class progressBarHp;
 class mapManager;
+class mapObject;
+class objCrop;
 
 #define TARGET_SIZE 2
 
@@ -76,6 +78,9 @@ private:
 	progressBarHp*	m_pHpBar;
 	progressBarHp*	m_pEnergyBar;
 
+	map<int, mapObject*>	m_mapObj;
+	map<int, mapObject*>::iterator m_iterObj;
+
 	PRIVATESYNTHESIZE(int, m_nMoney, Money);
 	
 	float m_fMaxHp;				// @플레이어 최대 체력
@@ -99,8 +104,13 @@ private:
 	bool isStop;				// 멈춰있을때 타일타겟 보이게
 	bool isSeed;				// 씨앗을 뿌릴수 있는지 없는지 확인용
 	bool isProgressBar[2];		// 체력,기력바 출력용 불값
+	bool isHarvest;
 
 	int m_nTempIndex;			// 타일에 접근할 임시 인덱스
+	POINT m_pRight;
+	POINT m_pLeft;
+	POINT m_pUp;
+	POINT m_pDown;
 
 	int m_nHp;	// 소모품 확인용 hp변수 (삭제해야함)
 
@@ -110,6 +120,8 @@ private:
 	void setTargetXY();					// 타겟렉트 좌표
 	void setKey();						// 키 묶어둔 함수
 	void move(PLAYERDIR playerdir);		// 플레이어 이동 함수
+	void PointCollide();				// 충돌값 구하는 함수
+	void Collide();						// 플레이어 충돌함수
 	void setMotion(animation * ani, image** image, const char * szName, int framex, int framey);
 	void startMotion(animation* ani, int start, int end, bool reverse, bool loop, int fps);
 	void setSyncMotion(PLAYERMOTION motion, int* x, int* y);	//모션 싱크로 맞추는 함수

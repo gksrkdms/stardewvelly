@@ -296,6 +296,21 @@ void mapManager::loadingRender(HDC hdc)
 
 }
 
+void mapManager::setCrop(int seedNum, int tileIndex)
+{
+
+	m_pObjectCrop = new objCrop;
+	m_pObjectCrop->init(seedNum, tileIndex, m_pTiles[tileIndex].rc.left, m_pTiles[tileIndex].rc.bottom);
+	m_mapObj.insert(pair<int, mapObject*>(tileIndex, m_pObjectCrop));
+}
+
+void mapManager::objectDelete(int objIndex)
+{
+	m_iterObj = m_mapObj.find(objIndex);
+	delete m_iterObj->second;
+	m_iterObj = m_mapObj.erase(m_iterObj);
+}
+
 void mapManager::saveMap(const char * szfileName)
 {
 	DWORD write;
@@ -334,6 +349,8 @@ void mapManager::loadingProcess()
 	if (m_Loading == LOAD_END)
 	{
 		m_Loading = LOAD_FALSE;
+		//string temp;
+		//temp = "image/temp_1111.map";
 		saveMap(tempCurrMapId);
 		g_mapSize.mapSizeX = m_ntempX;
 		g_mapSize.mapSizeY = m_ntempY;

@@ -87,13 +87,22 @@ HRESULT inven::init()
 void inven::release()
 {
 	// 인벤토리 릴리즈
-	for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
+	m_iterItem = m_mapItem.begin();
+	for (; m_iterItem != m_mapItem.end();)
 	{
-		m_iterItem->second->release();
+		if (m_iterItem->second != NULL)
+		{
+			m_iterItem->second->release();
+			delete m_iterItem->second;
+			m_iterItem = m_mapItem.erase(m_iterItem);
+		}
+		else
+		{
+			m_iterItem++;
+		}
+		//m_iterItem->second->release();
 	}
 	m_mapItem.clear();
-	if (m_pQuickItem)
-		delete m_pQuickItem;
 }
 
 void inven::update()
@@ -119,12 +128,12 @@ void inven::update()
 
 	setDir(); // 플레이어 상황에 따른 인벤토리값 셋팅함수
 	// 손에 집은 아이템 x,y마우스 따라다니게
-	if (isHandItem == true)
-	{
+	//if (isHandItem == true)
+	//{
 		m_pHand->setX(g_ptMouse.x + 5);
 		m_pHand->setY(g_ptMouse.y + 5);
-		//m_pHand->update(true);
-	}
+		m_pHand->update();
+	//}
 
 	if (m_invenDir == INVEN_INVEN)
 	{

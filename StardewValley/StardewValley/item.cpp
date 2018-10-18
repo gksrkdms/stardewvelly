@@ -53,6 +53,8 @@ HRESULT item::init(int x, int y, bool shop)
 
 void item::release()
 {
+	if(waterBar)
+	delete waterBar;
 }
 
 void item::update()

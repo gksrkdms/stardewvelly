@@ -6,21 +6,19 @@
 #include "item.h"
 #include "fishing.h"
 #include "progressBarHp.h"
+#include "mapObject.h"
+#include "objCrop.h"
 
 #include "mapManager.h"
 
 HRESULT player::init()
 {
-	addSound(); //@ 사운드모음 
-	//m_pPlayer = IMAGEMANAGER->findImage("player_idle");
+	//addSound(); //@ 사운드모음 
+	m_pPlayer = IMAGEMANAGER->findImage("player_idle");
 	m_pTarget = IMAGEMANAGER->findImage("focustile_001");
 	m_pSeedTarget = IMAGEMANAGER->findImage("focustile_002");
 	m_pNumber = IMAGEMANAGER->findImage("goldnumber");
 	m_pHpEnergyUi = IMAGEMANAGER->findImage("hp_EnergyBar");
-	EFFECTMANAGER->addEffect("water_drop", "image/Stardew Valley/물뿌바닥이펙트.bmp",640,64,64,64,8,5);
-	EFFECTMANAGER->addEffect("water_drop2", "image/Stardew Valley/물뿌윗부분이펙트.bmp",192,64,64,64,5,5);
-	EFFECTMANAGER->addEffect("recovery", "image/Stardew Valley/회복이펙트.bmp",448,64,64,64,10,5);
-	EFFECTMANAGER->addEffect("need_water", "image/Stardew Valley/물부족.bmp",256,64,64,64,4,5);
 
 	m_pAni = new animation;
 	m_playerDir = PLAYER_DOWN;
@@ -53,10 +51,6 @@ HRESULT player::init()
 	m_fCurrHp = m_fMaxHp = 100;			// @플레이어 체력
 	m_fCurrEnergy = m_fMaxEnergy = 270;		// @플레이어 에너지 
 	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, 164);  //@플레이어 체력
-
-	m_fCurrHp = m_fMaxHp = 270;			// @플레이어 체력
-	m_fCurrEnergy = m_fMaxEnergy = 300;		// @플레이어 에너지 
-	m_HpRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth()+12, WINSIZEY -208, 24, 164);  //@플레이어 체력
 	m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 208, 24, 164); // @플레이어 에너지
 	
 	m_rc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX, m_nPlayerSizeY);
@@ -74,6 +68,10 @@ HRESULT player::init()
 	m_playerCollision = COLL_FALSE;
 
 	m_nTempIndex = 0;
+
+	m_pRight.x = 0;
+	m_pRight.y = 0;
+	isHarvest = false;
 
 	m_nHp = 50;
 
@@ -123,9 +121,9 @@ void player::update()
 	// 플레이상태와 플레이어 모션이 idle, handup상태일떄 다음 함수 실행
 	if (m_playerState == PLAYER_PLAY && (m_playerMotion == MOTION_IDLE || m_playerMotion == MOTION_HANDUP || m_playerMotion == MOTION_RIDE)) //@@ 말타기추가
 	{
-		setKey();// 키입력함수 wasd이동키
-		if(m_playerMotion == MOTION_IDLE || m_playerMotion == MOTION_HANDUP)	
-			useItem();	// 소모품 아이템 사용
+		setKey();	// 키입력함수 wasd이동키
+		useItem();	// 소모품 아이템 사용
+		Collide();
 	}
 
 	// 플레이어 상태가 메뉴면 메뉴 true로
@@ -148,7 +146,7 @@ void player::update()
 	{
 		m_pTargetItem->setPlayXY(m_nX, m_nY);	// 도구아이템이 아닐때 플레이어 x,y받아오는 함수
 		// L버튼 가능을하기위해 낚시상태가 아닐떄, 인벤클래스의 L버튼불값이 false일떄
-		if (m_playerState != PLAYER_FISHING && m_pMenu->getInven()->getLbutton() == false)
+		if (m_playerState != PLAYER_FISHING && m_pMenu->getInven()->getLbutton() == false && isHarvest == false)
 		{
 			setItemMotion();
 		}						// 도구아이템 모션 상태
@@ -169,6 +167,28 @@ void player::update()
 	//낚시
 	m_pFishing->setPlayer(this);
 	m_pFishing->update();
+
+	// 충돌 값 구하는 함수
+	PointCollide();
+	if (m_pMap->getTile(m_nTempIndex)->object == OB_NUM)
+	{
+		isHarvest = true;
+	}
+	else
+	{
+		isHarvest = false;
+	}
+	if (isHarvest)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			m_mapObj = m_pMap->getObject();
+			m_iterObj = m_mapObj.find(m_nTempIndex);
+			m_pMenu->getInven()->addItem(m_iterObj->second->getCropId());
+			m_pMap->getTile(m_nTempIndex)->object = OBJ_NULL;
+			m_pMap->objectDelete(m_nTempIndex);
+		}
+	}
 }
 
 void player::render(HDC hdc)
@@ -177,7 +197,7 @@ void player::render(HDC hdc)
 
 	if (m_pTargetItem && m_pTargetItem->getActItemKind()==ACTITEM_WATER)
 	{
-		EFFECTMANAGER->render(hdc);
+		//EFFECTMANAGER->render(hdc);
 	}
 	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth(),WINSIZEY-260); // @체력,에너지틀
 	//MakeRect(hdc, m_HpRc);		// @체력렉트
@@ -196,7 +216,7 @@ void player::render(HDC hdc)
 	}
 	if (m_pTargetItem && m_pTargetItem->getActItemKind() != ACTITEM_WATER)
 	{
-		EFFECTMANAGER->render(hdc);
+		//EFFECTMANAGER->render(hdc);
 	}
     
 	// 퀵바 아이템이 있을때
@@ -218,14 +238,12 @@ void player::render(HDC hdc)
 			// 아이템이 씨앗일때
 			if (m_pTargetItem->getItemKind() == ITEM_SEED)
 			{
-				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, GAME_SCALAR);
+				m_pSeedTarget->alphaFrameRender(hdc, m_nTargetX, m_nTargetY, isSeed, 0, 150, 4);
 			}
 		}
 	}
 
 	char str[128];
-	//sprintf_s(str, 128, "%d", i);
-	//TextOut(hdc, 500, 50, str, strlen(str));
 
 	//MakeRect(hdc, m_temprc);
 	//MakeRect(hdc, m_rc);
@@ -241,9 +259,10 @@ void player::render(HDC hdc)
 	}
 	m_pFishing->render(hdc);
 
-	//char str[128];
-	sprintf_s(str, 128, "씨앗불값 : %d", isSeed);
-	TextOut(hdc, 0, 550, str, strlen(str));
+
+	sprintf_s(str, 128, "무브 : %d", isMove);
+	TextOut(hdc, 0, 600, str, strlen(str));
+
 
 	if (isProgressBar[1] == true)
 	{
@@ -332,6 +351,13 @@ void player::setTargetXY()
 					m_nTargetX = m_pMap->getTile(m_indexCamera)->rc.left;
 					m_nTargetY = m_pMap->getTile(m_indexCamera)->rc.top;
 					break;
+				}
+			}
+			if (IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
+			{
+				if (m_pMap->getTile(m_indexCamera)->terrain == EXIT)
+				{
+					m_pMap->loadingMap("image/1111.map", 50, 50);
 				}
 			}
 		}
@@ -545,24 +571,44 @@ void player::setKey()
 // 이동함수 (수정해야함)
 void player::move(PLAYERDIR playerdir)
 {
-	/*switch (playerdir)
+	switch (playerdir)
 	{
 	case PLAYER_LEFT:
+		if(m_playerCollision != COLL_LEFT)
 		m_nX -= m_nMoveSpeed;
 		break;
 	case PLAYER_RIGHT:
+		if(m_playerCollision != COLL_RIGHT)
 		m_nX += m_nMoveSpeed;
 		break;
 	case PLAYER_UP:
+		if (m_playerCollision != COLL_UP)
 		m_nY -= m_nMoveSpeed;
 		break;
 	case PLAYER_DOWN:
+		if (m_playerCollision != COLL_DOWN)
 		m_nY += m_nMoveSpeed;
 		break;
-	}*/
+	}
+}
 
+void player::PointCollide()
+{
+	m_pRight.x = m_rc.right + 5;
+	m_pRight.y = (m_rc.bottom + m_rc.top) / 2;
 
+	m_pLeft.x = m_rc.left - 5;
+	m_pLeft.y = (m_rc.bottom + m_rc.top) / 2;
 
+	m_pUp.x = (m_rc.left + m_rc.right) / 2;
+	m_pUp.y = m_rc.top - 5;
+
+	m_pDown.x = (m_rc.left + m_rc.right) / 2;
+	m_pDown.y = m_rc.bottom + 5;
+}
+
+void player::Collide()
+{
 	// 맵정보 받아와야함
 	for (int y = 0; y < WINSIZEY / m_pMap->getTileSize() + 1; y++)
 	{
@@ -573,80 +619,41 @@ void player::move(PLAYERDIR playerdir)
 
 			int m_indexCamera;
 			m_indexCamera = (y + cullY)*m_pMap->getTileX() + (x + cullX);
-			
+
 			if (m_indexCamera >= (m_pMap->getTileX() * m_pMap->getTileY())) continue;
 
 			//충돌x
-			if (!(m_pMap->getTile(m_indexCamera)->isCollide) && IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
-			{
-				m_isMove = true;
-			}
+			//if (!(m_pMap->getTile(m_indexCamera)->isCollide) && IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
+			//{
+			//	m_isMove = true;
+			//	if (m_isMove)
+			//		m_playerCollision = COLL_FALSE;
+			//}
 
-			//충돌시
+			if ((m_pMap->getTile(m_indexCamera)->isCollide) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pRight))
+			{
+				m_playerCollision = COLL_RIGHT;
+				return;
+			}
+			else if ((m_pMap->getTile(m_indexCamera)->isCollide) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pLeft))
+			{
+				m_playerCollision = COLL_LEFT;
+				return;
+			}
+			else if ((m_pMap->getTile(m_indexCamera)->isCollide) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pUp))
+			{
+				m_playerCollision = COLL_UP;
+				return;
+			}
+			else if ((m_pMap->getTile(m_indexCamera)->isCollide) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pDown))
+			{
+				m_playerCollision = COLL_DOWN;
+				return;
+			}
 			else
 			{
-				if ((m_pMap->getTile(m_indexCamera)->isCollide) && IntersectRect(&m_temprc, &m_pMap->getTile(m_indexCamera)->rc, &m_rc))
-				{
-					m_isMove = false;
-
-					switch (playerdir)
-					{
-					case PLAYER_LEFT:
-						m_playerCollision = COLL_LEFT;
-						break;
-					case PLAYER_RIGHT:
-						m_playerCollision = COLL_RIGHT;
-						break;
-					case PLAYER_UP:
-						m_playerCollision = COLL_UP;
-						break;
-					case PLAYER_DOWN:
-						m_playerCollision = COLL_DOWN;
-						break;
-					}
-					//m_playerCollision = COLL_LEFT;
-				}
+				m_playerCollision = COLL_FALSE;
 			}
-		}
-	}
-
-	// 충돌x
-	if (m_isMove)
-	{
-		switch (playerdir)
-		{
-		case PLAYER_LEFT:
-			m_nX -= m_nMoveSpeed;
-			break;
-		case PLAYER_RIGHT:
-			m_nX += m_nMoveSpeed;
-			break;
-		case PLAYER_UP:
-			m_nY -= m_nMoveSpeed;
-			break;
-		case PLAYER_DOWN:
-			m_nY += m_nMoveSpeed;
-			break;
-		}
-	}
-
-	// 충돌o
-	else
-	{
-		switch (playerdir)
-		{
-		case PLAYER_LEFT:
-			//m_nX -= m_nMoveSpeed;
-			break;
-		case PLAYER_RIGHT:
-			//m_nX += m_nMoveSpeed;
-			break;
-		case PLAYER_UP:
-			//m_nY -= m_nMoveSpeed;
-			break;
-		case PLAYER_DOWN:
-			//m_nY += m_nMoveSpeed;
-			break;
 		}
 	}
 }
@@ -753,8 +760,10 @@ void player::setItemMotion()
 {
 	if (m_playerState == PLAYER_PLAY)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && m_playerMotion == MOTION_IDLE)
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && m_playerMotion == MOTION_IDLE &&
+			m_pTargetItem->getItemKind() == ITEM_ACT)
 		{
+			isMove = false;
 			setDir();	// 플레이어 방향 정하는 함수
 			if (m_pTargetItem->getActItemKind() != ACTITEM_NULL)
 			{
@@ -997,12 +1006,18 @@ void player::useItem()
 				m_fCurrEnergy += m_pTargetItem->getEnergy();
 				if (m_fCurrEnergy >= m_fMaxEnergy)
 					m_fCurrEnergy = m_fMaxEnergy;
-				EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
+				//EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
 				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 				m_pTargetItem->useItem();
-			case CONITEM_SEED: //작물 심기
-				OBJMANAGER->setCrop(m_pMap->getTile(m_nTempIndex)->rc.left, m_pMap->getTile(m_nTempIndex)->rc.bottom, m_pTargetItem->getItemId(), m_nTempIndex);
-				m_pMap->getTile(m_nTempIndex)->object = CROP;
+				break;
+			case CONITEM_SEED:
+				if ((m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND || m_pMap->getTile(m_nTempIndex)->terrain == WETFARMLAND) &&
+					m_pMap->getTile(m_nTempIndex)->object != CROP)
+				{
+					m_pMap->getTile(m_nTempIndex)->object = CROP;
+					m_pMap->setCrop(m_pTargetItem->getItemId(), m_nTempIndex);
+					m_pTargetItem->useItem();
+				}
 				break;
 			}
 		}
@@ -1060,8 +1075,8 @@ void player::setWaterTile()
 {
 	if (m_pTargetItem->getWaterDurability() > 0)
 	{
-		EFFECTMANAGER->play("water_drop2", (m_nTargetX), (m_nTargetY)-30);
-		EFFECTMANAGER->play("water_drop", (m_nTargetX), (m_nTargetY));
+		//EFFECTMANAGER->play("water_drop2", (m_nTargetX), (m_nTargetY)-30);
+		//EFFECTMANAGER->play("water_drop", (m_nTargetX), (m_nTargetY));
 		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개2.wav", g_soundVolume.effect);
 		m_pTargetItem->setWaterDurability(m_pTargetItem->getWaterDurability() - 1);
 		if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND)
@@ -1077,7 +1092,7 @@ void player::setWaterTile()
 	}
 	else
 	{
-		EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
+		//EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
 		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개물없을때.wav", g_soundVolume.effect);
 	}
 }
@@ -1175,11 +1190,11 @@ void player::progressBarToolTip()
 void player::addSound()
 {
 	//플레이어 액션
-	SOUNDMANAGER->addSound("sound/effect/playerAct/곡소리.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/낫질.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/맨땅에.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/도끼질.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/물뿌리개2.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/밭갈다.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/물뿌리개물없을때.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/gok.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/not.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/ground.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/axe.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/water.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/spade.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/notwater.wav", false, false);
 }

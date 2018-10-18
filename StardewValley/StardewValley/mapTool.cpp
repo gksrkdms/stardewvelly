@@ -311,7 +311,7 @@ void mapTool::render(HDC hdc)
 						m_pTiles[m_indexCamera].objectFrameX,
 						m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
 				}
-			}		
+			}
 		}
 	}
 

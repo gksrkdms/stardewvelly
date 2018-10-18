@@ -811,11 +811,9 @@ void image::alphaFrameRender(HDC hdc, int destX, int destY, int currFrameX, int 
 			m_pBlendImage->hMemDC,
 			0, 0,
 			m_pImageInfo->nWidth * scalar, m_pImageInfo->nHeight * scalar,
-			//m_pImageInfo->nFrameWidth, m_pImageInfo->nFrameHeight,
 
 			// 대상
-			hdc,			
-			//m_pImageInfo->nFrameWidth, m_pImageInfo->nFrameHeight,
+			hdc,
 			destX, destY,
 			SRCCOPY);
 
@@ -823,9 +821,8 @@ void image::alphaFrameRender(HDC hdc, int destX, int destY, int currFrameX, int 
 		GdiTransparentBlt(
 			// 목적지
 			m_pBlendImage->hMemDC,
-			destX, destY,
-			m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
-			//m_pImageInfo->nFrameWidth * scalar, m_pImageInfo->nFrameHeight * scalar,
+			0, 0,
+			m_pImageInfo->nFrameWidth * scalar, m_pImageInfo->nFrameHeight * scalar,
 
 			// 대상
 			m_pImageInfo->hMemDC,
@@ -838,15 +835,11 @@ void image::alphaFrameRender(HDC hdc, int destX, int destY, int currFrameX, int 
 			// 목적지
 			hdc,
 			destX, destY,
-			//m_pImageInfo->nWidth, m_pImageInfo->nHeight,
-			//m_pImageInfo->nFrameWidth*scalar, m_pImageInfo->nFrameHeight*scalar,
-
 			m_pImageInfo->nWidth * scalar, m_pImageInfo->nHeight * scalar,
 
 			// 대상
 			m_pBlendImage->hMemDC,
 			0, 0,
-			//m_pImageInfo->nFrameWidth, m_pImageInfo->nFrameHeight,
 			m_pImageInfo->nWidth * scalar, m_pImageInfo->nHeight * scalar,
 			m_blendFunc);
 	}
