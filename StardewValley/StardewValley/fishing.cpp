@@ -41,7 +41,7 @@ HRESULT fishing::init()
 	// 낚은물고기 알림판
 	m_pIboard = IMAGEMANAGER->findImage("i_NoticeBoard");
 	
-	addSound();
+	//addSound();
 
 	///플레이어 좌표
 	m_fPlayerX = m_pPlayer->getX() - CAMERA->getX();

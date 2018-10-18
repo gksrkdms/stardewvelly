@@ -5,8 +5,6 @@
 
 HRESULT gameScene::init()
 {
-	g_mapSize.mapSizeX = 3200;
-	g_mapSize.mapSizeY = 3200;
 	addSound();
 	m_pBG = IMAGEMANAGER->addImage("background", "image/background.bmp", g_mapSize.mapSizeX, g_mapSize.mapSizeY, true, RGB(255, 0, 255));
 	CAMERA->init();
@@ -15,7 +13,7 @@ HRESULT gameScene::init()
 	m_pMapManager = new mapManager;
 	m_pMapManager->getPlayer(m_pPlayer);
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/town2.map");
+	m_pMapManager->loadMap("image/1111.map");
 	m_pMapManager->SetTree();
 
 	//m_pMapManager->loadMap("image/goldBeach1.map");
@@ -56,11 +54,11 @@ void gameScene::update()
 
 	if (KEYMANAGER->isStayKeyDown('O'))
 	{
-		m_pMapManager->loadingMap("image/1280.map", 20, 15);
+		m_pMapManager->loadingMap("image/1280.map", 20, 20);
 	}
 	if (KEYMANAGER->isStayKeyDown('P'))
 	{
-		m_pMapManager->loadingMap("image/ddd.map", 50, 50);
+		m_pMapManager->loadingMap("image/1111.map", 50, 50);
 	}
 
 	//m_rcPlayer = m_pPlayer->getPlayerRc();
@@ -87,8 +85,8 @@ void gameScene::render(HDC hdc)
 	else*/
 	{
 		m_pMapManager->render(hdc);
-		m_pPlayer->render(hdc);
 		m_pMapManager->objRender(hdc);
+		m_pPlayer->render(hdc);
 		PLAYTIMEMANAGER->render(hdc);
 	}	
 

@@ -42,8 +42,12 @@ public:
 	void setCrop(int x, int y, int id, int index); // 작물 set
 	void setNpc(int x, int y, int id, int index); // Npc set
 
-	void deleteTree(int index); // 나무 삭제
-	void deleteCrop(int x, int y); // 작물 삭제
+	int harvest(int index);	// 수확
+	void deleteObj(int index); // 오브젝트 삭제
+
+	list<mapObject*> getObject() { return m_listObj; }
+
+	void setWaterFarm(int index);
 
 	void getPlayer(player* player);
 };
