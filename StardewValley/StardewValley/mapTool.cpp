@@ -22,6 +22,7 @@ mapTool::~mapTool()
 
 HRESULT mapTool::init()
 {	
+
 	m_pTileSet = IMAGEMANAGER->findImage("earthAll");
 	m_pObject = IMAGEMANAGER->findImage("town_Shop");
 	m_pObject2 = IMAGEMANAGER->findImage("town_Nomal");
@@ -1620,6 +1621,9 @@ void mapTool::TerrTypeInit()
 	m_pSampleTiles[144].terrain = SEA;
 	m_pSampleTiles[146].terrain = SEA;
 	m_pSampleTiles[166].terrain = SEA;
+
+	m_pSampleTiles[398].terrain = EXIT;
+	m_pSampleTiles[399].terrain = EXIT;
 }
 
 void mapTool::changeImg()
