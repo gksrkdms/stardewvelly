@@ -363,6 +363,13 @@ void mapManager::loadMap(const char* szfileName)
 		OPEN_EXISTING,
 		FILE_ATTRIBUTE_NORMAL,
 		NULL);
+	
+	// 지금 현재 맵 이름이 새로 불러오는 맵이름과 다르면 원래맵 저장
+	if (tempCurrMapId != szfileName)
+	{
+		m_iter = m_map.find(szfileName);
+		m_map.insert(pair<string, tagTile*>(tempCurrMapId, m_pTiles));
+	}
 
 	delete[] m_pTiles;
 	TILE_X = g_mapSize.mapSizeX / TILE_SIZE_1;

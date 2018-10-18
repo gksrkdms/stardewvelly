@@ -18,8 +18,8 @@ class objectManager;
 class mapManager: public mapTool
 {
 private:
-	std::map<std::string, mapTool*>	m_map;
-	std::map<std::string, mapTool*>::iterator m_iter;
+	std::map<std::string, tagTile*>	m_map;
+	std::map<std::string, tagTile*>::iterator m_iter;
 
 	std::vector<tagTile> m_vecTile;
 	std::vector<tagTile>::iterator m_iterTile;
