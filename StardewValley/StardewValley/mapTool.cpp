@@ -22,6 +22,7 @@ mapTool::~mapTool()
 
 HRESULT mapTool::init()
 {	
+
 	m_pTileSet = IMAGEMANAGER->findImage("earthAll");
 	m_pObject = IMAGEMANAGER->findImage("town_Shop");
 	m_pObject2 = IMAGEMANAGER->findImage("town_Nomal");
@@ -1399,8 +1400,6 @@ void mapTool::objectTypeInit()
 		m_pSampleTiles[390].object = DOOR;
 		m_pSampleTiles[391].object = DOOR;
 
-		// npc test
-		m_pSampleTiles[2].object = NPC;
 		break;
 	case IMGOBJ_2:
 		for (int i = 0; i < SAMPLE_TILE_X *SAMPLE_TILE_Y; i++)
@@ -1622,6 +1621,9 @@ void mapTool::TerrTypeInit()
 	m_pSampleTiles[144].terrain = SEA;
 	m_pSampleTiles[146].terrain = SEA;
 	m_pSampleTiles[166].terrain = SEA;
+
+	m_pSampleTiles[398].terrain = EXIT;
+	m_pSampleTiles[399].terrain = EXIT;
 }
 
 void mapTool::changeImg()
