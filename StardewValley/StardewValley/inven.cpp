@@ -87,13 +87,22 @@ HRESULT inven::init()
 void inven::release()
 {
 	// 인벤토리 릴리즈
-	for (m_iterItem = m_mapItem.begin(); m_iterItem != m_mapItem.end(); m_iterItem++)
+	m_iterItem = m_mapItem.begin();
+	for (; m_iterItem != m_mapItem.end();)
 	{
-		m_iterItem->second->release();
+		if (m_iterItem->second != NULL)
+		{
+			m_iterItem->second->release();
+			delete m_iterItem->second;
+			m_iterItem = m_mapItem.erase(m_iterItem);
+		}
+		else
+		{
+			m_iterItem++;
+		}
+		//m_iterItem->second->release();
 	}
 	m_mapItem.clear();
-	if (m_pQuickItem)
-		delete m_pQuickItem;
 }
 
 void inven::update()

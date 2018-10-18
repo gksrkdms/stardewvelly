@@ -13,8 +13,8 @@
 
 HRESULT player::init()
 {
-	addSound(); //@ 사운드모음 
-	//m_pPlayer = IMAGEMANAGER->findImage("player_idle");
+	//addSound(); //@ 사운드모음 
+	m_pPlayer = IMAGEMANAGER->findImage("player_idle");
 	m_pTarget = IMAGEMANAGER->findImage("focustile_001");
 	m_pSeedTarget = IMAGEMANAGER->findImage("focustile_002");
 	m_pNumber = IMAGEMANAGER->findImage("goldnumber");
@@ -215,7 +215,7 @@ void player::render(HDC hdc)
 
 
 	//MakeRect(hdc, m_temprc);
-	MakeRect(hdc, m_rc);
+	//MakeRect(hdc, m_rc);
 	//MakeRect(hdc, m_TargetRc);
 
 	m_pMenu->render(hdc);
@@ -230,7 +230,7 @@ void player::render(HDC hdc)
 
 	char str[128];
 
-	sprintf_s(str, 128, "타일오브젝트 : %d", m_pMap->getTile(m_nTempIndex)->terrain);
+	sprintf_s(str, 128, "무브 : %d", isMove);
 	TextOut(hdc, 0, 600, str, strlen(str));
 
 
@@ -698,6 +698,7 @@ void player::setItemMotion()
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && m_playerMotion == MOTION_IDLE &&
 			m_pTargetItem->getItemKind() == ITEM_ACT)
 		{
+			isMove = false;
 			setDir();	// 플레이어 방향 정하는 함수
 			if (m_pTargetItem->getActItemKind() != ACTITEM_NULL)
 			{
@@ -1094,11 +1095,11 @@ void player::progressBarToolTip()
 void player::addSound()
 {
 	//플레이어 액션
-	SOUNDMANAGER->addSound("sound/effect/playerAct/곡소리.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/낫질.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/맨땅에.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/도끼질.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/물뿌리개2.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/밭갈다.wav", false, false);
-	SOUNDMANAGER->addSound("sound/effect/playerAct/물뿌리개물없을때.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/gok.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/not.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/ground.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/axe.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/water.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/spade.wav", false, false);
+	SOUNDMANAGER->addSound("sound/effect/playerAct/notwater.wav", false, false);
 }
