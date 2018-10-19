@@ -189,13 +189,6 @@ void player::render(HDC hdc)
 	}
 	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth(),WINSIZEY-260); // @체력,에너지틀
 
-	//@@@@@@@@@@@@@@@ 필요없는듯함 확인하고 삭제할것@@@@@@@@@@@@@@@ 
-	//MakeRect(hdc, m_HpRc);		// @체력렉트
-	//MakeRect(hdc, m_EnergyRc);  //@에너지렉트
-	HBRUSH brush = CreateSolidBrush(RGB(9, 255, 0)); //색깔브러쉬
-	FillRect(hdc, &m_HpRc, brush);
-	FillRect(hdc, &m_EnergyRc, brush);
-	DeleteObject(brush);
 	//m_pHpBar->render(hdc);
 	//m_pEnergyBar->render(hdc);
 	//HBRUSH brush = CreateSolidBrush(RGB(9, 255, 0)); //색깔브러쉬
@@ -1110,14 +1103,14 @@ void player::setWaterTile()
 
 		}
 		m_pTargetItem->progressWaterDurability(1);
-		//if (m_fCurrEnergy >= 0)	//@@
-		//{
-		//	m_fCurrEnergy -= 5;
-		//}
-		//if (m_fCurrEnergy <= 0)
-		//{
-		//	m_fCurrEnergy = 0;
-		//}
+		if (m_fCurrEnergy >= 0)	//@@
+		{
+			m_fCurrEnergy -= 5;
+		}
+		if (m_fCurrEnergy <= 0)
+		{
+			m_fCurrEnergy = 0;
+		}
 		
 		m_pEnergyBar->setGauge(m_fCurrEnergy, m_fMaxEnergy);//@@
 		
