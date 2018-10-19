@@ -314,6 +314,7 @@ void mapManager::loadMap(const char* szfileName)
 	{
 		m_map.insert(pair<string, tagTile*>(szfileName, m_pTiles));
 		ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
+		OBJMANAGER->release();
 		SetTree();
 	}
 		
@@ -336,6 +337,11 @@ void mapManager::loadMap(const char* szfileName)
 
 void mapManager::SetTree()
 {
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	{
+		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1 - CAMERA->getX(), (i / TILE_X)*TILE_SIZE_1 - CAMERA->getY(), TILE_SIZE_1, TILE_SIZE_1);
+	}
+
 	for (int y = 0; y < TILE_Y; y++)
 	{
 		for (int x = 0; x < TILE_X; x++)
