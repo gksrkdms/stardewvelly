@@ -62,6 +62,7 @@ HRESULT objTree::init(int x, int y, int id, int index)
 	m_isOnce = false;
 
 	m_isOverlap = false;
+	isHarvest = false;
 
 	//m_rcObjet = RectMake(x - m_pObject->getFrameWidth()*1.5, y - m_pObject->getFrameHeight()*GAME_SCALAR, m_pObject->getFrameWidth()*GAME_SCALAR, m_pObject->getFrameHeight()*GAME_SCALAR);
 	m_rcObjet = RectMake(x - m_pObject->getFrameWidth()*1.5, y - m_pObject->getFrameHeight()*GAME_SCALAR, m_pObject->getFrameWidth()*GAME_SCALAR, m_pObject->getFrameHeight()*GAME_SCALAR);

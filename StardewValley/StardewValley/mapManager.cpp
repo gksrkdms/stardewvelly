@@ -119,8 +119,8 @@ void mapManager::update()
 
 		if ((*m_iterObj)->getHarvest() == true)
 			m_pTiles[(*m_iterObj)->getIndex()].object = HARVEST;
-		else
-			m_pTiles[(*m_iterObj)->getIndex()].object = CROP;
+		//else
+		//	m_pTiles[(*m_iterObj)->getIndex()].object = CROP;
 	}
 
 	loadingProcess();

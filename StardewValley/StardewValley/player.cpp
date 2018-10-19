@@ -239,6 +239,19 @@ void player::render(HDC hdc)
 	//MakeRect(hdc, m_TargetRc);
 	m_pMenu->render(hdc);
 
+	if (m_pMap->getTile(m_nTempIndex)->object == TREE_SMALL)
+	{
+		sprintf_s(str, 128, "%d", 1);
+		TextOut(hdc, 200, 700, str, strlen(str));
+	}
+
+	else
+	{
+		sprintf_s(str, 128, "%d", 0);
+		TextOut(hdc, 200, 700, str, strlen(str));
+	}
+	
+
 	//if (m_pTargetItem)
 	//{
 	//	//char str[128];
