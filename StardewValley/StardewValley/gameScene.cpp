@@ -13,7 +13,7 @@ HRESULT gameScene::init()
 	m_pMapManager = new mapManager;
 	m_pMapManager->getPlayer(m_pPlayer);
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/town2.map");
+	m_pMapManager->loadMap("image/farm16.map");
 	//m_pMapManager->SetTree();
 
 	//m_pMapManager->loadMap("image/goldBeach1.map");
@@ -93,15 +93,15 @@ void gameScene::render(HDC hdc)
 
 	//플레이어가 위
 
-	TIMEMANAGER->render(hdc);
+	//TIMEMANAGER->render(hdc);
 
 	m_pPlayer->numRender(hdc, 1122, 205);
 	
-	char str[128];
-	sprintf_s(str, 128, "카메라x : %d", CAMERA->getX());
-	TextOut(hdc, 50, 100, str, strlen(str));
-	sprintf_s(str, 128, "카메라y : %d", CAMERA->getY());
-	TextOut(hdc, 50, 150, str, strlen(str));
+	//char str[128];
+	//sprintf_s(str, 128, "카메라x : %d", CAMERA->getX());
+	//TextOut(hdc, 50, 100, str, strlen(str));
+	//sprintf_s(str, 128, "카메라y : %d", CAMERA->getY());
+	//TextOut(hdc, 50, 150, str, strlen(str));
 
 	m_pMapManager->loadingRender(hdc);
 	

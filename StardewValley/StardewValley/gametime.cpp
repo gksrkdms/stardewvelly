@@ -177,8 +177,6 @@ void gametime::render(HDC hdc)
 		m_pClock->render(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR -10, 20, GAME_SCALAR);
 		m_pMinutehand->rotateRender(hdc, m_nMinAngle, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR -20, -26, GAME_SCALAR);
 
-	TIMEMANAGER->render(hdc);
-
 	//그림추가
 
 	char str[256];

@@ -79,6 +79,9 @@ HRESULT player::init()
 	}
 	isFirstMap[0] = true;
 
+	m_nX = WINSIZEX / 2 - 100;
+	m_nY = 1100;
+
 
 	return S_OK;
 }
@@ -199,11 +202,7 @@ void player::render(HDC hdc)
 
 	m_pEnergyBar->render(hdc);
 	m_pHpBar->render(hdc);
-	// 플레이어 랜더
-	if (m_pFishing->getIsFishing() == false)
-	{
-		m_pPlayer->aniRender(hdc, m_nX - CAMERA->getX() - m_nSyncX, m_nY - CAMERA->getY() - m_nSyncY, m_pAni);
-	}
+
 	if (m_pTargetItem && m_pTargetItem->getActItemKind() != ACTITEM_WATER)
 	{
 		//EFFECTMANAGER->render(hdc);
@@ -240,12 +239,12 @@ void player::render(HDC hdc)
 	//MakeRect(hdc, m_TargetRc);
 	m_pMenu->render(hdc);
 
-	if (m_pTargetItem)
-	{
-		//char str[128];
-		sprintf_s(str, 128, "%d", m_pTargetItem->getItemId());
-		TextOut(hdc, 200, 700, str, strlen(str));
-	}
+	//if (m_pTargetItem)
+	//{
+	//	//char str[128];
+	//	sprintf_s(str, 128, "%d", m_pTargetItem->getItemId());
+	//	TextOut(hdc, 200, 700, str, strlen(str));
+	//}
 	m_pFishing->render(hdc);
 
 	if (isProgressBar[1] == true)
@@ -352,7 +351,7 @@ void player::setTargetXY()
 			{
 				if (m_pMap->getTile(m_indexCamera)->terrain == EXIT)
 				{
-					m_pMap->loadingMap("town", 50, 50);
+					m_pMap->loadingMap("image/town2.map", 50, 50);
 				}
 			}
 		}

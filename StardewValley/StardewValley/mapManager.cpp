@@ -167,12 +167,12 @@ void mapManager::render(HDC hdc)
 					, m_pTiles[m_indexCamera].terrainFrameX, m_pTiles[m_indexCamera].terrainFrameY, TILE_SIZE_1, TILE_SIZE_1);
 			}
 
-			if (m_pTiles[m_indexCamera].isCollide == true)
-				MakeRect(hdc, m_pTiles[m_indexCamera].rc);
+			//if (m_pTiles[m_indexCamera].isCollide == true)
+			//	MakeRect(hdc, m_pTiles[m_indexCamera].rc);
 
 		}
 
-		TextOut(hdc, 0, 400, tempCurrMapId, strlen(tempCurrMapId));
+		//TextOut(hdc, 0, 400, tempCurrMapId, strlen(tempCurrMapId));
 	}
 }
 void mapManager::objRender(HDC hdc)
@@ -236,10 +236,6 @@ void mapManager::loadingRender(HDC hdc)
 		m_pBlack->alphaRender(hdc, m_nAlpha);
 	}
 
-}
-
-void mapManager::objectDelete(int objIndex)
-{
 }
 
 
