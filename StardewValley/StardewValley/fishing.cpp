@@ -649,7 +649,7 @@ void fishing::zziThrow()
 		else if (m_fTime3 < 0.4f)
 		{
 			m_fZziX += 8.f;
-			m_fZziY += 16.f;
+			m_fZziY += 15.f;
 		}
 		if (m_fTime3 > 0.5f && m_fTime3 < 0.6f)
 		{

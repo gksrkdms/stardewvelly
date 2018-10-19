@@ -23,6 +23,7 @@ mapTool::~mapTool()
 HRESULT mapTool::init()
 {	
 
+	//m_pTileShop = IMAGEMANAGER->findImage("shopTile"); //@@
 	m_pTileSet = IMAGEMANAGER->findImage("earthAll");
 	m_pObject = IMAGEMANAGER->findImage("town_Shop");
 	m_pObject2 = IMAGEMANAGER->findImage("town_Nomal");
@@ -79,12 +80,16 @@ HRESULT mapTool::init()
 
 	// 샘플타일 기본 위치
 	m_nImageX = WINSIZEX - m_pTileSet->getWidth() - TILE_SIZE_1;
+	//m_nImageX = WINSIZEX - m_pTileShop->getWidth() - TILE_SIZE_1; //@@
+
 
 	for (int i = 0; i < SAMPLE_TILE_X * SAMPLE_TILE_Y; i++)
 	{
 		m_pSampleTiles[i].rc = RectMake(m_nImageX + (i % SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, (i / SAMPLE_TILE_X) * TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE, TILE_SIZE_SAMPLE);
 		m_pSampleTiles[i].frameX = i % (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
 		m_pSampleTiles[i].frameY = i / (m_pTileSet->getWidth() / TILE_SIZE_SAMPLE);
+		//m_pSampleTiles[i].frameX = i % (m_pTileShop->getWidth() / TILE_SIZE_SAMPLE);//@@
+		//m_pSampleTiles[i].frameY = i / (m_pTileShop->getWidth() / TILE_SIZE_SAMPLE);//@@
 		m_pSampleTiles[i].object = MYHOME;
 		m_pSampleTiles[i].objectID = OBID_1;
 		m_pSampleTiles[i].terrain = NOMALTILE;
