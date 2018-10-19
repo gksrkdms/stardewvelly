@@ -198,6 +198,19 @@ void player::render(HDC hdc)
 	DeleteObject(brush);
 	//m_pHpBar->render(hdc);
 	//m_pEnergyBar->render(hdc);
+	//HBRUSH brush = CreateSolidBrush(RGB(9, 255, 0)); //색깔브러쉬
+	//FillRect(hdc, &m_HpRc, brush);
+	//FillRect(hdc, &m_EnergyRc, brush);
+	//DeleteObject(brush);
+	//@@@@@@@@@@@@@@@			여기까지			@@@@@@@@@@@@@@@ 
+
+	m_pEnergyBar->render(hdc);
+	m_pHpBar->render(hdc);
+	// 플레이어 랜더
+	if (m_pFishing->getIsFishing() == false)
+	{
+		m_pPlayer->aniRender(hdc, m_nX - CAMERA->getX() - m_nSyncX, m_nY - CAMERA->getY() - m_nSyncY, m_pAni);
+	}
 	if (m_pTargetItem && m_pTargetItem->getActItemKind() != ACTITEM_WATER)
 	{
 		//EFFECTMANAGER->render(hdc);
@@ -1097,14 +1110,14 @@ void player::setWaterTile()
 
 		}
 		m_pTargetItem->progressWaterDurability(1);
-		if (m_fCurrEnergy >= 0)	//@@
-		{
-			m_fCurrEnergy -= 5;
-		}
-		if (m_fCurrEnergy <= 0)
-		{
-			m_fCurrEnergy = 0;
-		}
+		//if (m_fCurrEnergy >= 0)	//@@
+		//{
+		//	m_fCurrEnergy -= 5;
+		//}
+		//if (m_fCurrEnergy <= 0)
+		//{
+		//	m_fCurrEnergy = 0;
+		//}
 		
 		m_pEnergyBar->setGauge(m_fCurrEnergy, m_fMaxEnergy);//@@
 		

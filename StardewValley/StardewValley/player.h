@@ -84,6 +84,7 @@ private:
 	int m_fMaxEnergy;			// @플레이어 최대 에너지
 	int m_fCurrHp;			// @플레이어 현재 체력
 	int m_fCurrEnergy;		// @플레이어 현재 에너지
+	
 	float m_fGaugeBar;			//@@
 
 	int m_nX;					// 플레이어 좌표x
