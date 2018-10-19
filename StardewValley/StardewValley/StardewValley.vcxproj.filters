@@ -202,7 +202,7 @@
       <Filter>MainGame\MapTool\object\Manager</Filter>
     </ClInclude>
     <ClInclude Include="inven.h">
-      <Filter>MainGame\gameScene\item</Filter>
+      <Filter>MainGame\gameScene\menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -336,6 +336,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cursor1.cur">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="cursor2.cur">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="cursor3.cur">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>

@@ -238,7 +238,6 @@ void player::render(HDC hdc)
 	//MakeRect(hdc, m_temprc);
 	//MakeRect(hdc, m_rc);
 	//MakeRect(hdc, m_TargetRc);
-
 	m_pMenu->render(hdc);
 
 	if (m_pTargetItem)

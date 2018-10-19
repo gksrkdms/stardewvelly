@@ -155,6 +155,8 @@ HRESULT mapTool::init()
 	
 	EnableWindow(m_hBtnSetCollision, FALSE);
 	EnableWindow(m_hBtnCancelCollision, FALSE);
+
+	m_isOnCollide = false;
 	
 	m_vecSelectedTile.reserve(SAMPLE_TILE_X * SAMPLE_TILE_Y);
 	return S_OK;
@@ -221,6 +223,32 @@ void mapTool::update()
 			m_isMiniMapOn = false;
 		}
 	}
+
+	if (KEYMANAGER->isOnceKeyDown('C'))
+	{
+		m_isOnCollide = true;
+		m_isOnCollideCount++;
+		if (m_isOnCollideCount == 2)
+		{
+			m_isOnCollideCount = 0;
+			m_isOnCollide = false;
+		}
+	}
+
+
+	//if (KEYMANAGER->isOnceKeyDown('I'))
+	//{
+	//	//wndClass.hCursor = SetCursor(LoadCursor(NULL, IDC_ARROW));
+	//	g_hPrevCursor = GetCursor();
+	//	SetCursor(g_hCursor);
+	//}
+	
+	//ielse
+	//{
+	//	wndClass.hCursor = SetCursor(g_hCursor);					// 커서
+	//}
+
+
 
 	//오토타일
 	autoTile();
@@ -317,6 +345,12 @@ void mapTool::render(HDC hdc)
 						m_pTiles[m_indexCamera].objectFrameX,
 						m_pTiles[m_indexCamera].objectFrameY, TILE_SIZE_1, TILE_SIZE_1);
 				}
+			}
+
+			// 충돌체면 그려줌			
+			if (m_pTiles[m_indexCamera].isCollide && m_isOnCollide)
+			{
+				m_pDrag->render(hdc, m_pTiles[m_indexCamera].rc.left, m_pTiles[m_indexCamera].rc.top,GAME_SCALAR);
 			}
 		}
 	}
@@ -809,7 +843,7 @@ LRESULT mapTool::ChildMapSampleProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 	{
 		switch (LOWORD(wParam))
 		{
-		case BTN_LEFT:
+		case BTN_LEFT: // sample img left
 			m_isReverse = false;
 			changeImg();
 			break;
@@ -1030,7 +1064,7 @@ void mapTool::objectTileSave()
 						case IMGOBJ_2:
 							m_ptempSampleObj2[iIndex].isCollide = m_pSampleTiles[iIndex].isCollide;
 							break;
-						case IMGOBJ_OBJMAX:
+						case IMGOBJ_3:
 							m_ptempSampleObj3[iIndex].isCollide = m_pSampleTiles[iIndex].isCollide;
 							break;
 						default:
@@ -1073,7 +1107,7 @@ void mapTool::objectTileSave()
 						case IMGOBJ_2:
 							m_ptempSampleObj2[m_sampleTileIndex].isCollide = m_pSampleTiles[m_sampleTileIndex].isCollide;
 							break;
-						case IMGOBJ_OBJMAX:
+						case IMGOBJ_3:
 							m_ptempSampleObj3[m_sampleTileIndex].isCollide = m_pSampleTiles[m_sampleTileIndex].isCollide;
 							break;
 						default:
@@ -1631,6 +1665,7 @@ void mapTool::TerrTypeInit()
 	m_pSampleTiles[399].terrain = EXIT;
 }
 
+// sample 이미지 바꾸기
 void mapTool::changeImg()
 {
 	if (m_isObject)

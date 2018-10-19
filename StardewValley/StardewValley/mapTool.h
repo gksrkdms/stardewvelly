@@ -236,6 +236,9 @@ private:
 
 	int m_sampleTileIndex;
 
+	bool m_isOnCollide; // 충돌체 보이기
+	int m_isOnCollideCount; //  충돌체껐다켰다
+
 	int m_selectNum; //전체 범위 갯수
 	int m_selectX; //drag x범위
 	int m_selectY; // drag y 범위

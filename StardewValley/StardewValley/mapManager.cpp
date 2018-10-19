@@ -76,6 +76,20 @@ void mapManager::release()
 	SAFE_DELETE_ARRAY(m_pObjectCrop);
 	//delete m_pObjMgr;
 
+	// 맵의 모든 원소를 돌면서 확인
+	for (m_iter = m_map.begin(); m_iter != m_map.end(); )
+	{
+		// 원소의 value( tagTile* )가 있으면
+		if (m_iter->second != NULL)
+		{
+			m_iter = m_map.erase(m_iter);
+		}
+		else
+		{
+			m_iter++;
+		}
+	}
+	m_map.clear();
 
 	m_vecTile.clear();
 	//delete[] m_pTiles;
@@ -176,11 +190,7 @@ void mapManager::objRender(HDC hdc)
 			if (m_pTiles[m_indexCamera].object == TREE_SMALL || m_pTiles[m_indexCamera].object == TREE_BIG
 				|| m_pTiles[m_indexCamera].object == CROP || m_pTiles[m_indexCamera].object == HARVEST)
 				OBJMANAGER->render(hdc);
-
-			//else if(m_pTiles[m_indexCamera].object == TREE_SMALL)
-			//	OBJMANAGER->render(hdc);
-
-
+			
 			else if (m_pTiles[m_indexCamera].object == NPC)
 				OBJMANAGER->Npcrender(hdc);
 
@@ -228,6 +238,10 @@ void mapManager::loadingRender(HDC hdc)
 
 }
 
+void mapManager::objectDelete(int objIndex)
+{
+}
+
 
 void mapManager::saveMap(const char * szfileName)
 {
@@ -238,7 +252,7 @@ void mapManager::saveMap(const char * szfileName)
 		0,						// 파일 공유 방식 지정 (0) : 공유 안함
 								// FILE_SHARE_DELETE : 삭제 접근 요청시 공유
 		NULL,					// 보안 관련 옵션
-		CREATE_ALWAYS,			// CREATE_ALWAYS : 새로운 파일 생성, 동일한 이름의 파일이 있으면 덮어쓴다
+		CREATE_NEW,			// CREATE_ALWAYS : 새로운 파일 생성, 동일한 이름의 파일이 있으면 덮어쓴다
 								// CREATE_NEW : 새로운 파일 생성
 								// OPEN_EXISTING : 파일이 존재하면 오픈, 없으면 에러코드 리턴
 		FILE_ATTRIBUTE_NORMAL,	// FILE_ATTRIBUTE_NORMAL : 다른 속성이 없다
@@ -269,7 +283,7 @@ void mapManager::loadingProcess()
 		m_Loading = LOAD_FALSE;
 		//string temp;
 		//temp = "image/temp_1111.map";
-		saveMap(tempCurrMapId);
+		//saveMap(tempCurrMapId);
 		g_mapSize.mapSizeX = m_ntempX;
 		g_mapSize.mapSizeY = m_ntempY;
 		loadMap(tempLoadMapId);
@@ -297,25 +311,35 @@ void mapManager::loadMap(const char* szfileName)
 		FILE_ATTRIBUTE_NORMAL,
 		NULL);
 
-	delete[] m_pTiles;
-	TILE_X = g_mapSize.mapSizeX / TILE_SIZE_1;
-	TILE_Y = g_mapSize.mapSizeY / TILE_SIZE_1;
-	m_pTiles = new tagTile[TILE_X*TILE_Y];
+	m_iter = m_map.find(szfileName);
 
-	ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
+	// 바꾸고자 하는 맵을 못찾으면 새로 저장
+	if (m_iter == m_map.end())
+	{
+		m_map.insert(pair<string, tagTile*>(szfileName, m_pTiles));
+		ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
+		SetTree();
+	}
+		
+	// 바꿀 맵 있으면
+	else
+	{
+		delete[] m_pTiles;
+		//TILE_X = g_mapSize.mapSizeX / TILE_SIZE_1;
+		//TILE_Y = g_mapSize.mapSizeY / TILE_SIZE_1;
+		m_pTiles = new tagTile[TILE_X*TILE_Y];
 
+		ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
+	}
+
+	//ReadFile(hFile, m_pTiles, sizeof(tagTile) *TILE_X *TILE_Y, &read, NULL);
+	//SetTree();
 	CloseHandle(hFile);
-
 	tempCurrMapId = szfileName;
 }
 
 void mapManager::SetTree()
 {
-	for (int i = 0; i < TILE_X * TILE_Y; i++)
-	{
-		m_pTiles[i].rc = RectMake((i % TILE_X)*TILE_SIZE_1 - CAMERA->getX(), (i / TILE_X)*TILE_SIZE_1 - CAMERA->getY(), TILE_SIZE_1, TILE_SIZE_1);
-	}
-
 	for (int y = 0; y < TILE_Y; y++)
 	{
 		for (int x = 0; x < TILE_X; x++)
