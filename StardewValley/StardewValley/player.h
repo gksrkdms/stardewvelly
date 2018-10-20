@@ -140,6 +140,7 @@ private:
 	int m_nPlayerIndexX;
 	int m_nPlayerIndexY;
 	int m_nPlayerIndex;
+	bool m_isPlayerUp; // true 플레이어가 위쪽 , false 플레이어가 obj보다 아래쪽 render
 
 	void addSound();
 public:
@@ -156,6 +157,7 @@ public:
 	void setY(int y) { m_nY = y; }
 	int getSizeX() { return m_nPlayerSizeX; }
 	int getSizeY() { return m_nPlayerSizeY; }
+	bool getPlayerLocation() { return m_isPlayerUp; }
 
 	PLAYERDIR getPlayerDir() { return m_playerDir; }
 	void setPlayerState(PLAYERSTATE state) { m_playerState  = state; }

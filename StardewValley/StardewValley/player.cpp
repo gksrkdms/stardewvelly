@@ -650,17 +650,25 @@ void player::Collide()
 			else if ((m_pMap->getTile(m_indexCamera)->isCollide) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pUp))
 			{
 				m_playerCollision = COLL_UP;
+				m_isPlayerUp = true;
 				return;
 			}
 			else if ((m_pMap->getTile(m_indexCamera)->isCollide) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pDown))
 			{
 				m_playerCollision = COLL_DOWN;
+				m_isPlayerUp = false;
 				return;
 			}
 			else
 			{
 				m_playerCollision = COLL_FALSE;
 			}
+
+			if ((m_pMap->getTile(m_indexCamera)->object!=OBJ_NULL) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pUp))
+				m_isPlayerUp = true;
+
+			else if ((m_pMap->getTile(m_indexCamera)->object!=OBJ_NULL) && PtInRect(&m_pMap->getTile(m_indexCamera)->rc, m_pDown))
+				m_isPlayerUp = false;						
 		}
 	}
 }
