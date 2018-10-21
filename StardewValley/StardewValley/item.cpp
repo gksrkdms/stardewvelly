@@ -408,6 +408,9 @@ void item::setItem(bool sameItem)
 		case 501:
 			itemName = "item_501";
 			break;
+		case 502:
+			itemName = "item_502";
+			break;
 
 		default:
 			return;

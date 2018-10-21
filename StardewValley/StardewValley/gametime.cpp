@@ -41,6 +41,10 @@ void gametime::update()
 {
 	m_zulaTime = (int)TIMEMANAGER->getZulaTime();
 
+	if (KEYMANAGER->isOnceKeyDown('U'))
+	{
+		m_hour = 24;
+	}
 	//½Ã°£
 	if (m_zulaTime % CONVER_HOUR == 0 && !m_isAction && m_zulaTime != 0)
 	{
