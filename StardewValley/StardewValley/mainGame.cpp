@@ -175,9 +175,10 @@ void mainGame::imgload()
 	
 	// background
 	IMAGEMANAGER->addImage("whitebackground", "image/background.bmp", WINSIZEX, WINSIZEY);
-	IMAGEMANAGER->addImage("dark", "image/dark.bmp", WINSIZEX, WINSIZEY); //¹ã, ³×ÀÌºñ
+	//IMAGEMANAGER->addImage("dark", "image/dark.bmp", WINSIZEX, WINSIZEY); //¹ã, ³×ÀÌºñ
+	IMAGEMANAGER->addImage("dark1", "image/dark1.bmp", WINSIZEX, WINSIZEY,true,RGB(255,0,255)); //¹ã, ³×ÀÌºñ
 	IMAGEMANAGER->addImage("black", "image/black.bmp", WINSIZEX, WINSIZEY); // ºí·¢
-
+	
 	// Å¸ÀÌÆ²
 	IMAGEMANAGER->addImage("title_001", "image/Stardew Valley/title/title_001.bmp", 400, 183, true, RGB(255, 0, 255));	// ½ºÅ¸µà¹ë¸®
 	IMAGEMANAGER->addImage("title_002", "image/Stardew Valley/title/title_002.bmp", 888, 348, 4, 2, true, RGB(255, 0, 255));	// ¸Þ´º

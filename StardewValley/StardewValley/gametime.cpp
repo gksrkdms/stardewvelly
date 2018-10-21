@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "gametime.h"
-
+#include "player.h"
 
 gametime::gametime()
 {
@@ -13,11 +13,12 @@ gametime::~gametime()
 
 HRESULT gametime::init()
 {
-	m_pdark = IMAGEMANAGER->findImage("dark");
+	//m_pdark = IMAGEMANAGER->findImage("dark");
+	m_pdark = IMAGEMANAGER->findImage("dark1");
 	m_pClock = IMAGEMANAGER->findImage("clock");
 	m_pMinutehand = IMAGEMANAGER->findImage("minutehand");
 	TIMEMANAGER->setZulaTime(0);
-
+	
 	m_hour = 6;
 	m_min = 0;
 	m_zulaTime = 0;
@@ -41,9 +42,15 @@ void gametime::update()
 {
 	m_zulaTime = (int)TIMEMANAGER->getZulaTime();
 
-	if (KEYMANAGER->isOnceKeyDown('U'))
+	if (KEYMANAGER->isOnceKeyDown('U')) //@@ 재성 테스트용
 	{
+	
 		m_hour = 24;
+		
+	}
+	if (KEYMANAGER->isStayKeyDown('J'))
+	{
+		m_alpha++;
 	}
 	//시간
 	if (m_zulaTime % CONVER_HOUR == 0 && !m_isAction && m_zulaTime != 0)
@@ -173,9 +180,12 @@ void gametime::update()
 
 void gametime::render(HDC hdc)
 {
-	if (m_pdark)
-		m_pdark->alphaRender(hdc, 0, 0, m_alpha);
+	//if (m_pdark)
+		//m_pdark->alphaRender(hdc, 0, 0, m_alpha);
 
+	if (m_pdark)
+	m_pdark->alphaRender(hdc,0,0, m_alpha);
+	//m_light->alphaRender(hdc, WINSIZEX / 2, WINSIZEY / 2, 30);
 	// 시계 랜더
 	if(m_pClock)
 		m_pClock->render(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR -10, 20, GAME_SCALAR);

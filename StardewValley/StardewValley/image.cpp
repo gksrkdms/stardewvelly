@@ -8,7 +8,6 @@ image::image()
 {
 }
 
-
 image::~image()
 {
 }

@@ -3,7 +3,7 @@
 
 // 게임시간단위로 한시간일때 현실시간으로 몇초인지 환산한 값
 #define CONVER_HOUR 60
-
+class player;
 enum WEEK {
 	MON, TUE, WED, THUR, FRI, SAT, SUN
 };

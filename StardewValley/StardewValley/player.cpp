@@ -54,6 +54,7 @@ HRESULT player::init()
 	m_EnergyRc = RectMake(WINSIZEX - m_pHpEnergyUi->getWidth() + 64, WINSIZEY - 208, 24, 164); // @플레이어 에너지
 	
 	m_rc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX, m_nPlayerSizeY);
+	m_lightRc = RectMake(m_nX - 30 -CAMERA->getX(), m_nY - 30 - CAMERA->getY(), m_nPlayerSizeX, m_nPlayerSizeY); //@@ 횃불테스트용
 	m_TargetRc = RectMake(m_nX, m_nY + 32, m_nPlayerSizeX * 3, m_nPlayerSizeY * 3);
 	isMove = false;
 	isStop = true;
@@ -141,6 +142,8 @@ void player::update()
 		m_pMenu->setMenu(true);
 	}
 	  
+	//@@ 횃불테스트용
+	m_lightRc = RectMake(m_nX -30 - CAMERA->getX(), m_nY - 30 - CAMERA->getY(), m_nPlayerSizeX+80, m_nPlayerSizeY);
 	// 플레이어 렉트 셋팅
 	m_rc = RectMake(m_nX + 8 - CAMERA->getX(), m_nY + 63 - CAMERA->getY(), m_nPlayerSizeX, m_nPlayerSizeY);
 	// 바닥에 빨간색네모 타겟 렉트
@@ -185,7 +188,8 @@ void player::update()
 
 void player::render(HDC hdc)
 {
-	
+	//MakeRect(hdc, m_lightRc); //@@
+
 	if (m_pTargetItem && m_pTargetItem->getActItemKind()==ACTITEM_WATER)
 	{
 		//EFFECTMANAGER->render(hdc);

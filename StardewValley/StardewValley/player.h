@@ -54,6 +54,8 @@ enum PLAYERMOTION
 class player
 {
 private:
+	RECT m_lightRc; //@@ 횃불테스트용
+
 	image*		m_pPlayer;		// 플레이어 이미지
 	image*		m_pTarget;		// 바닥타일 타겟 이미지(빨간색 네모)
 	image*		m_pSeedTarget;	// 바닥타일 씨앗타겟 이미지
