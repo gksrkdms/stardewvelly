@@ -188,7 +188,7 @@ void player::render(HDC hdc)
 	
 	if (m_pTargetItem && m_pTargetItem->getActItemKind()==ACTITEM_WATER)
 	{
-		//EFFECTMANAGER->render(hdc);
+		EFFECTMANAGER->render(hdc);
 	}
 	m_pHpEnergyUi->render(hdc, WINSIZEX-m_pHpEnergyUi->getWidth(),WINSIZEY-260); // @체력,에너지틀
 
@@ -205,7 +205,7 @@ void player::render(HDC hdc)
 
 	if (m_pTargetItem && m_pTargetItem->getActItemKind() != ACTITEM_WATER)
 	{
-		//EFFECTMANAGER->render(hdc);
+		EFFECTMANAGER->render(hdc);
 	}
     
 	// 퀵바 아이템이 있을때
@@ -239,17 +239,17 @@ void player::render(HDC hdc)
 	//MakeRect(hdc, m_TargetRc);
 	m_pMenu->render(hdc);
 
-	if (m_pMap->getTile(m_nTempIndex)->object == TREE_SMALL)
-	{
-		sprintf_s(str, 128, "%d", 1);
-		TextOut(hdc, 200, 700, str, strlen(str));
-	}
+	//if (m_pMap->getTile(m_nTempIndex)->object == TREE_SMALL)
+	//{
+	//	sprintf_s(str, 128, "%d", 1);
+	//	TextOut(hdc, 200, 700, str, strlen(str));
+	//}
 
-	else
-	{
-		sprintf_s(str, 128, "%d", 0);
-		TextOut(hdc, 200, 700, str, strlen(str));
-	}
+	//else
+	//{
+	//	sprintf_s(str, 128, "%d", 0);
+	//	TextOut(hdc, 200, 700, str, strlen(str));
+	//}
 	
 
 	//if (m_pTargetItem)
@@ -364,7 +364,7 @@ void player::setTargetXY()
 			{
 				if (m_pMap->getTile(m_indexCamera)->terrain == EXIT)
 				{
-					m_pMap->loadingMap("image/town2.map", 50, 50);
+					m_pMap->loadingMap("image/town3.map", 50, 50);
 				}
 			}
 		}
@@ -1030,7 +1030,7 @@ void player::useItem()
 				m_fCurrEnergy += m_pTargetItem->getEnergy();
 				if (m_fCurrEnergy >= m_fMaxEnergy)
 					m_fCurrEnergy = m_fMaxEnergy;
-				//EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
+				EFFECTMANAGER->play("recovery", (m_nX +5) - CAMERA->getX(), m_nY- CAMERA->getY());
 				SOUNDMANAGER->play("sound/effect/아삭소리2.wav", g_soundVolume.effect);
 				m_pTargetItem->useItem();
 				break;
@@ -1109,8 +1109,8 @@ void player::setWaterTile()
 {
 	if (m_pTargetItem->getWaterDurability() > 0)
 	{
-		//EFFECTMANAGER->play("water_drop2", (m_nTargetX), (m_nTargetY)-30);
-		//EFFECTMANAGER->play("water_drop", (m_nTargetX), (m_nTargetY));
+		EFFECTMANAGER->play("water_drop2", (m_nTargetX), (m_nTargetY)-30);
+		EFFECTMANAGER->play("water_drop", (m_nTargetX), (m_nTargetY));
 		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개2.wav", g_soundVolume.effect);
 		m_pTargetItem->setWaterDurability(m_pTargetItem->getWaterDurability() - 1);
 		if (m_pMap->getTile(m_nTempIndex)->terrain == FARMLAND)
@@ -1136,7 +1136,7 @@ void player::setWaterTile()
 	}
 	else
 	{
-		//EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
+		EFFECTMANAGER->play("need_water",(m_nX+10)- CAMERA->getX(),(m_nY-80)- CAMERA->getY());
 		SOUNDMANAGER->play("sound/effect/playerAct/물뿌리개물없을때.wav", g_soundVolume.effect);
 	}
 	if (m_pMap->getTile(m_nTempIndex)->terrain == WATER || m_pMap->getTile(m_nTempIndex)->terrain == SEA)

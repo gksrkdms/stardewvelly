@@ -28,7 +28,7 @@ HRESULT objNpc::init(int x, int y, int id, int index)
 	switch (m_nObjID)
 	{
 	case 0:
-		m_pObject = IMAGEMANAGER->findImage("npc_abigail");
+		m_pObject = IMAGEMANAGER->findImage("npc_Mal");
 		m_NpcName = ABIGAIL;
 		m_pAniNpc->init(m_pObject->getWidth(), m_pObject->getHeight(), m_pObject->getFrameWidth(), m_pObject->getFrameHeight());
 		break;
@@ -44,7 +44,7 @@ HRESULT objNpc::init(int x, int y, int id, int index)
 	m_nFrameY = 0;
 	m_isOnce = false;
 	NpcState = BOTTOM;
-	startMotion(m_pAniNpc, 0, 3, false, true, 1);
+	startMotion(m_pAniNpc, 4, 9, false, true, 0);
 
 	return S_OK;
 }
@@ -70,25 +70,25 @@ void objNpc::update()
 	//	break;
 	//}
 
-	if (KEYMANAGER->isOnceKeyDown('V'))
-	{
-		NpcState = LEFT;
-		abiMove();
-	}
+	//if (KEYMANAGER->isOnceKeyDown('V'))
+	//{
+	//	NpcState = LEFT;
+	//	abiMove();
+	//}
 
 
-	if (PLAYTIMEMANAGER->getMin() % 5 == 0 && !m_isOnce)
-	{
-		m_isOnce = true;
-		m_nFrameX++;
-		m_pObject->setFrameX(m_nFrameX);
-		if (m_nFrameX > 3)
-		{
-			m_nFrameX = 3;
-		}
-	}
-	else if (PLAYTIMEMANAGER->getMin() % 5 != 0)
-		m_isOnce = false;
+	//if (PLAYTIMEMANAGER->getMin() % 5 == 0 && !m_isOnce)
+	//{
+	//	m_isOnce = true;
+	//	m_nFrameX++;
+	//	m_pObject->setFrameX(m_nFrameX);
+	//	if (m_nFrameX > 3)
+	//	{
+	//		m_nFrameX = 3;
+	//	}
+	//}
+	//else if (PLAYTIMEMANAGER->getMin() % 5 != 0)
+	//	m_isOnce = false;
 
 	/*switch (m_NpcInfo->NpcState)
 	{
@@ -111,6 +111,7 @@ void objNpc::render(HDC hdc)
 	//m_pObject->frameRender(hdc, m_nObjX - CAMERA->getX(), m_nObjY - m_pObject->getFrameHeight()*GAME_SCALAR - CAMERA->getY(), m_nFrameX, m_nFrameY, GAME_SCALAR);
 	
 	m_pObject->aniRender(hdc, m_nObjX - CAMERA->getX(), m_nObjY - m_pObject->getFrameHeight()*GAME_SCALAR - CAMERA->getY(), m_pAniNpc, GAME_SCALAR);
+	//m_pObject->aniRender(hdc, m_nObjX - CAMERA->getX(), m_nObjY - CAMERA->getY(), m_pAniNpc, GAME_SCALAR);
 }
 
 void objNpc::abiMove()
@@ -118,12 +119,12 @@ void objNpc::abiMove()
 	switch (NpcState)
 	{
 	case BOTTOM:
-		m_nObjY += 3;
+		//m_nObjY += 3;
 		//m_pAniNpc->stop();
 		//startMotion(m_pAniNpc, 0, 3, false, true, 5);
 		break;
 	case LEFT:
-		m_nObjX += 3;
+		//m_nObjX += 3;
 		//m_pAniNpc->stop();
 		//startMotion(m_pAniNpc, 4, 7, false, true, 5);
 		break;

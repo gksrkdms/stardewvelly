@@ -219,10 +219,16 @@ void gametime::render(HDC hdc)
 	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 150, 135, str, strlen(str));
 
 	// Ка
-	sprintf_s(str, 256, "%d", m_min/10);
+	//sprintf_s(str, 256, "%d", m_min/10);
+	//TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 190, 135, str, strlen(str));
+
+	//sprintf_s(str, 256, "%d", m_min%10);
+	//TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 210, 135, str, strlen(str));
+
+	sprintf_s(str, 256, "%d", m_nPrintMin/10);
 	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 190, 135, str, strlen(str));
 
-	sprintf_s(str, 256, "%d", m_min%10);
+	sprintf_s(str, 256, "%d", m_nPrintMin%10);
 	TextOut(hdc, WINSIZEX - m_pClock->getWidth()*GAME_SCALAR + 210, 135, str, strlen(str));
 
 	SelectObject(hdc, oldFont);

@@ -13,7 +13,7 @@ HRESULT gameScene::init()
 	m_pMapManager = new mapManager;
 	m_pMapManager->getPlayer(m_pPlayer);
 	m_pMapManager->init();
-	m_pMapManager->loadMap("image/farm16.map");
+	m_pMapManager->loadMap("image/farm17.map");
 	//m_pMapManager->SetTree();
 
 	//m_pMapManager->loadMap("image/goldBeach1.map");

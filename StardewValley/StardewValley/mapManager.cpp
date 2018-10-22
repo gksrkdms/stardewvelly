@@ -128,7 +128,7 @@ void mapManager::update()
 
 void mapManager::render(HDC hdc)
 {
-	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
+	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 2; y++)
 	{
 		for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
 		{
@@ -177,7 +177,7 @@ void mapManager::render(HDC hdc)
 }
 void mapManager::objRender(HDC hdc)
 {
-	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
+	for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 2; y++)
 	{
 		for (int x = 0; x < WINSIZEX / TILE_SIZE_1 + 1; x++)
 		{

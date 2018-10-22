@@ -8,7 +8,6 @@ const UINT nFileNameMaxLen = 512;
 char szFileName[nFileNameMaxLen];
 TCHAR szFileName2[256] = _T("");
 
-
 int SAMPLE_TILE_X;
 int SAMPLE_TILE_Y;
 
@@ -464,7 +463,7 @@ void mapTool::render(HDC hdc)
 	char str[128];
 	SetBkMode(hdc, TRANSPARENT);
 
-	sprintf_s(str, 128, "%d", g_ptMouse.x);
+	/*sprintf_s(str, 128, "%d", g_ptMouse.x);
 	TextOut(hdc, 800, 250, str, strlen(str));
 	sprintf_s(str, 128, "%d", CAMERAMANAGER->getCameraX());
 	TextOut(hdc, 0, 250, str, strlen(str));
@@ -478,7 +477,7 @@ void mapTool::render(HDC hdc)
 	sprintf_s(str, 128, "right : %d", m_Dragrc.right);
 	TextOut(hdc, 850, 50, str, strlen(str));
 	sprintf_s(str, 128, "bottom : %d", m_Dragrc.bottom);
-	TextOut(hdc, 850, 150, str, strlen(str));
+	TextOut(hdc, 850, 150, str, strlen(str));*/
 
 	//for (int y = 0; y < WINSIZEY / TILE_SIZE_1 + 1; y++)
 	//{
@@ -1602,6 +1601,8 @@ void mapTool::objectTypeInit()
 		m_pSampleTiles[301].object = BOX;
 		m_pSampleTiles[320].object = BOX;
 		m_pSampleTiles[321].object = BOX;
+		
+		m_pSampleTiles[163].object = NPC;
 		break;
 	default:
 		break;
